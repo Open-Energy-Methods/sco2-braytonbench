@@ -1,0 +1,28 @@
+state_id,subsystem,T_K,P_Pa,h_J_per_kg,s_J_per_kg_K,rho_kg_per_m3,mdot_kg_per_s,reference_case,notes
+1,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+2,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+3,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+4,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+5,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+6,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+7,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+8,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+9,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+10,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+11,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+12,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+13,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+14,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+15,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+16,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+17,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+18,sCO2,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+P1,PWR_primary,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+P2,PWR_primary,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+P3,PWR_primary,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+C1,cooling_system,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+C2,cooling_system,,,,,,,FR2016_Table3,Figure 4 label; awaiting author
+FM1,flow_identifier,,,,,,,FR2016_Table3,Figure 4 labelled flow; mass-flow column applies
+FM2,flow_identifier,,,,,,,FR2016_Table3,Figure 4 labelled flow; mass-flow column applies
+FM3,flow_identifier,,,,,,,FR2016_Table3,Figure 4 labelled flow; mass-flow column applies
+FM4,flow_identifier,,,,,,,FR2016_Table3,Figure 4 labelled flow; mass-flow column applies
