@@ -74,6 +74,24 @@ control is implemented. The initial heater-UA value in the example is
 sized from a chosen hypothetical nominal operating point, not
 measured hardware or a published benchmark.
 
+## G3.2 — two installed UAs, finite cooling stream and sensible-source cp
+
+The new `sco2_braytonbench.coupled_plant.solve_coupled_plant`
+function calculates both **compressor inlet T1** and **turbine inlet T4**
+from an installed heater UA, installed cooler UA, finite hot-gas flow,
+finite cooling-medium flow and a fixed-UA recuperator.
+
+The coolant outlet and exhaust gas outlet temperatures follow separate
+enthalpy balances; pinch and stack constraints are enforced. A
+documented linear sensible-heat-capacity model can be used for both
+streams, while constant cp remains the default for compatibility.
+An optional separately identified **quadratic flow-loss scaling scenario**
+is provided for sensitivity only, not a measured map.
+
+Read [the G3.2 physics and verification scope](docs/G32_COUPLED_COOLING.md).
+The model is still steady-state, with no phase change, real turbomachinery
+maps, calibrated heat-transfer correlations or transient control.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

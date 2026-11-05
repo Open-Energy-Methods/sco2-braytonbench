@@ -20,6 +20,7 @@ from typing import Iterable
 from .cycle import CycleInputs, CycleResult, solve_cycle
 from .exchangers import HeaterResult, waste_gas_heater
 from .properties import DomainError, Properties
+from .streams import LinearCp
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,8 @@ class WasteGasSource:
     minimum_heater_approach_k: float = 10.0
     dead_state_temperature_k: float = 300.0
     segments: int = 20
+    cp_slope_j_kg_k2: float = 0.0
+    cp_reference_temperature_k: float = 300.0
 
     def __post_init__(self) -> None:
         must_be_positive = (
@@ -52,6 +55,16 @@ class WasteGasSource:
             raise DomainError("waste gas must be hotter than the stack floor")
         if self.segments < 3:
             raise DomainError("heater segmentation must be >=3")
+        # Require positive cp over the declared gas/ambient range.
+        fluid=self.heat_capacity
+        for temperature in (self.dead_state_temperature_k,
+                self.minimum_stack_temperature_k,self.inlet_temperature_k):
+            fluid.cp(temperature)
+
+    @property
+    def heat_capacity(self) -> LinearCp:
+        return LinearCp(self.cp_j_kg_k,self.cp_slope_j_kg_k2,
+                        self.cp_reference_temperature_k)
 
     @property
     def capacity_rate_w_k(self) -> float:
@@ -60,9 +73,8 @@ class WasteGasSource:
     @property
     def available_heat_w(self) -> float:
         """Sensible heat before the prescribed stack-temperature floor."""
-        return self.capacity_rate_w_k * (
-            self.inlet_temperature_k - self.minimum_stack_temperature_k
-        )
+        return self.mass_flow_kg_s*self.heat_capacity.delta_h(
+            self.minimum_stack_temperature_k,self.inlet_temperature_k)
 
 
 @dataclass(frozen=True)
@@ -160,6 +172,8 @@ def evaluate_whr_design(
         source.inlet_temperature_k, source.mass_flow_kg_s,
         source.cp_j_kg_k, source.minimum_heater_approach_k,
         n=source.segments,
+        cp_slope_j_kg_k2=source.cp_slope_j_kg_k2,
+        cp_reference_temperature_k=source.cp_reference_temperature_k,
     )
     if heater.gas_out_k < source.minimum_stack_temperature_k - 1e-8:
         raise DomainError("stack temperature below design minimum")
@@ -167,17 +181,18 @@ def evaluate_whr_design(
         and heater.required_ua_w_k > source.maximum_heater_ua_w_k*(1+1e-8)):
         raise DomainError("heater exceeds UA sizing allowance")
 
-    q_exhaust = source.capacity_rate_w_k * (
-        source.inlet_temperature_k - heater.gas_out_k
-    )
+    q_exhaust = source.mass_flow_kg_s * source.heat_capacity.delta_h(
+        heater.gas_out_k,source.inlet_temperature_k)
     closure = q_exhaust - cycle.heater_w
     if abs(closure) > 1e-8*max(q_exhaust,cycle.heater_w,1.0):
         raise DomainError("CO2 / exhaust first-law mismatch")
 
     t0 = source.dead_state_temperature_k
-    exergy = source.capacity_rate_w_k * (
-        (source.inlet_temperature_k - heater.gas_out_k)
-        - t0 * log(source.inlet_temperature_k/heater.gas_out_k)
+    exergy = source.mass_flow_kg_s * (
+        source.heat_capacity.delta_h(heater.gas_out_k,
+                                    source.inlet_temperature_k)
+        - t0*source.heat_capacity.delta_s(heater.gas_out_k,
+                                         source.inlet_temperature_k)
     )
     if exergy <= 0:
         raise DomainError("nonpositive source exergy consumption")

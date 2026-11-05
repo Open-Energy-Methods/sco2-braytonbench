@@ -84,3 +84,23 @@ jobs:
           name: g31-installed-ua-coupling
           path: evidence/generated/fixed_ua_coupled_demo.json
           if-no-files-found: ignore
+
+  coupled-heater-cooler:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Dual-UA coupled real-CO2 inverse test
+        run: python -m pytest -q tests/test_coupled_plant_co2.py
+      - name: Source and coolant finite-stream off-design diagnostic
+        run: python scripts/coupled_sink_demo.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g32-coupled-heater-cooler
+          path: evidence/generated/g32_coupled_cooler.json
+          if-no-files-found: ignore

@@ -9,3 +9,10 @@ __all__=['CycleInputs','CycleResult','solve_cycle','PressureLosses','CoolPropCO2
 
 from .fixed_ua import FixedUAResult, solve_fixed_ua_whr
 __all__ += ['FixedUAResult','solve_fixed_ua_whr']
+
+from .streams import LinearCp
+from .cooler import CoolerSink, CoolerRating, rate_cooler
+from .offdesign import FlowScaling
+from .coupled_plant import CoupledPlantResult, solve_coupled_plant
+__all__ += ['LinearCp','CoolerSink','CoolerRating','rate_cooler',
+            'FlowScaling','CoupledPlantResult','solve_coupled_plant']
