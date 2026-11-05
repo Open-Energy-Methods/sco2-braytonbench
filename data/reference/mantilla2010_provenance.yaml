@@ -1,0 +1,18 @@
+dataset_id: mantle2010_thermoml
+source: NIST ThermoML original curated record
+original_json_url: https://trc.nist.gov/ThermoML/10.1021/je1001158.json
+landing_url: https://trc.nist.gov/ThermoML/10.1021/je1001158.html
+doi: 10.1021/je1001158
+authors: [Ivan D. Mantilla, Diego E. Cristancho, Saquib Ejaz, Kenneth R. Hall]
+publication_year: 2010
+title: P-rho-T Data for Carbon Dioxide from (310 to 450) K up to 160 MPa
+method: magnetic suspension densimetry
+fluid: pure carbon dioxide
+observation_type: measured density, not equation-of-state output
+n_observations: 49
+T_unit: K
+P_unit: kPa
+rho_unit: kg/m3
+uncertainty_note: The column thermoml_combined_uncertainty_as_reported is copied from ThermoML nCombExpandUncertValue without inferring coverage factor. Do not treat it as relative percent or a standard deviation without further documentation.
+constraints: These measurements are mostly outside the immediate critical locus and do not fully validate EOS property derivatives, heat capacities, phase equilibria, or enthalpy/entropy.
+status: data_transcribed_from_machine_readable_thermoml

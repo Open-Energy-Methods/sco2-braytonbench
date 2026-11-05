@@ -58,16 +58,23 @@ def fr2016_conceptual_cycle(
     eta_turbine: float = .90,
     recuperator_effectiveness: float = .925,
     segments: int = 30,
+    low_pressure_point: int = 8,
+    low_temperature_point: int = 7,
 ) -> FR2016Comparison:
     """Paper Figure 2b mapping, all SI units, reference pressure at point 8.
 
-    For transparency we interpret the reported low-side temperature at paper
-    point 7 (pre-cooler outlet), since Fig 9 names T7. This interpretation is
-    not proven identical to the authors' actual detailed Figure 4 conditions.
-    P_low is parameterized explicitly rather than silently identifying it
-    with a pressure at the compressor inlet in the detailed EES model.
+    Source-mapping sensitivity controls:
+    - low_pressure_point = 7 or 8 (precooler outlet or compressor inlet);
+    - low_temperature_point = 7 or 8, same choices.
+    Source Figure 9 labels T7, favouring 7 for nominal temperature, but the
+    detailed EES Figure 4 constraints are not fully identifiable.
+    Defaults deliberately retain the initial 7/8 mapping.
     """
-    p = fr2016_pressure_map(high_pressure_pa, low_pressure_pa)
+    if low_pressure_point not in (7, 8) or low_temperature_point not in (7, 8):
+        raise DomainError("low-side mapping must use paper point 7 or 8")
+    # Paper Table 2: 7 -> 8 adiabatic piping loses 40 kPa.
+    p8 = low_pressure_pa - 40e3 if low_pressure_point == 7 else low_pressure_pa
+    p = fr2016_pressure_map(high_pressure_pa, p8)
     s: dict[int, State] = {}
     s[1] = props.tp(p[1], high_temperature_k)
     s[2] = props.ph(p[2], s[1].h)  # adiabatic 1-2 piping
@@ -75,8 +82,12 @@ def fr2016_conceptual_cycle(
         s[2].h, props.ps(p[3], s[2].s).h, eta_turbine))
     s[4] = props.ph(p[4], s[3].h)  # adiabatic 3-4 piping
 
-    s[7] = props.tp(p[7], low_temperature_k)  # paper T7
-    s[8] = props.ph(p[8], s[7].h)  # adiabatic 7-8 piping
+    if low_temperature_point == 7:
+        s[7] = props.tp(p[7], low_temperature_k)
+        s[8] = props.ph(p[8], s[7].h)  # adiabatic 7-8 piping
+    else:
+        s[8] = props.tp(p[8], low_temperature_k)
+        s[7] = props.ph(p[7], s[8].h)  # reverse isenthalpic mapping
     s[9] = props.ph(p[9], compressor_outlet(
         s[8].h, props.ps(p[9], s[8].s).h, eta_compressor))
     s[10] = props.ph(p[10], s[9].h)  # adiabatic 9-10 piping
