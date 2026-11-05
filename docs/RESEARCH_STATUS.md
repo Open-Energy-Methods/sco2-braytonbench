@@ -108,3 +108,10 @@ Figure 4 EES plant's compressor-turbine branch, full state table
 or missing performance maps.
 
 See `docs/EXPERIMENTAL_DENSITY_AND_IDENTIFIABILITY.md`.
+
+### Tightened regression confirmed
+
+GitHub Actions [run 41993973281](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993973281) **passed all three jobs** after the stricter density screens:
+**73 passed / 5 CoolProp modules skipped** per fixture-only Python job; **61 passed** in the dedicated real-fluid job. Regression criteria `max absolute density residual < 0.2%` and `RMS < 0.1%` passed. The report contains measured and calculated densities and is retained in [the evidence artifact](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993973281/artifacts/13398788849).
+
+The worst observed density residual (0.09024% at 450 K and approximately 122.193 MPa) is larger than the paper's quoted <0.03% density uncertainty, despite lying within its reported ~0.1% high-pressure EOS discrepancies. A formal experimental uncertainty consistency test remains outstanding. This does not invalidate the density agreement, but prevents a stronger claim about uncertainty-limited accuracy.

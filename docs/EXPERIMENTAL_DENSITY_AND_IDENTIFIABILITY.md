@@ -55,3 +55,8 @@ The aggregate Table 3 energy totals impose only a small number of independent sc
 - G1-E: measured PVT data available and tested in CI; **partial** until actual residuals reviewed, uncertainty evaluated and critical-region/h/s independent data collected.
 - G2: the conceptual source cycle and perturbation analysis are auditable; **original detailed EES plant remains not identifiable** from the published aggregates.
 - The benchmark shall never be relabelled an HZDR CARBOSOLA twin, measured test campaign or full EES code reproduction.
+
+## Final regression check
+
+The stricter density regression screens of **0.2% maximum absolute relative residual** and **0.1% RMS relative residual** passed GitHub Actions [run 41993973281](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993973281).
+The tests are not a statistical fit of uncertainties. The original article's statement of <0.03% density uncertainty should not be confused with these regression thresholds; the observed largest EOS–measurement residual of approximately 0.090% is larger.

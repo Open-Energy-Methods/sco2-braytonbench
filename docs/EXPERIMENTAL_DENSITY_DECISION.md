@@ -20,7 +20,7 @@ versioned in `data/reference/mantilla2010_thermoml_density.csv`.
 | RMS relative density residual | 0.034731% |
 | Maximum absolute relative density residual | 0.090241% |
 | Initial broad software screen | 2% max / 1% RMS (passed) |
-| New tighter regression screen | 0.2% max / 0.1% RMS (must pass new CI) |
+| New tighter regression screen | 0.2% max / 0.1% RMS (**passed**) |
 
 By temperature:
 
@@ -32,8 +32,7 @@ By temperature:
 | 450 | 8 | 0.09024 | 0.05336 |
 
 These are **relative residuals**, not uncertainty estimates or
-statements of statistical significance. The NIST ThermoML
-uncertainty column is preserved as reported but needs documentation
+statements of statistical significance. The source article reports measurement uncertainty below 0.03% across its stated high-pressure measurement range; our largest EOS–measurement residual of 0.090% exceeds that figure, though it is consistent with the article's discussion of EOS residuals approaching 0.1% at higher pressure. This is **not** a formal uncertainty-budget test. The NIST ThermoML uncertainty column is preserved as reported but needs documentation
 before being used as a statistical weighting scheme.
 
 ## Source-model identifiability decision
@@ -82,8 +81,11 @@ verification of the authors' original plant.
 
 ## Machine-readable evidence
 
-GitHub Actions run:
-https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993477851
+Final tightened-regression GitHub Actions run (all three jobs passed):
+https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993973281
+
+Machine-readable four-report archive:
+https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993973281/artifacts/13398788849
 
 Measurements source:
 https://trc.nist.gov/ThermoML/10.1021/je1001158.json
