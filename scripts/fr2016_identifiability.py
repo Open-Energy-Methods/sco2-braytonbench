@@ -1,8 +1,8 @@
-"""Enumerate defensible alternative boundary-state interpretations of FR2016.
+"""Quantify the consequences of counterfactual boundary-state labels in FR2016.
 
 Does not reconstruct the detailed author EES plant, or estimate parameter
 uncertainty from a probability distribution. Mapping sensitivity diagnoses
-structural ambiguities in the *published* reference.
+mislabel sensitivity; the paper identifies T7 and compressor suction P8 in its conceptual schematic.
 """
 from __future__ import annotations
 import json
@@ -46,13 +46,13 @@ r={"source":"Friedman and Rapp 2016, Figure 2b/Table 2/Table 3",
    "paper_reported_low_temperature_ratio_to_Tcrit":1.0,
    "paper_thermal_efficiency_percent":100*FR2016_REPORTED["eta_thermal"],
    "source_model_identified":False,
-   "purpose":"Test boundary-state ambiguity; no full EES model is recovered",
+   "purpose":"Stress-test erroneous alternative state labels against the source-supported T7/P8 default; no full EES model is recovered",
    "n_mapping_cases":4,
    "cases":cases,
-   "observed_mapping_efficiency_spread_pp":
+   "observed_counterfactual_mapping_spread_pp":
        max(c["efficiency_percent"] for c in valid)-min(c["efficiency_percent"] for c in valid) if len(valid)>1 else None,
    "unidentified_items":[
-      "Which detailed EES Figure 4 state receives nominal P_low",
+      "Original detailed Figure 4 pressure boundary mapping (may differ from Figure 2b)",
       "Original EES compressor-turbine and main-turbine shaft split",
       "Original compressor/turbine maps, motor-generator performance",
       "Complete plant state table and external loop conditions",

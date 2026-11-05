@@ -69,3 +69,42 @@ No experimental sCO2 test-rig experience or CARBOSOLA-specific
 measurements or geometry is claimed. The repository is a fresh
 reconstruction; the previously referenced v0.5 archive was not
 available for direct import.
+
+## Independent measured-density validation (GitHub Actions 2026-11-05)
+
+The source-curated `data/reference/mantilla2010_thermoml_density.csv` includes
+**49 directly measured pure-CO₂ densities** from Mantilla et al. (2010)
+at 310/350/400/450 K, spanning approximately 1–160 MPa. Unlike the
+older REFPROP-versus-CoolProp tests, this is experimental validation
+**of density only**.
+
+The real-fluid CI job on [run 41993477851](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993477851)
+passed **61 tests**. Both fixture-only Python jobs passed **73 tests**
+and skipped 5 optional CoolProp modules.
+
+- Mean density residual: **−0.005608%**
+- RMS relative density residual: **0.034731%**
+- Maximum absolute relative density residual: **0.090241%**
+  (among the 49 recorded conditions).
+- Per-temperature maximum residuals: 310 K **0.04660%**;
+  350 K **0.02784%**; 400 K **0.06498%**;
+  450 K **0.09024%**.
+
+The regression-screen thresholds have been tightened to **0.2% maximum**
+and **0.1% RMS** based on this first clean baseline. They are test
+thresholds, **not** physically derived measurement uncertainty bounds.
+Independent validation of enthalpy, entropy and heat capacity is
+still outstanding, particularly in the closest near-critical region.
+
+## Original source-model identifiability
+
+The FR2016 default `T7/P8` mapping remains source-supported.
+Deliberately relabelling the low-side pressure and/or temperature
+to adjacent states produces a conceptual-cycle efficiency range
+**24.2907–24.3058%** (spread **0.01510 percentage points**).
+These are **counterfactual mapping tests**, not equally credible
+interpretations of the authors' paper. They do not recover the
+Figure 4 EES plant's compressor-turbine branch, full state table
+or missing performance maps.
+
+See `docs/EXPERIMENTAL_DENSITY_AND_IDENTIFIABILITY.md`.

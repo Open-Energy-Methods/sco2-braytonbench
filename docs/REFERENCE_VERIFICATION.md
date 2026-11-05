@@ -100,3 +100,25 @@ implemented or validated in this repository**.
   agreement is encouraging but topology and source boundary
   conditions are not uniquely identifiable; no full EES replication.
 - **G3-G6:** open as documented in `docs/RESEARCH_STATUS.md`.
+
+## Extension with independent measured densities
+
+A new **experimental** source is the Mantilla et al. 2010 CO₂
+`(P,ρ,T)` dataset, DOI [10.1021/je1001158](https://doi.org/10.1021/je1001158).
+Its 49 observations were recovered as machine-readable NIST ThermoML data,
+rather than digitized from a graph.
+
+The first CoolProp 8.0.0 comparison (GitHub Actions
+[41993477851](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993477851))
+yielded mean bias **−0.0056077%**, RMS **0.0347305%** and maximum
+absolute residual **0.0902414%**. It spans four isotherms
+310–450 K. This provides experimentally grounded confidence in
+**density**, though it is not a measured (h/s/c_p) validation
+and does not certify the immediate critical singular region.
+
+A separate four-case T7/T8, P7/P8 labelling sensitivity exercise
+shows a **0.01510 percentage point** efficiency range. T7 and
+compressor suction P8 are grounded in the conceptual paper;
+other labels are counterfactual index-misassignment sensitivity.
+Unreported Figure 4 detailed EES component states still bar
+full source-model reproduction.

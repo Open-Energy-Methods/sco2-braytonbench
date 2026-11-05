@@ -37,11 +37,11 @@ def test_measurement_residual_screen():
     rms=(sum(e*e for e in errors)/len(errors))**.5
     # Broad screen to detect unit, dataset, phase and backend regressions.
     # Not a statement that density is validated to 2% uncertainty.
-    assert max_abs < .02, f"max relative measured density residual: {max_abs:.6%}"
-    assert rms < .01, f"RMS relative measured density residual: {rms:.6%}"
+    assert max_abs < .002, f"max relative measured density residual: {max_abs:.6%}"
+    assert rms < .001, f"RMS relative measured density residual: {rms:.6%}"
 
 @pytest.mark.parametrize("temperature_k",[310,350,400,450])
 def test_individual_temperature_groups(temperature_k):
     err=[abs(e) for e,p in residuals() if p["T_K"]==temperature_k]
     assert len(err)>=5
-    assert max(err)<.02
+    assert max(err)<.002
