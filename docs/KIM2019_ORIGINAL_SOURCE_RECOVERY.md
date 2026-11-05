@@ -38,7 +38,7 @@ The versioned [machine-readable Table 4 transcription](../data/reference/kim2019
 
 **PDF p. 10, Table 6:** the paper reports its **own** empirical model mean absolute difference (MAD) **10.00% top**, **10.44% bottom**, and **8.71% top/bottom average**. Its semi-empirical model reports **21.73% top / 22.35% bottom**. It also reports the original Lei water-fit correlation **381.45% top / 115.79% bottom** on its *own* source evaluation; this supports the independent finding that Lei may transfer poorly to CO₂. However, it is **not** a reproduction of our Stuttgart H1c 1065.72% top / 197.73% bottom error, because domains, property treatment and data populations differ.
 
-**DO NOT report 10.00% / 10.44% as achieved in BraytonBench.** This PR implements **no Kim equation**, tests no Kim numerical predictions and performs no Stuttgart comparison of Kim. The original coefficient equations can now be implemented in a new isolated H1d PR with independent arithmetic reference points, a constrained wall-T solve, the existing identical 4 nominal held-outs and matched-station comparisons.
+**DO NOT report 10.00% / 10.44% as achieved in BraytonBench.** At source-retrieval PR #18, no Kim equation had yet been implemented. Subsequent draft [PR #19](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/19) implements equation arithmetic, wall-temperature inverse and out-of-fit-domain Stuttgart transfers, but **not** the original 620-point model parity.
 
 Additional caution: the model uses temperature-averaged **near-wall properties** and must treat any **experimentally measured wall-temperature input** as a conditioned diagnostic, not an a-priori predictive result. Actual source training/validation independence cannot be inferred solely from Table 6.
 
