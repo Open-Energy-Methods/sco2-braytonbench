@@ -62,4 +62,5 @@ jobs:
           path: |
             evidence/generated/whr_design_screen.json
             evidence/generated/whr_grid_matrix.csv
+            evidence/generated/whr_robustness.json
           if-no-files-found: ignore
