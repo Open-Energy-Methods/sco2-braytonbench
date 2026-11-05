@@ -1,37 +1,46 @@
 # Research and verification status
 
-Updated: 2026-11-05. **Pre-alpha research software.**
+Updated: 2026-11-05. **Pre-alpha research software — PR #1 remains draft.**
 
-This is a fresh, independently structured repository. It is not a copy of HTHP-ControlBench, and it is **not** a CARBOSOLA digital twin.
+The repository is independent of HTHP-ControlBench, and it is
+**not** a CARBOSOLA digital twin.
 
-## Provenance and scope
+## Provenance
 
-- **Friedman & Rapp (2016):** the pressure-loss labels in Table 2 and Figure 2b have been visually reviewed. The repository reconstructs a 12-point **pressure network only**; the original authors' detailed EES plant uses additional elements. The reference model has **not** been reproduced numerically.
-- **Mohagheghi & Kapat (2014):** the RC/RRC topology and finite exhaust-gas heat supply were visually reviewed. Their GA/REFPROP optimum has **not** been numerically reproduced. Plot readings are **not** benchmark truth data.
-- **Analytic fixture:** constant-property ideal-gas fluid, used to test equations, signs, pressure closure, heat transfer and numerical procedures. It **must not** be described as real CO2 or as validation against either paper.
-- **CoolProp:** an optional real-fluid interface exists; real-fluid state inversion and cycle integration await CI and independently referenced values.
+- **Friedman & Rapp (2016):** Figure 2b state/pressure graph is
+  visually reviewed. A 12-point **conceptual-cycle** comparator has
+  now been implemented separately from the six-state waste-heat
+  prototype. The original authors' complete Figure 4 EES model is
+  not reproduced.
+- **Mohagheghi & Kapat (2014):** RC/RRC layouts and finite gas
+  heat-exchanger assumptions are source-audited. Their REFPROP/GA
+  optimizations have not been numerically reproduced.
+- **NIST REFPROP User's Guide (2013):** published CO2 state values
+  at 293.15 K are recorded for version-controlled cross-implementation
+  checks (density and reference-offset-safe enthalpy/entropy deltas).
+  See `docs/REFERENCE_VERIFICATION.md`.
+- **Analytic test fixture:** ideal gas, not actual CO2; used for
+  pressure, enthalpy and conservation logic tests only.
+- **CoolProp:** optional HEOS backend and CI reference tests; real
+  fluid cycle validation remains pending independent review.
 
-## Gate register
+## Verification gates
 
-| Gate | Current status | Requirement to close |
+| Gate | Status | Closure conditions |
 |---|---|---|
-| G0 — literature provenance | **Partial** | Topology/parameter traceability, especially full paper state tables and equation-of-state reference |
-| G1-A — algebraic invariants | **Local tests passed** | Stable CI on clean environments |
-| G1-E — real CO2 EOS | **Open** | CoolProp property tests and external benchmark comparisons near criticality |
-| G2 — fully coupled steady cycle | **Open** | Real-fluid convergence, source-paper quantitative comparison, energy/entropy checks |
-| G3 — source waste heat | **Partial prototype** | Finite-UA source/inventory of constraints with verified parameter ranges |
-| G4 — dynamic plant | **Not implemented** | Conserved states, thermal masses and valid time scales |
-| G5 — PI/MPC | **Not implemented** | Physically credible actuators, safety limits and observer assumptions |
-| G6 — TEA, modular variants | **Not implemented** | Credible design/economic boundary and uncertainty |
+| G0 — original-paper provenance | Partial | Unidentified Figure 4 EES assumptions documented |
+| G1-A — algebraic invariants | Local & CI fixture tests passed | Maintain CI |
+| G1-E — real CO2 EOS | **Open / reference tests in CI** | Check numerical comparisons and broaden domain |
+| G2 — FR2016 numerical reproduction | **Open** | Source-model identifiability and quantitative reproduction |
+| G3 — waste-heat transfer | Partial prototype | Real-fluid heater and fixed geometry validated |
+| G4 — conserved transient plant | Not implemented | Mass/energy inventories |
+| G5 — PI/MPC | Not implemented | Controlled plant and safety authority |
+| G6 — economics/modular | Not implemented | Validated operating scenarios |
 
-An optional EOS property smoke test alone **does not pass G1-E or G2**.
+Even if the new NIST and near-critical density tests pass,
+they do not close the entire G1-E gate without uncertainty and
+a broader domain of independent thermodynamic comparisons.
 
-## Traceability limitations
-
-No proprietary HZDR/CARBOSOLA data were used. No experimental sCO2 test-rig work is claimed. No test of the exact earlier v0.5 software package has been reconstructed from unavailable original artifacts.
-
-The local test report in `evidence/` applies to the **new repository reconstruction** and must not be conflated with a previously reported 61-test experiment whose source files were not available for import.
-
-## AI assistance
-
-Design drafting and implementation received AI assistance and require human engineering review. Benchmark provenance, independent numerical tests and reproducibility are treated as release prerequisites.
+No hardware or experimental sCO2 performance is claimed.
+The earlier v0.5 package was not available for import; this
+repository contains a fresh and explicitly labelled reconstruction.
