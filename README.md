@@ -88,7 +88,7 @@ streams, while constant cp remains the default for compatibility.
 An optional separately identified **quadratic flow-loss scaling scenario**
 is provided for sensitivity only, not a measured map.
 
-Read [the G3.2 physics and verification scope](docs/G32_COUPLED_COOLING.md).
+Read [the G3.2 physics and verification scope](docs/G32_COUPLED_COOLING.md) and the [G3.2 numerical verification](docs/G32_NUMERICAL_VERIFICATION.md).
 The model is still steady-state, with no phase change, real turbomachinery
 maps, calibrated heat-transfer correlations or transient control.
 

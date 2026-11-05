@@ -135,3 +135,13 @@ In an **independently assumed illustrative** 800 K gas inlet/20 kg/s CO₂ desig
 See [G3.1 methods](docs/G31_FIXED_UA_COUPLING.md), [G3.1 numerical results](docs/G31_FIXED_UA_NUMERICAL_RESULTS.md) and [reproducibility evidence](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42002609837/artifacts/13403581114).
 
 **G3.1 physical/industrial validation OPEN:** gas property variation, real heat-transfer/pressure-loss correlations, cooling-UA equipment coupling and independent operating data remain necessary.
+
+## G3.2 — two installed-UAs and finite coolant, 2026-11-05
+
+[Stacked draft PR #9](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/9) solves compressor inlet T1 and turbine inlet T4 from a finite hot-gas stream, finite coolant and two **fixed installed exchanger UAs**. It also introduces source and coolant temperature-dependent linear sensible cp (optional) and **uncalibrated** flow-dependent loss/efficiency scenarios. Existing constant-cp behaviour is retained by default. The sink has no phase change, measured geometry, pump/fan power or transient inventory.
+
+[GitHub Actions run 42005964249](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42005964249) passed all six jobs: **178 fixture tests passed/8 optional real-fluid modules skipped** on each Python version; previous property, G3 and G3.1 jobs passed; the new dual-UA real-CO₂ test passed, and two coolant-perturbation operating points were exported.
+
+At a synthetic installed heater UA **21.626 kW/K** and cooler UA **100.514 kW/K**, coolant inlet 285→287 K changed calculated **T1 310.005→310.464 K**, **T4 650.020→652.217 K**, net shaft power **1.424→1.406 MW**, and cooler outlet **295.173→297.025 K**, with both UA errors below the declared solver tolerances. See [full numerical record](docs/G32_NUMERICAL_VERIFICATION.md).
+
+**Status:** G3.2 numerical prototype verified at these tests; industrial G3 gate **still OPEN**, pending calibrated geometry/flow properties, near-critical convergence, actual cooling equipment constraints and machine maps.

@@ -130,7 +130,7 @@ fractional pressure-loss treatment.
   2% fractional pressure-drop convention have not been reproduced.
 - No proprietary/experimental HZDR/CARBOSOLA information is used.
 
-**G3.2 decision:** treat as exploratory until actual CI results
+See [G3.2 numerical results](G32_NUMERICAL_VERIFICATION.md) and [the source experiment evidence](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42005964249/artifacts/13405495551).\n\n**G3.2 decision:** treat as exploratory until actual CI results
 and their convergence evidence are inspected. The industrial
 off-design validation gate remains OPEN even after a test suite
 passes, because plant geometry and equipment maps are missing.
