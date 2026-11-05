@@ -187,9 +187,31 @@ been obtained and its Eqs. (23), (24), (29), (30), top/bottom
 **Table 4** coefficients and original experimental limits recorded in
 [the source audit](docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md)
 and [machine-readable coefficient registry](data/reference/kim2019_coefficients.json).
-The copyrighted full PDF is **not included**. **No Kim 2019 numerical
-correlation, Stuttgart benchmark reproduction, or independent
-prediction has yet been implemented.**
+The copyrighted full PDF is **not included**. This first source-recovery
+milestone preceded the later **H1d implementation**, detailed below;
+independent original-study reproduction is still OPEN.
+
+## G3.5 H1d — original Kim (2019) horizontal CO₂ correlation benchmark
+
+[Kim H1d source-aware methodology](docs/G35D_KIM2019_BENCHMARK.md)
+implements the original semi-empirical and empirical top/bottom mixed-
+convection equations with real-fluid temperature-integral properties.
+The printed Eq24 and empirical Table4 negative exponents give an
+unresolved source ambiguity; literal and separately labelled
+**unverified sign-hypothesis** comparisons are isolated.
+Stuttgart's entire source heat-flux range **exceeds Kim's original fit
+maximum**. All H1d comparisons are out-of-domain transfer studies, not
+original Kim parity or industrial HX/cycle validation.
+
+[Executed Kim H1d numerical and original-source consistency results](docs/G35D_RESULTS.md)
+show the printed empirical Eq24/Table4 interpretation has extreme
+overprediction; the semi-empirical form achieves ~52.6% HTC MAPE
+on 1,573 Stuttgart stations, and the *unverified* sign variant ~43.9%
+on 1,522. **No original author 10% error has been reproduced**, and
+the source heat-flux envelopes do not overlap. Model accuracy gates
+remain OPEN. The updated H1d CI also computes a **three-way common-station**
+comparison with a matched Jackson–Hall baseline and explicit root-failure
+coverage; its numerical results are reproducible artifacts, not extra fit data.
 
 ## Source literature
 

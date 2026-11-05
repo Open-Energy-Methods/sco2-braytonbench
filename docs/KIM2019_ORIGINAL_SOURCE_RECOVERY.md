@@ -1,6 +1,6 @@
 # Kim et al. (2019): original source recovered and verified
 
-**Status:** original full 12-page source PDF **obtained and inspected** on 2026-11-05. The source-recovery gate is CLOSED. **Implementing the correlation and validating it against Stuttgart are separate and OPEN.**
+**Status:** original full 12-page source PDF **obtained and inspected** on 2026-11-05. The source-recovery gate is CLOSED. **H1d source-equation implementations and out-of-domain Stuttgart comparisons have since executed. Original author's exact empirical Eq24 interpretation and original-data numerical parity remain OPEN.**
 
 Citation: Tae Ho Kim, Jin Gyu Kwon, Joo Hyun Park, Hyun Sun Park and Moo Hwan Kim, *Heat transfer model for horizontal flows of CO₂ at supercritical pressures in terms of mixed convection*, *International Journal of Heat and Mass Transfer* **131** (2019), pp. 1117–1128. DOI: [10.1016/j.ijheatmasstransfer.2018.11.075](https://doi.org/10.1016/j.ijheatmasstransfer.2018.11.075).
 
@@ -38,7 +38,7 @@ The versioned [machine-readable Table 4 transcription](../data/reference/kim2019
 
 **PDF p. 10, Table 6:** the paper reports its **own** empirical model mean absolute difference (MAD) **10.00% top**, **10.44% bottom**, and **8.71% top/bottom average**. Its semi-empirical model reports **21.73% top / 22.35% bottom**. It also reports the original Lei water-fit correlation **381.45% top / 115.79% bottom** on its *own* source evaluation; this supports the independent finding that Lei may transfer poorly to CO₂. However, it is **not** a reproduction of our Stuttgart H1c 1065.72% top / 197.73% bottom error, because domains, property treatment and data populations differ.
 
-**DO NOT report 10.00% / 10.44% as achieved in BraytonBench.** This PR implements **no Kim equation**, tests no Kim numerical predictions and performs no Stuttgart comparison of Kim. The original coefficient equations can now be implemented in a new isolated H1d PR with independent arithmetic reference points, a constrained wall-T solve, the existing identical 4 nominal held-outs and matched-station comparisons.
+**DO NOT report 10.00% / 10.44% as achieved in BraytonBench.** At source-retrieval PR #18, no Kim equation had yet been implemented. Subsequent draft [PR #19](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/19) implements equation arithmetic, wall-temperature inverse and out-of-fit-domain Stuttgart transfers, but **not** the original 620-point model parity.
 
 Additional caution: the model uses temperature-averaged **near-wall properties** and must treat any **experimentally measured wall-temperature input** as a conditioned diagnostic, not an a-priori predictive result. Actual source training/validation independence cannot be inferred solely from Table 6.
 
@@ -48,6 +48,10 @@ Additional caution: the model uses temperature-averaged **near-wall properties**
 - **Original eqs. (23), (24), (29), (30), superposition and Table 4: VERIFIED and machine-transcribed.**
 - **Original source fit region and published error table: RECORDED.**
 - **Original paper full text: NOT redistributed.**
-- **Numerical implementation, original-study pointwise replication and Stuttgart hold-out transfer validation: NOT YET DONE.**
+- **H1d numerical interpretation comparison and unchanged Stuttgart held-out scoring: EXECUTED, with substantial source-level ambiguity and poor out-of-fit-range performance. Exact original-study 620-point replication and in-domain validation: NOT YET DONE.**
 
 This source audit is part of the release/integration provenance; scientific model work remains in [Issue #17](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/17).
+
+### H1d implementation warning — printed Eq24 / Table4 consistency check
+
+The subsequently implemented source-equation audit exposed a **potential internal inconsistency**: Eq.24 visibly places `Re_b^n1 Pr_b^n2` in the denominator but empirical Table4 specifies negative n1 and n2. A literal reading causes Nusselt numbers orders of magnitude larger than original Fig10 suggests, and >30 million% MAPE in the independent Stuttgart flux-driven transfer test. An alternative sign convention is separately tested as an **UNVERIFIED hypothesis**, not a published author correction or original-model reproduction. The exact source-vs-model distinction, root coverage and all experiment errors are documented in [H1d results](G35D_RESULTS.md). The original 620-point author dataset is still needed to establish parity. 
