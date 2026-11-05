@@ -53,7 +53,7 @@ for case in cases:
                 fluid_property_model=water))
         assert isfinite(heater.required_ua_w_k)
         assert isfinite(cooler.required_ua_w_k)
-        assert abs(cooler.coolant_energy_residual_w)<1e-5
+        assert abs(cooler.coolant_energy_residual_w)<1e-8*max(cooler.rejected_heat_w,1.)
         assert abs(cycle.first_law_residual_w)<1e-5
         assert heater.min_approach_k>=10.
         assert cooler.minimum_approach_k>=5.

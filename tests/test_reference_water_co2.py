@@ -38,7 +38,7 @@ def test_water_cooler_with_real_co2_energy_and_entropy():
         maximum_outlet_temperature_k=330.,segments=5,
         fluid_property_model=W)
     actual=rate_cooler(CoolPropCO2(),r.states[5],r.states[0],20.,sink)
-    assert abs(actual.coolant_energy_residual_w)<1e-5
+    assert abs(actual.coolant_energy_residual_w)<1e-8*max(actual.rejected_heat_w,1.)
     assert actual.entropy_generation_w_k>0
     assert 285.<actual.coolant_outlet_k<330.
     assert actual.minimum_approach_k>=sink.minimum_approach_k
@@ -94,4 +94,4 @@ def test_nist_air_and_real_water_integrated_dual_ua_inverse():
     assert x.cooler_ua_residual_relative<.001
     assert x.heater.ua_residual_relative<.0002
     assert x.cooler.entropy_generation_w_k>0
-    assert abs(x.cooler.coolant_energy_residual_w)<1e-5
+    assert abs(x.cooler.coolant_energy_residual_w)<1e-8*max(x.cooler.rejected_heat_w,1.)
