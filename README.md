@@ -175,6 +175,22 @@ is a cross-fluid transferability failure rather than a solver
 residual problem. No model correction, HM interpolation or
 new coefficient fit was introduced.
 
+## Consolidated research and recovered Kim 2019 source
+
+[Consolidation history and CI verification](docs/PR_CONSOLIDATION_AUDIT.md)
+covers the prior nine stacked research PRs without erasing their commit
+history. A merge into `main` is a **repository integration milestone
+only**, not an approval of all numerical model assumptions.
+
+The **original Kim et al. (2019) CO₂ mixed-convection paper** has now
+been obtained and its Eqs. (23), (24), (29), (30), top/bottom
+**Table 4** coefficients and original experimental limits recorded in
+[the source audit](docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md)
+and [machine-readable coefficient registry](data/reference/kim2019_coefficients.json).
+The copyrighted full PDF is **not included**. **No Kim 2019 numerical
+correlation, Stuttgart benchmark reproduction, or independent
+prediction has yet been implemented.**
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

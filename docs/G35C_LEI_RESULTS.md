@@ -66,3 +66,7 @@ The local bisection scan detects **sampled** sign changes; it does not mathemati
 **Full industrial G3 and Brayton-cycle plant/controls validation: OPEN.**
 
 This source-faithful negative result is appropriate to retain for a reproducible methods benchmark. Do not tune original Lei published coefficients post hoc and then claim a Lei replication.
+
+### Subsequent source-retrieval update (2026-11-05)
+
+Since this independent Lei-transfer review, the previously inaccessible full **Kim et al. (2019)** original source PDF has been obtained. Its exact equations, Table 4 coefficient matrix, original CO₂ experimental range and Table 6 author's errors are now documented in [Kim source audit](KIM2019_ORIGINAL_SOURCE_RECOVERY.md). No Kim correlation has yet been implemented or scored against the Stuttgart source. This later retrieval does **not** alter the original Lei negative results.
