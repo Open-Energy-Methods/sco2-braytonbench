@@ -133,8 +133,8 @@ def solve_lei_wall(
     rho_bulk_kg_m3:float,heat_flux_w_m2:float,diameter_m:float,
     bulk_temperature_k:float,pressure_pa:float,props:Callable,
     wall_upper_k:float=650.,
-    scan_segments:int=16,max_iterations:int=23,
-    tolerance_k:float=0.008,
+    scan_segments:int=16,max_iterations:int=35,
+    tolerance_k:float=0.00001,
     max_energy_residual_relative:float=0.002,
 )->tuple[LeiWallState,int,float]:
     """Solve the one-point energy condition q''=HTC(Tw)*(Tw-Tb).
