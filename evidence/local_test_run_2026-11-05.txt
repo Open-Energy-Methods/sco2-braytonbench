@@ -1,0 +1,9 @@
+Reconstructed repository initial foundation — 2026-11-05
+Environment: local container, Python 3.13, pytest
+Command: python -m pytest -q
+Result: 58 passed, 1 skipped in 0.19 s
+Skipped: entire tests/test_coolprop_optional.py (CoolProp not available)
+Scope: SI algebra, ideal-gas fixture, six-state cycle, pressure mapping,
+counterflow HX conservation, source gas finite duty and pinch
+Not verified: genuine CO2 thermodynamic benchmark, original v0.5 code,
+CARBOSOLA, experiments, dynamic plant, PI/MPC.

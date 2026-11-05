@@ -1,0 +1,23 @@
+source_id: MK2014
+authors: [Mahmood Mohagheghi, Jayanta Kapat]
+year: 2014
+title: Thermodynamic Optimization of Recuperated S-CO2 Brayton Cycles for Waste Heat Recovery Applications
+venue: 4th International Symposium - Supercritical CO2 Power Cycles
+evidence: source PDF user supplied and 13-page screenshot audit
+publication_type: steady-state optimization using REFPROP and genetic algorithm
+validated_experimental_data: false
+modelled_configurations:
+  - RC_six_state
+  - RRC_nine_state
+ambient_temperature_K: 300
+minimum_cycle_temperature_K: 310
+fractional_pressure_drop: 0.02
+turbine_isentropic_efficiency: 0.90
+compressor_isentropic_efficiency: 0.89
+waste_gas_mass_flow_kg_s: 100
+waste_gas_assumption: air-like
+recuperator_terminal_delta_T_bounds_K: [10, 40]
+main_heater_pinch_bounds_K: [10, 400]
+objective: maximize net bottoming cycle power, not necessarily efficiency
+figure_3_numerical_reproduction: not_possible_from_plot_alone
+source_note: no transient PI MPC or CARBOSOLA experimental data
