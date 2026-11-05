@@ -161,7 +161,7 @@ def evaluate(index_file:Path,h1b_file:Path,h1b_report_file:Path,
             q_domains["source_flux_exceeds_max"]+=int(q/1e3>max(
                source_registry["source_experimental_envelope"]["postech"]["wall_heat_flux_kw_m2_max"],
                source_registry["source_experimental_envelope"]["additional_Adebiyi_Hall"]["heat_flux_kw_m2_max"]))
-            q_domains["original_postech_full_P_G_q_D"]+=int(all(domain.values()))
+            q_domains["original_postech_full_P_G_q_D"]+=int(domain["valid_in_POSTECH_fitted_P_G_q_and_D"])
         except (KeyError,ValueError,ZeroDivisionError,OverflowError):
             exclusions[("all","malformed_source_record")]+=2
             continue
