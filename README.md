@@ -39,7 +39,7 @@ python -m pytest tests/test_coolprop_optional.py -q
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
 - Mohagheghi, M., and Kapat, J. (2014), *Thermodynamic Optimization of Recuperated S-CO2 Brayton Cycles for Waste Heat Recovery Applications*, 4th International Symposium on Supercritical CO₂ Power Cycles. Supports open-loop source-gas balances and the distinction between maximum net-power and maximum-efficiency cycle designs.
 
-See [source distinctions](docs/REFERENCES.md), [research gate status](docs/RESEARCH_STATUS.md), and [verification protocol](docs/VERIFICATION.md).
+See [source distinctions](docs/REFERENCES.md), [FR2016 source/benchmark review](docs/FR2016_COMPARISON_REVIEW.md), [real-fluid reference verification](docs/REFERENCE_VERIFICATION.md), [research gate status](docs/RESEARCH_STATUS.md), and [verification protocol](docs/VERIFICATION.md).
 
 ## Explicit exclusions
 

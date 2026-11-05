@@ -19,9 +19,20 @@ and is **not** a CARBOSOLA digital twin.
   The difference is `-0.0754` percentage points. Power comparison
   is normalized to the source's reported 100.20 MW heat input,
   **not** a separate determination of installed capacity.
-- New CI tests check entropy generation and thermodynamic derivatives.
-  A sensitivity report probes recuperator segmentation and low
-  pressure/temperature assumptions. Results require CI inspection.
+- A second CI run **41991703407** passed **64 analytic-fixture tests**
+  (4 optional CoolProp modules skipped in the fixture jobs) and
+  **46 real-fluid reference/consistency checks** in the dedicated
+  CoolProp 8.0.0 job. Its 12-state diagnostic and sensitivity JSON
+  are available as reproducible Actions artifacts.
+- At the chosen FR2016 point, increasing HX segments 30->60
+  changed calculated efficiency by **0** at printed precision,
+  while inferred recuperator UA increased **0.037%**.
+  Imposed effectiveness and a terminal-limited Qmax can make duty
+  segment-insensitive; this is **not universal grid independence**.
+- A +/-1 K shift of T_low changed efficiency from
+  24.4834% to 24.1216% (baseline 24.3058%). This assumption
+  sensitivity exceeds the 0.0754-percentage-point paper difference.
+  See `docs/FR2016_COMPARISON_REVIEW.md`.
 - Source Figure 4 EES turbine split, component maps and individual
   state data remain unknown; matching Table 3 totals is **not
   confirmation of an equivalent detailed plant model**.
