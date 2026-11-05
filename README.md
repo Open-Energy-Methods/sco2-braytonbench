@@ -34,6 +34,23 @@ python -m pytest tests/test_coolprop_optional.py -q
 
 **A passed smoke test is not numerical validation of a complete CO₂ cycle.**
 
+## Industrial waste-heat recovery — G3 exploratory screening
+
+A source-constrained six-state recuperated CO₂ model is now available
+on the G3 feature branch. It checks a finite exhaust-gas thermal
+inventory, counterflow heater pinch, stack-temperature floor,
+heat-exchanger sizing allowance, first-law conservation and an ideal-gas
+exergy ceiling. Both net **shaft power** and thermal efficiency are
+ranked over the **same finite feasible design grid**.
+
+Run the separately pinned CoolProp experiment with
+`python scripts/whr_design_screen.py`.
+Read [the G3 model specification](docs/G3_WASTE_HEAT_DESIGN_SCREENING.md)
+for explicit assumptions, source-versus-model distinctions, and limits.
+
+The branch's grid search is **not** a global optimizer, an MK2014
+REFPROP/GA reproduction, or a validated off-design sCO₂ rig model.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
