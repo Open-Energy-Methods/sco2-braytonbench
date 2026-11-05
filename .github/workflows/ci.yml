@@ -183,3 +183,30 @@ jobs:
             evidence/generated/stuttgart_h1b/h1b_paired_audit.json
             evidence/generated/stuttgart_h1/report.json
           if-no-files-found: ignore
+
+  stuttgart-h1c-lei-orientation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Published Lei equations and implicit wall-solve identity tests
+        run: python -m pytest -q tests/test_lei_mixed_convection.py
+      - name: Reproduce original unchanged H1a baseline
+        run: python scripts/stuttgart_h1.py
+      - name: Reproduce original unchanged H1b wall-property comparisons
+        run: python scripts/stuttgart_h1b.py
+      - name: Evaluate Lei HB/HT experiment transfer and paired comparisons
+        run: python scripts/stuttgart_h1c.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35c-lei-top-bottom-stuttgart
+          path: |
+            evidence/generated/stuttgart_h1c/h1c_lei_pointwise.csv
+            evidence/generated/stuttgart_h1c/h1c_lei_report.json
+            evidence/generated/stuttgart_h1b/h1b_report.json
+          if-no-files-found: ignore

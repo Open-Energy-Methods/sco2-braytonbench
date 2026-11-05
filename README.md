@@ -151,6 +151,17 @@ the earlier forced-convection baselines, but top-wall MAPE remains
 A source-faithful Richardson indicator flags buoyancy risk rather
 than inventing a heat-transfer enhancement factor.
 
+## G3.5 H1c — orientation-specific published Lei equations
+
+[The H1c test protocol](docs/G35C_LEI_TOP_BOTTOM.md) adds the
+published Lei et al. **top (HT) and bottom (HB)** equations as an
+explicit cross-fluid/geometry stress test on the Stuttgart experimental
+dataset. These equations were fitted for supercritical WATER (26/43 mm),
+**not** this supercritical CO₂ 4/8 mm dataset. No middle-wall formula
+or angular interpolation is invented; measured-wall-conditioned
+diagnostics are separated from flux-driven predictions, with the
+same STU-001 quarantine and four held-out families.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
