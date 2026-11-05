@@ -57,3 +57,10 @@ The original paper's Table 6 reports **10.00% top and 10.44% bottom** *on the au
 **Gate:** pure equation arithmetic + full Stuttgart conditional comparison **EXECUTED**; original-source empirical parity **OPEN**, complete in-domain original-fit validation **OPEN**, reliable top/bottom near-critical sCO₂ HTC prediction **OPEN**, industrial PCHE and Brayton-cycle UA validation **OPEN**.
 
 No emails were sent; no new release, tag or DOI was issued.
+
+## Exact three-way common-station robustness audit
+
+The preliminary three-model summary above uses each model's successfully solved station subset; those MAPE values are **not a common-support ranking**. A further CI analysis intersects the exact successful `(experiment_id, axial_position_m, orientation)` station IDs across all three Kim variants, checks the source metadata and fixed original holdout grouping, and evaluates a **matched Jackson–Hall baseline on those same points**.
+
+The reproducible CI artifacts are `common_station_comparison.md`, `common_station_comparison.json`, `common_station_comparison.csv`, and the audited `common_station_errors.csv`. This removes unequal-subset comparison from the matched comparison but **does not repair nonrandom failed-root exclusions**. Original Kim fit-domain overlap remains zero because of the published heat-flux ceiling. Published data from this audit are reported only when the revised CI workflow completes.
+
