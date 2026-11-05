@@ -52,4 +52,4 @@ All scores record sample counts, per-run and nominal-family macro error, MAPE, s
 
 The 2022 authors report ~52% Bishop deviation under **their** method, not necessarily identical to ours. Do not claim replicated author statistics without source-aligned eligibility, thermophysical reference treatment and uncertainty review. Neither formula explicitly resolves circumferential buoyancy or establishes an industrial sCO₂ exchanger UA.
 
-**H1b stage remains OPEN** until verified CI outputs and independent accuracy review.
+The first dedicated real-CO₂ run has completed; see [H1b executed results](G35B_RESULTS.md) and the [full machine archive](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42035909213/artifacts/13417234462). The result is a **partial improvement**, not a validated buoyancy-resolving model. **H1b accurate-prediction stage remains OPEN**.

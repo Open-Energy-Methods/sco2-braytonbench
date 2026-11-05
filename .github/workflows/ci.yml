@@ -171,6 +171,8 @@ jobs:
         run: python scripts/stuttgart_h1.py
       - name: Evaluate 4 wall-property correlation modes
         run: python scripts/stuttgart_h1b.py
+      - name: Paired model and source-reduced-HTC independent audit
+        run: python scripts/stuttgart_h1b_paired_audit.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -178,5 +180,6 @@ jobs:
           path: |
             evidence/generated/stuttgart_h1b/h1b_report.json
             evidence/generated/stuttgart_h1b/h1b_pointwise.csv
+            evidence/generated/stuttgart_h1b/h1b_paired_audit.json
             evidence/generated/stuttgart_h1/report.json
           if-no-files-found: ignore

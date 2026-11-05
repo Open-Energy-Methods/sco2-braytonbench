@@ -140,6 +140,17 @@ experiment benchmark. It distinguishes **measured-wall-conditioned
 diagnostics** from **flux-driven wall-temperature inversions**,
 without coefficient fitting or modifying the four nominal held-outs.
 
+## G3.5 H1b — first wall-property comparison results
+
+[The executed Bishop and Jackson–Hall experimental analysis](docs/G35B_RESULTS.md)
+separates measured-wall-conditioned diagnostics from flux-driven wall-T
+solutions. Flux-driven MAPE **46.40% (Bishop, 2,152 stations)**
+and **49.47% (Jackson–Hall, 2,318)** improve materially over
+the earlier forced-convection baselines, but top-wall MAPE remains
+~81–85%, and these remain cross-fluid/horizontal-domain extrapolations.
+A source-faithful Richardson indicator flags buoyancy risk rather
+than inventing a heat-transfer enhancement factor.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
