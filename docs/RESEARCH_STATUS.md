@@ -115,3 +115,11 @@ GitHub Actions [run 41993973281](https://github.com/Open-Energy-Methods/sco2-bra
 **73 passed / 5 CoolProp modules skipped** per fixture-only Python job; **61 passed** in the dedicated real-fluid job. Regression criteria `max absolute density residual < 0.2%` and `RMS < 0.1%` passed. The report contains measured and calculated densities and is retained in [the evidence artifact](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41993973281/artifacts/13398788849).
 
 The worst observed density residual (0.09024% at 450 K and approximately 122.193 MPa) is larger than the paper's quoted <0.03% density uncertainty, despite lying within its reported ~0.1% high-pressure EOS discrepancies. A formal experimental uncertainty consistency test remains outstanding. This does not invalidate the density agreement, but prevents a stronger claim about uncertainty-limited accuracy.
+
+## G3 finite-source steady screening, 2026-11-05
+
+Draft stacked [PR #6](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/6) models an industrial gas source coupled to a six-state real-CO₂ cycle, with explicit first-law, heater UA sizing, stack and pinch feasibility checks. [GitHub Actions 41999222234](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41999222234) passed all four jobs: **136 analytic tests (6 optional skipped) per Python version, 61 property/EOS tests and 3 real-fluid gas-source checks**.
+
+Base independent grid (16/20 feasible): power maximum **8.110 MW, η=25.218%** at CO₂ 100 kg/s, T4=700 K versus efficiency maximum **33.504%, Wnet=1.622 MW** at CO₂ 20 kg/s, T4=700 K. Under hypothetical cooler cap 15 MW_th and recuperator local minimum 10 K (6/20 feasible), power-max becomes **4.984 MW** (70 kg/s, 650 K) and efficiency-max **30.728%** (40 kg/s, 700 K). These are not MK2014 paper results or plant predictions. Both original winners underwent a **12/24/48 segment** sensitivity check; see [G3 results](docs/G3_STEADY_SCREENING_RESULTS.md) and [full G3 inputs/limitations](docs/G3_WASTE_HEAT_DESIGN_SCREENING.md).
+
+**G3 partial only.** The heater UA is an inequality design sizing allowance; a fixed installed heater, gas heat-capacity variation, flow-dependent pressure loss and real cooling/powertrain maps remain unimplemented.

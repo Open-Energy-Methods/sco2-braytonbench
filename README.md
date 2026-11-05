@@ -46,7 +46,7 @@ ranked over the **same finite feasible design grid**.
 Run the separately pinned CoolProp experiment with
 `python scripts/whr_design_screen.py`.
 Read [the G3 model specification](docs/G3_WASTE_HEAT_DESIGN_SCREENING.md)
-for explicit assumptions, source-versus-model distinctions, and limits.
+for explicit assumptions, source-versus-model distinctions, and limits. The [G3 screening results](docs/G3_STEADY_SCREENING_RESULTS.md) document numerical outcomes, added plant limits, and convergence checks.
 
 The branch's grid search is **not** a global optimizer, an MK2014
 REFPROP/GA reproduction, or a validated off-design sCO₂ rig model.
