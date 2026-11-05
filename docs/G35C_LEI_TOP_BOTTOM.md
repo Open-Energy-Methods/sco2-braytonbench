@@ -57,6 +57,11 @@ H1c takes the 2,318 original H1b Jackson-flux-successful stations as its referen
 
 For each Lei mode report point MAPE/bias, macro run and nominal-family error, HB/HT and 4/8 mm errors, unchanged four held-out groups, matched-station H1b Jackson, Bishop and Gnielinski errors, and a **seeded 4,000-resample nominal-family bootstrap**. Bootstrap assesses variation across 18 source configurations; it is NOT instrument covariance, a 95% predictive confidence interval or external test-set generalization. Original source HTC and measured wall T are calculated from related sensors and are not statistically independent.
 
+The [completed H1c real-fluid results](G35C_LEI_RESULTS.md) demonstrate
+severe source-domain transfer failure, despite converged wall/flux
+residuals. The [full machine evidence](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42040967963/artifacts/13421155963)
+is retained instead of fitting modified coefficients to hide the failure.
+
 ## Reproduce
 
 ```bash

@@ -162,6 +162,19 @@ or angular interpolation is invented; measured-wall-conditioned
 diagnostics are separated from flux-driven predictions, with the
 same STU-001 quarantine and four held-out families.
 
+## G3.5 H1c — published Lei top/bottom transferability audit
+
+The [executed H1c results](docs/G35C_LEI_RESULTS.md) show the
+originally **supercritical-WATER**, 26/43-mm Lei top/bottom correlations
+transfer **very poorly** to Stuttgart CO₂ 4/8-mm tubes. On
+1,580 identical HB/HT stations, Lei flux-driven local HTC MAPE is
+**631.72%** (top **1065.72%**) compared with **55.52%** for the
+previous Jackson–Hall flux-driven comparison. The wall-inverse
+numerical flux balance closes to better than 0.0013%, so this
+is a cross-fluid transferability failure rather than a solver
+residual problem. No model correction, HM interpolation or
+new coefficient fit was introduced.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
