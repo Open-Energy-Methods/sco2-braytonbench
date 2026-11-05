@@ -2,7 +2,7 @@
 import pytest
 from sco2_braytonbench import CycleInputs,DomainError,IdealGasFixture,PressureLosses
 from sco2_braytonbench.whr import (
-    WasteGasSource,evaluate_whr_design,screen_whr_designs,
+    WasteGasSource,PlantDesignLimits,evaluate_whr_design,screen_whr_designs,
 )
 
 F=IdealGasFixture()
@@ -89,3 +89,35 @@ def test_screen_reports_infeasibilities_and_both_maxima():
 def test_no_feasible_candidates_explicit_error():
     with pytest.raises(DomainError,match="no feasible"):
         screen_whr_designs(F,source(),[design(t4=860)])
+
+@pytest.mark.parametrize("bad",[-1.,float("nan")])
+def test_minimum_recuperator_approach_constraint_rejects_invalid(bad):
+    with pytest.raises(DomainError):
+        PlantDesignLimits(minimum_recuperator_approach_k=bad)
+
+def test_cooler_allowance_domain_rejected():
+    with pytest.raises(DomainError):
+        PlantDesignLimits(maximum_cooler_duty_w=0.)
+
+def test_design_rejected_when_cooler_exceeds_selected_budget():
+    base=evaluate_whr_design(F,design(),source())
+    assert base.cycle.cooler_w>0
+    with pytest.raises(DomainError,match="cooler"):
+        evaluate_whr_design(F,design(),source(),limits=PlantDesignLimits(
+            maximum_cooler_duty_w=base.cycle.cooler_w/2))
+
+def test_design_rejected_when_recuperator_below_selected_minimum():
+    base=evaluate_whr_design(F,design(),source())
+    with pytest.raises(DomainError,match="recuperator"):
+        evaluate_whr_design(F,design(),source(),limits=PlantDesignLimits(
+            minimum_recuperator_approach_k=
+            base.cycle.recuperator.min_approach_k+5.))
+
+def test_constraints_change_feasible_grid_count():
+    cases=[design(t4=t,m=m) for t in (550.,620.,680.)
+           for m in (5.,10.,20.)]
+    a=screen_whr_designs(F,source(),cases)
+    b=screen_whr_designs(F,source(),cases,limits=PlantDesignLimits(
+        maximum_cooler_duty_w=max(x.cycle.cooler_w for x in a.feasible)*.8))
+    assert 0<len(b.feasible)<len(a.feasible)
+    assert b.evaluated_count==a.evaluated_count
