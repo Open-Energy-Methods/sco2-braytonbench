@@ -20,7 +20,7 @@ from typing import Iterable
 from .cycle import CycleInputs, CycleResult, solve_cycle
 from .exchangers import HeaterResult, waste_gas_heater
 from .properties import DomainError, Properties
-from .streams import LinearCp
+from .streams import LinearCp, SensibleStream
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,7 @@ class WasteGasSource:
     segments: int = 20
     cp_slope_j_kg_k2: float = 0.0
     cp_reference_temperature_k: float = 300.0
+    gas_property_model: SensibleStream | None = None
 
     def __post_init__(self) -> None:
         must_be_positive = (
@@ -62,7 +63,9 @@ class WasteGasSource:
             fluid.cp(temperature)
 
     @property
-    def heat_capacity(self) -> LinearCp:
+    def heat_capacity(self) -> SensibleStream:
+        if self.gas_property_model is not None:
+            return self.gas_property_model
         return LinearCp(self.cp_j_kg_k,self.cp_slope_j_kg_k2,
                         self.cp_reference_temperature_k)
 
@@ -174,6 +177,7 @@ def evaluate_whr_design(
         n=source.segments,
         cp_slope_j_kg_k2=source.cp_slope_j_kg_k2,
         cp_reference_temperature_k=source.cp_reference_temperature_k,
+        gas_property_model=source.gas_property_model,
     )
     if heater.gas_out_k < source.minimum_stack_temperature_k - 1e-8:
         raise DomainError("stack temperature below design minimum")

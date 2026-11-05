@@ -16,3 +16,8 @@ from .offdesign import FlowScaling
 from .coupled_plant import CoupledPlantResult, solve_coupled_plant
 __all__ += ['LinearCp','CoolerSink','CoolerRating','rate_cooler',
             'FlowScaling','CoupledPlantResult','solve_coupled_plant']
+
+from .reference_streams import DryAirNISTShomate, CoolPropLiquidWater
+from .hydraulics import CircularPipe, PipeLossResult, pipe_loss, co2_pipe_loss
+__all__ += ['DryAirNISTShomate','CoolPropLiquidWater',
+            'CircularPipe','PipeLossResult','pipe_loss','co2_pipe_loss']

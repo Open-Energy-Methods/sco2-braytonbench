@@ -7,7 +7,7 @@ profiles; no pressure-drop/UA design coupling is asserted.
 from dataclasses import dataclass
 from math import isfinite, log
 from .properties import DomainError, Properties, State
-from .streams import LinearCp
+from .streams import LinearCp, SensibleStream
 
 @dataclass(frozen=True)
 class HXResult:
@@ -102,7 +102,8 @@ def waste_gas_heater(props:Properties,co2_in:State,co2_out:State,
                      m_co2:float,t_gas_in:float,m_gas:float,cp_gas:float,
                      min_pinch_k:float=10.,n:int=30,
                      *,cp_slope_j_kg_k2:float=0.,
-                     cp_reference_temperature_k:float=300.) -> HeaterResult:
+                     cp_reference_temperature_k:float=300.,
+                     gas_property_model:SensibleStream|None=None) -> HeaterResult:
     if n<3 or min(m_co2,m_gas,cp_gas,t_gas_in)<=0 or min_pinch_k<0:
         raise DomainError('invalid heater inputs')
     if co2_out.p>co2_in.p:
@@ -110,7 +111,8 @@ def waste_gas_heater(props:Properties,co2_in:State,co2_out:State,
     q=m_co2*(co2_out.h-co2_in.h)
     if q<=0:
         raise DomainError('heater must add heat to CO2')
-    gas_cp=LinearCp(cp_gas,cp_slope_j_kg_k2,cp_reference_temperature_k)
+    gas_cp=(gas_property_model if gas_property_model is not None else
+            LinearCp(cp_gas,cp_slope_j_kg_k2,cp_reference_temperature_k))
     gas_out=gas_cp.temperature_for_delta_h(t_gas_in,-q/m_gas)
     d=[]
     for i in range(n+1):

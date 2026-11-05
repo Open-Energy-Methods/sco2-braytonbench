@@ -92,6 +92,27 @@ Read [the G3.2 physics and verification scope](docs/G32_COUPLED_COOLING.md) and 
 The model is still steady-state, with no phase change, real turbomachinery
 maps, calibrated heat-transfer correlations or transient control.
 
+## G3.3 — reference stream properties, hydraulics and HX sensitivity
+
+Research property options now include:
+- a **NIST Shomate** ideal, dry, fixed-composition 79/21 mole-fraction N₂/O₂ stream (300–1000 K);
+- a **CoolProp HEOS Water** liquid-coolant stream at user-specified
+  pressure with no boiling or freezing;
+- **Darcy–Weisbach** single-phase circular-pipe hydraulics with
+  laminar `64/Re` and turbulent Haaland/Colebrook friction, rejecting
+  transition regimes rather than interpolating fabricated accuracy.
+
+The previous linear/constant cp and assumed-flow-loss models are still
+available for comparative regressions. No industrial heat-exchanger
+geometry, wetted path or roughness was provided, so the pipe
+correlation is **not automatically applied to the cycle**.
+
+Read [G3.3 reference-property and convergence protocol](docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md)
+and run `python scripts/g33_component_mesh_sensitivity.py` to
+record a real-fluid, multi-point **component-level** mesh sensitivity
+with 6/12/24/48 segments. This is **not** full nested dual-UA
+operating-point grid convergence and does not close industrial G3.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

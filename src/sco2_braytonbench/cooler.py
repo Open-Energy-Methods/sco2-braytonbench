@@ -8,7 +8,7 @@ CO2 follow the cycle's already-prescribed cooler pressure loss.
 from dataclasses import dataclass
 from math import isfinite
 from .properties import DomainError, Properties, State
-from .streams import LinearCp
+from .streams import LinearCp, SensibleStream
 from .exchangers import _lmtd
 
 
@@ -23,6 +23,7 @@ class CoolerSink:
     segments: int = 12
     cp_slope_j_kg_k2: float = 0.0
     cp_reference_temperature_k: float = 300.0
+    fluid_property_model: SensibleStream | None = None
 
     def __post_init__(self) -> None:
         if not all(isfinite(x) and x>0 for x in (
@@ -39,7 +40,9 @@ class CoolerSink:
         model.cp(self.maximum_outlet_temperature_k)
 
     @property
-    def heat_capacity(self)->LinearCp:
+    def heat_capacity(self)->SensibleStream:
+        if self.fluid_property_model is not None:
+            return self.fluid_property_model
         return LinearCp(self.cp_j_kg_k,self.cp_slope_j_kg_k2,
                         self.cp_reference_temperature_k)
 

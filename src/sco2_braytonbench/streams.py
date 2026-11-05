@@ -6,6 +6,14 @@ These are transparent exploratory correlations, NOT calibrated air/water.
 SI units: T K, cp J/(kg K), enthalpy changes J/kg, entropy J/(kg K).
 """
 from dataclasses import dataclass
+from typing import Protocol
+
+class SensibleStream(Protocol):
+    def cp(self, t_k:float)->float: ...
+    def delta_h(self,t1_k:float,t2_k:float)->float: ...
+    def delta_s(self,t1_k:float,t2_k:float)->float: ...
+    def temperature_for_delta_h(self,t_start_k:float,dh_j_kg:float)->float: ...
+
 from math import isfinite, log, sqrt
 from .properties import DomainError
 
