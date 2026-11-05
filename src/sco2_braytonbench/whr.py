@@ -126,7 +126,8 @@ class WHRScreen:
 
 def evaluate_whr_design(
     props: Properties, inputs: CycleInputs, source: WasteGasSource,
-    *, limits: PlantDesignLimits | None = None
+    *, limits: PlantDesignLimits | None = None,
+    enforce_heater_ua_cap: bool = True,
 ) -> WHRPoint:
     """Check one externally selected CO2 mass flow and turbine-inlet T.
 
@@ -162,7 +163,8 @@ def evaluate_whr_design(
     )
     if heater.gas_out_k < source.minimum_stack_temperature_k - 1e-8:
         raise DomainError("stack temperature below design minimum")
-    if heater.required_ua_w_k > source.maximum_heater_ua_w_k*(1+1e-8):
+    if (enforce_heater_ua_cap
+        and heater.required_ua_w_k > source.maximum_heater_ua_w_k*(1+1e-8)):
         raise DomainError("heater exceeds UA sizing allowance")
 
     q_exhaust = source.capacity_rate_w_k * (
