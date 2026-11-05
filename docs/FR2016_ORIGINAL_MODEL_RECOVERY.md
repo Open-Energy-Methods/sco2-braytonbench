@@ -16,6 +16,10 @@
 
 **Paper Table 3, p. 14** reports 100.20 MW supplied heat, 38.08 MW turbine work, 13.65 MW compressor work, 75.80 MW cooler rejection with T1=550 K, P1=30 MPa, normalized cycle low T=1.0 and low P=1.13. These aggregate values do not identify individual branch powers, state properties, mass flows, or complete geometry. Existing BraytonBench comparisons must remain labelled **conceptual-cycle, not original EES replication**.
 
+## Additional lead — 2017 Friedman-authored thermodynamics chapter
+
+Peter Friedman also coauthored a chapter with M. Anderson titled [*Thermodynamics*](https://doi.org/10.1016/B978-0-08-100804-1.00003-7) (pp. 41–66) in the 2017 Woodhead Publishing volume *Fundamentals and Applications of Supercritical Carbon Dioxide Based Power Cycles*. Its publisher abstract describes example simple-recuperated and recompression cycle analyses. The accessible abstract **does not establish** that the book reproduces the 2016 Figure 4 EES model, contains its state table, or offers downloadable source. The chapter is a **secondary literature lead**, not a recovered dataset. Ask the corresponding author whether the chapter includes a relevant tabulation or whether the same reference case is discussed in a publicly available appendix.
+
 ## Author request — preferred tiers
 
 1. **Best case:** a publication-cleared version of the Table 3 EES calculation, including relevant functions, constants, EES version, property settings, and model mode. No protected, confidential, naval-specific or export-controlled content is requested.
