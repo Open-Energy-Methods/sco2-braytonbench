@@ -51,6 +51,29 @@ for explicit assumptions, source-versus-model distinctions, and limits. The [G3 
 The branch's grid search is **not** a global optimizer, an MK2014
 REFPROP/GA reproduction, or a validated off-design sCO₂ rig model.
 
+## G3.1 — fixed installed heater UA and coupled operating point
+
+The `sco2_braytonbench.fixed_ua.solve_fixed_ua_whr` solver now
+determines the turbine-inlet temperature from the **installed** main-heater
+`UA`, source-gas inlet and mass flow, CO₂ circuit conditions and an
+explicit feasible operating-temperature interval.
+
+Unlike the earlier heater-sizing inequality, its accepted solution
+satisfies `UA_required ≈ UA_installed` together with gas-side
+and CO₂-cycle first-law balances. It also checks stack temperature,
+heater pinch and a stream exergy bound. It **does not** invoke a
+fictional bypass or usable-area adjustment.
+
+Read [the coupled operating-point specification](docs/G31_FIXED_UA_COUPLING.md)
+and run `python scripts/fixed_ua_coupled_demo.py` with CoolProp
+installed to generate an explicit real-fluid source-temperature
+perturbation report.
+
+No physical cooler-UA coupling, measured equipment maps or transient
+control is implemented. The initial heater-UA value in the example is
+sized from a chosen hypothetical nominal operating point, not
+measured hardware or a published benchmark.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
