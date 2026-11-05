@@ -56,7 +56,7 @@ for case in cases:
         assert abs(cooler.coolant_energy_residual_w)<1e-5
         assert abs(cycle.first_law_residual_w)<1e-5
         assert heater.min_approach_k>=10.
-        assert cooler.min_approach_k>=5.
+        assert cooler.minimum_approach_k>=5.
         runs.append({
            "n_segments":n,
            "recuperator_duty_w":cycle.recuperator.q_w,
