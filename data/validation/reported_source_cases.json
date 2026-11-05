@@ -1,0 +1,108 @@
+{
+  "schema": "research-evidence-snapshot-v1",
+  "epistemic_status": "source_transcription_checks_only_not_model_validation",
+  "sources": {
+    "stuttgart": {
+      "doi": "10.17632/4mvk4nxrkz.1",
+      "license": "CC-BY-4.0",
+      "kind": "experimental_derived",
+      "experiment_count": 54,
+      "axial_records": 2508,
+      "local_htc_records": 2398,
+      "nominal_triplets": 18,
+      "anomaly": {
+        "flag": "STU-001",
+        "id": "4MM_HM_77.5_10_20_90_A",
+        "source_q_kw_m2": 832.9920767421186,
+        "paired_bottom_q_kw_m2": 91.75750862888708,
+        "paired_top_q_kw_m2": 91.70285323926026,
+        "status": "quarantine_no_autocorrection"
+      },
+      "matched_top_bottom_max_delta_k": 86.81291043405554
+    },
+    "zhang": {
+      "doi": "10.3389/fenrg.2022.835224",
+      "kind": "measured_and_derived",
+      "rated": {
+        "hot_in_c": 501.5,
+        "hot_out_c": 326.7,
+        "cold_in_c": 317.8,
+        "cold_out_c": 498.5,
+        "q_hot_kw": 54.8,
+        "q_co2_kw": 54.2,
+        "area_m2": 7.3,
+        "paper_rated_u_w_m2_k": 1264
+      },
+      "independent_pressure_study_table2": {
+        "p_mpa": [
+          15.5,
+          18,
+          20
+        ],
+        "u_w_m2_k": [
+          1230,
+          1273,
+          1388
+        ]
+      },
+      "anomaly": {
+        "flag": "ZH-001",
+        "status": "reconcile_do_not_replace_reported_U"
+      }
+    },
+    "kaist": {
+      "source": "2024 symposium Paper 6",
+      "kind": "measured_and_model_corrected",
+      "speed_first": {
+        "rpm": 12000,
+        "flow_kg_min": 33.97,
+        "turbine_pr": 1.011,
+        "leakage_pct": 31.52,
+        "motor_input_kw": 2.82
+      },
+      "speed_last": {
+        "rpm": 36000,
+        "flow_kg_min": 97.82,
+        "turbine_pr": 1.089,
+        "leakage_pct": 24.34,
+        "motor_input_kw": 49.01
+      },
+      "corrected_inlet_last": {
+        "measured_c": 59.07,
+        "windage_corrected_c": 68.52,
+        "turbine_out_c": 60.32,
+        "pin_bar": 88.16,
+        "pout_bar": 80.97
+      },
+      "caution": "model_corrected_Tin_is_not_independent_measurement"
+    },
+    "sandia": {
+      "report": "SAND2010-0171",
+      "table": "2.1",
+      "kind": "predicted_design",
+      "source_design_point": {
+        "t1_k": 305.3,
+        "p1_kpa": 7690,
+        "rpm": 75000,
+        "mdot_kg_s": 3.53
+      },
+      "caution": "measurements_in_separate_figures_5-11_and_5-12"
+    },
+    "hzdr_pche": {
+      "doi": "10.14278/rodare.3928",
+      "kind": "numerical_and_economic_figure_data",
+      "figure_spreadsheets": 9,
+      "license": "CC-BY-4.0"
+    },
+    "hzdr_tpms": {
+      "source": "RODARE 2026 CARBOSOLA TPMS archive",
+      "kind": "CFD_and_geometry_not_experiment",
+      "cleaned_tables": 7,
+      "source_license": "verify_before_rehost"
+    },
+    "kth_spg_msr": {
+      "timeframe": "2025–2027",
+      "kind": "planned_infrastructure_feasibility_not_lab_dataset"
+    }
+  }
+}
