@@ -203,6 +203,14 @@ Stuttgart's entire source heat-flux range **exceeds Kim's original fit
 maximum**. All H1d comparisons are out-of-domain transfer studies, not
 original Kim parity or industrial HX/cycle validation.
 
+[Executed Kim H1d numerical and original-source consistency results](docs/G35D_RESULTS.md)
+show the printed empirical Eq24/Table4 interpretation has extreme
+overprediction; the semi-empirical form achieves ~52.6% HTC MAPE
+on 1,573 Stuttgart stations, and the *unverified* sign variant ~43.9%
+on 1,522. **No original author 10% error has been reproduced**, and
+the source heat-flux envelopes do not overlap. Model accuracy gates
+remain OPEN.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

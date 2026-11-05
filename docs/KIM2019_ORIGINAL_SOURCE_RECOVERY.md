@@ -51,3 +51,7 @@ Additional caution: the model uses temperature-averaged **near-wall properties**
 - **Numerical implementation, original-study pointwise replication and Stuttgart hold-out transfer validation: NOT YET DONE.**
 
 This source audit is part of the release/integration provenance; scientific model work remains in [Issue #17](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/17).
+
+### H1d implementation warning — printed Eq24 / Table4 consistency check
+
+The subsequently implemented source-equation audit exposed a **potential internal inconsistency**: Eq.24 visibly places `Re_b^n1 Pr_b^n2` in the denominator but empirical Table4 specifies negative n1 and n2. A literal reading causes Nusselt numbers orders of magnitude larger than original Fig10 suggests, and >30 million% MAPE in the independent Stuttgart flux-driven transfer test. An alternative sign convention is separately tested as an **UNVERIFIED hypothesis**, not a published author correction or original-model reproduction. The exact source-vs-model distinction, root coverage and all experiment errors are documented in [H1d results](G35D_RESULTS.md). The original 620-point author dataset is still needed to establish parity. 

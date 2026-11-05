@@ -178,5 +178,15 @@
     "Original source includes measured-wall / property-dependent formulas; independent predictive validation must avoid measured-target leakage.",
     "The fit originally uses mixed POSTECH and Adebiyi-Hall data; exact independence/training distinctions are not proven by copying Table 6.",
     "Model validity should not be extrapolated to PCHE, Brayton cycles, high-temperature heaters, or other geometries without data."
-  ]
+  ],
+  "source_internal_ambiguity": {
+    "status": "OPEN",
+    "location": "original 2019 PDF p. 8 printed Eq24 versus Table4 signed empirical n1/n2",
+    "issue": "Printed Eq24 denominator Re^n1 Pr^n2 with n1,n2 NEGATIVE produces Nu_fc many orders larger than Fig10 suggests",
+    "printed_literal_is_implemented_as": "empirical_literal",
+    "alternate_is_not_author_verified": "empirical_hypothesis",
+    "source_study_MAD_is_not_reproduced": true,
+    "original_author_code_or_620_point_dataset_not_available": true,
+    "full_stuttgart_heat_flux_is_outside_original_training_envelope": true
+  }
 }

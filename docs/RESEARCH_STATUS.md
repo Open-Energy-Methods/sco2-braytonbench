@@ -187,3 +187,7 @@ The complete 12-page original published paper was uploaded, hash-verified and vi
 ### G3.5 H1d — Kim source-equation audit under real-fluid verification
 
 [H1d methods](docs/G35D_KIM2019_BENCHMARK.md) implement source Table4 empirical/semi-empirical top/bottom models and fixed-pressure integral-averaged CO₂ properties. **Critical Eq24/Table4 negative-exponent ambiguity** preserved, not silently corrected; the signed-exponent hypothesis is separately identified. No Kim HM equation, original four Stuttgart heldout groups remain fixed, source anomaly quarantined and coefficients not refitted. **Every Stuttgart heat flux exceeds Kim's original source maximum ~26.9 kW/m²**. Author original-data numerical parity and industrial model validation OPEN.
+
+### G3.5 H1d executed source-level Kim comparison — 2026-11-05
+
+[Full results](docs/G35D_RESULTS.md), [three completed model artifacts](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42053984073): semi-empirical printed formula 52.56% HTC MAPE on 1,573/1,580 HB/HT points, printed empirical Eq24/Table4 literal 30.2 million% on 1,337, explicitly **unverified sign alternative** 43.90% on 1,522. Held-outs unchanged, no coefficients fitted, source STU-001 quarantined. All Stuttgart heat fluxes exceed the original Kim fitted envelope. Source empirical equation parity and reliable original-domain validation OPEN. Source-provenance conflict retained, not silently corrected.

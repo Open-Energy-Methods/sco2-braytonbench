@@ -103,7 +103,11 @@ def original_fit_envelope(p_pa,mass_flux,q,D,registry):
        "Adebiyi_Hall_pressure":A["pressure_bar_min"]<=p_pa/1e5<=A["pressure_bar_max"],
        "Adebiyi_Hall_mass_flux":A["mass_flux_kg_m2_s_min"]<=mass_flux<=A["mass_flux_kg_m2_s_max"],
        "Adebiyi_Hall_q":A["heat_flux_kw_m2_min"]<=q/1e3<=A["heat_flux_kw_m2_max"],
-       "valid_in_POSTECH_fitted_P_G_q_and_D":False,
+       "valid_in_POSTECH_fitted_P_G_q_and_D":(
+           S["inlet_pressure_bar_min"]<=p_pa/1e5<=S["inlet_pressure_bar_max"]
+           and S["mass_flux_kg_m2_s_min"]<=mass_flux<=S["mass_flux_kg_m2_s_max"]
+           and S["wall_heat_flux_kw_m2_min"]<=q/1e3<=S["wall_heat_flux_kw_m2_max"]
+           and abs(D-S["tube_inner_diameter_m"])<1e-8),
     }
 
 def evaluate(index_file:Path,h1b_file:Path,h1b_report_file:Path,
