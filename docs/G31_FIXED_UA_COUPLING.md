@@ -139,7 +139,7 @@ declared in the code. This is **not** global optimization.
 7. No transient thermal mass, inventory, valve, bypass control,
    electrical export model, cost or experimental CARBOSOLA data.
 
-**Do not claim full G3 closure or begin PI/MPC based on these
+See [G3.1 numerical verification](G31_FIXED_UA_NUMERICAL_RESULTS.md) for real-CO₂ operating points, verification residuals and source-temperature response.\n\n**Do not claim full G3 closure or begin PI/MPC based on these
 idealized operating points.** Further progress requires a coupled
 cooling sink, variable gas cp and physically calibrated
 flow-dependent equipment characteristics.

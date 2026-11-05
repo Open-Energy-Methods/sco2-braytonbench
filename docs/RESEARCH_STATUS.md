@@ -123,3 +123,15 @@ Draft stacked [PR #6](https://github.com/Open-Energy-Methods/sco2-braytonbench/p
 Base independent grid (16/20 feasible): power maximum **8.110 MW, η=25.218%** at CO₂ 100 kg/s, T4=700 K versus efficiency maximum **33.504%, Wnet=1.622 MW** at CO₂ 20 kg/s, T4=700 K. Under hypothetical cooler cap 15 MW_th and recuperator local minimum 10 K (6/20 feasible), power-max becomes **4.984 MW** (70 kg/s, 650 K) and efficiency-max **30.728%** (40 kg/s, 700 K). These are not MK2014 paper results or plant predictions. Both original winners underwent a **12/24/48 segment** sensitivity check; see [G3 results](docs/G3_STEADY_SCREENING_RESULTS.md) and [full G3 inputs/limitations](docs/G3_WASTE_HEAT_DESIGN_SCREENING.md).
 
 **G3 partial only.** The heater UA is an inequality design sizing allowance; a fixed installed heater, gas heat-capacity variation, flow-dependent pressure loss and real cooling/powertrain maps remain unimplemented.
+
+## G3.1 fixed-installed-UA coupled heater — 2026-11-05
+
+New stacked draft [PR #8](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/8) extends G3 by solving **installed heater UA equality and turbine-inlet T4** under a finite hot-gas supply, rather than checking a heater sizing allowance against a prescribed T4. The parent G3 sizing-grid feature remains available separately; no physical bypass, actuator or used-area adjustment is assumed.
+
+[CI run 42002609837](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42002609837) **passed five jobs**: 151 analytic-fixture tests (7 optional real-fluid skips) per Python version, the existing property and G3 jobs, and 3 new real-fluid coupling tests plus off-design diagnostic.
+
+In an **independently assumed illustrative** 800 K gas inlet/20 kg/s CO₂ design, an installed heater UA of **21.783328 kW/K** was sized from nominal `T4=650 K`. Re-solving yields `T4=649.989 K`, gas outlet 758.003 K, net shaft power 1.424 MW, `η=30.822%`. Keeping that UA fixed and raising gas inlet to **810 K** yields `T4=658.954 K`, gas outlet 767.638 K, net shaft power 1.460 MW, `η=31.330%`. Relative UA residuals 0.00598% and 0.00203% respectively. These are independent steady-state solutions, **not dynamic responses or actual plant predictions**.
+
+See [G3.1 methods](docs/G31_FIXED_UA_COUPLING.md), [G3.1 numerical results](docs/G31_FIXED_UA_NUMERICAL_RESULTS.md) and [reproducibility evidence](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42002609837/artifacts/13403581114).
+
+**G3.1 physical/industrial validation OPEN:** gas property variation, real heat-transfer/pressure-loss correlations, cooling-UA equipment coupling and independent operating data remain necessary.
