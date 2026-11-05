@@ -2,45 +2,59 @@
 
 Updated: 2026-11-05. **Pre-alpha research software — PR #1 remains draft.**
 
-The repository is independent of HTHP-ControlBench, and it is
-**not** a CARBOSOLA digital twin.
+This independent repo is not an extension of HTHP-ControlBench
+and is **not** a CARBOSOLA digital twin.
 
-## Provenance
+## Results to date
 
-- **Friedman & Rapp (2016):** Figure 2b state/pressure graph is
-  visually reviewed. A 12-point **conceptual-cycle** comparator has
-  now been implemented separately from the six-state waste-heat
-  prototype. The original authors' complete Figure 4 EES model is
-  not reproduced.
-- **Mohagheghi & Kapat (2014):** RC/RRC layouts and finite gas
-  heat-exchanger assumptions are source-audited. Their REFPROP/GA
-  optimizations have not been numerically reproduced.
-- **NIST REFPROP User's Guide (2013):** published CO2 state values
-  at 293.15 K are recorded for version-controlled cross-implementation
-  checks (density and reference-offset-safe enthalpy/entropy deltas).
-  See `docs/REFERENCE_VERIFICATION.md`.
-- **Analytic test fixture:** ideal gas, not actual CO2; used for
-  pressure, enthalpy and conservation logic tests only.
-- **CoolProp:** optional HEOS backend and CI reference tests; real
-  fluid cycle validation remains pending independent review.
+- Algebraic tests for pressure closure, energy conservation and
+  heat-exchanger calculations have passed on an artificial
+  constant-property fixture. **Those are not real-CO2 tests.**
+- GitHub Actions run **41991114530** passed 30 real-fluid checks
+  on CoolProp 8.0.0, including NIST REFPROP reference densities
+  and h/s differences, near-critical density and a twelve-state
+  source-mapped conceptual cycle.
+- Friedman & Rapp (2016) Figure 2b, Table 2 conceptual comparison
+  obtained `eta = 24.3058%` vs Table 3 `24.3812%`.
+  The difference is `-0.0754` percentage points. Power comparison
+  is normalized to the source's reported 100.20 MW heat input,
+  **not** a separate determination of installed capacity.
+- New CI tests check entropy generation and thermodynamic derivatives.
+  A sensitivity report probes recuperator segmentation and low
+  pressure/temperature assumptions. Results require CI inspection.
+- Source Figure 4 EES turbine split, component maps and individual
+  state data remain unknown; matching Table 3 totals is **not
+  confirmation of an equivalent detailed plant model**.
 
-## Verification gates
+## Literature provenance
 
-| Gate | Status | Closure conditions |
+- Friedman & Rapp (2016): 12-state conceptual Figure 2b and
+  Table 2 pressure network reviewed; complete Figure 4 EES
+  model not reproduced.
+- Mohagheghi & Kapat (2014): finite waste-heat source and RC/RRC
+  designs reviewed. REFPROP/GA optimum not reproduced.
+- NIST REFPROP guide (2013): independent software-output reference
+  values, not experimental measurement data.
+- New alternative CO2 EOS by Lemmon, Harvey & Hellmann (2026):
+  potential future sensitivity study, not implemented.
+
+See `docs/REFERENCE_VERIFICATION.md` and CI artifact for
+specific temperatures, pressures, provenance and limitations.
+
+## Verification stage gates
+
+| Gate | Status | Blocker |
 |---|---|---|
-| G0 — original-paper provenance | Partial | Unidentified Figure 4 EES assumptions documented |
-| G1-A — algebraic invariants | Local & CI fixture tests passed | Maintain CI |
-| G1-E — real CO2 EOS | **Open / reference tests in CI** | Check numerical comparisons and broaden domain |
-| G2 — FR2016 numerical reproduction | **Open** | Source-model identifiability and quantitative reproduction |
-| G3 — waste-heat transfer | Partial prototype | Real-fluid heater and fixed geometry validated |
-| G4 — conserved transient plant | Not implemented | Mass/energy inventories |
-| G5 — PI/MPC | Not implemented | Controlled plant and safety authority |
-| G6 — economics/modular | Not implemented | Validated operating scenarios |
+| G0 original-source mapping | Partial | Detailed EES state table |
+| G1-A analytic conservation | Passed local and CI | Retain regression tests |
+| G1-E CO2 real-fluid | **Partially verified** | Larger independent data and edge regimes |
+| G2 source-model reproduction | **Open** | Full source-model identifiability |
+| G3 source gas recovery | Partial prototype | Full real-fluid/finite-UA verification |
+| G4 transient plant | Not implemented | Mass and energy inventory dynamics |
+| G5 PI/MPC | Not implemented | Physical actuation and safety |
+| G6 economics | Not implemented | Grounded cost and sizing assumptions |
 
-Even if the new NIST and near-critical density tests pass,
-they do not close the entire G1-E gate without uncertainty and
-a broader domain of independent thermodynamic comparisons.
-
-No hardware or experimental sCO2 performance is claimed.
-The earlier v0.5 package was not available for import; this
-repository contains a fresh and explicitly labelled reconstruction.
+No experimental sCO2 test-rig experience or CARBOSOLA-specific
+measurements or geometry is claimed. The repository is a fresh
+reconstruction; the previously referenced v0.5 archive was not
+available for direct import.

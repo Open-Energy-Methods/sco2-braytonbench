@@ -1,17 +1,12 @@
 # G1-E / G2 Verification record — 2026-11-05
 
-## Independent published reference values
+## Published CO2 property points
 
-NIST's *REFPROP 9.1 User's Guide* (Lemmon, Huber, McLinden, 2013),
-printed page 18 (in the manual's section 5.2) includes a carbon-dioxide
-table at 20°C, with pressure, density, enthalpy and entropy:
+NIST REFPROP 9.1 User's Guide (Lemmon, Huber and McLinden,
+2013), printed p. 18, shows a CO2 property table at **293.15 K**:
 https://www.nist.gov/system/files/documents/srd/REFPROP9.PDF
 
-We transcribed a short subset for reference tests, with the units printed
-in the table. The source is **REFPROP 9.1 software output**, not
-independently measured experimental points.
-
-| P (MPa) | Density (kg/m³) | h (kJ/kg) | s (kJ/kg/K) |
+| Pressure (MPa) | Density (kg/m3) | h (kJ/kg) | s (kJ/kg/K) |
 |---:|---:|---:|---:|
 | 5 | 140.65 | 432.38 | 1.8051 |
 | 6 | 782.65 | 254.28 | 1.1811 |
@@ -20,79 +15,88 @@ independently measured experimental points.
 | 9 | 843.17 | 244.58 | 1.1355 |
 | 10 | 856.31 | 242.51 | 1.1251 |
 
-The tests compare density directly and **enthalpy/entropy differences**
-relative to the 8 MPa row. Reference-state-dependent absolute h/s values
-are deliberately not taken as a success criterion. The comparison has
-conservative tolerances for the printed reference precision and possible
-implementation differences; a mismatch triggers inspection rather than
-automatic retuning.
+Tests compare density directly and enthalpy/entropy **differences**
+relative to the 8 MPa point (to avoid reference-state ambiguity).
+The quoted rounded REFPROP output is **calculated reference data**,
+not measured experimental evidence.
 
-A separate coarse near-critical reference comes from Hiroshima
-University's high-pressure fluid-properties laboratory, which explicitly
-identifies NIST Chemistry WebBook / Span–Wagner values as the basis:
+Additional NIST-derived near-pseudocritical density values from Hiroshima
+University High Pressure Fluid Properties Laboratory are used as
+coarse, independently published look-up comparisons:
 https://highpres.hiroshima-u.ac.jp/supercritical-co2-properties/
-These are rounded to 3 significant figures and **not independent
-experimental measurements**.
 
-## What a successful test means
+For independent thermodynamic sanity, the suite also checks
+`cp = (dh/dT)_p`, `cp/T = (ds/dT)_p`, isentropic state inversions
+and positive entropy generation in nonideal turbomachinery. These checks
+demonstrate backend self-consistency, **not agreement with independent
+measurements**.
 
-CoolProp HEOS::CO2 (also using Span–Wagner thermodynamics) agrees
-reasonably with tabulated calculations from a different implementation
-of the same EOS. Property inversions, critical parameters and
-near-pseudocritical sensitivity are sanity-checked. This does **not**
-establish global EOS accuracy, measurement agreement, property
-derivative fidelity at the critical locus or full Brayton-cycle validation.
+CI run 41991114530 passed 30 separate tests across the NIST
+comparison, phase-sensitive states and one source-mapped FR2016
+real-CO2 conceptual cycle using **CoolProp 8.0.0 / Python 3.11**.
+Detailed numerical run evidence:
+https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41991114530
 
-The G1-E gate can progress to **partial reference agreement** after CI
-records the exact installed CoolProp version and results. It remains
-**open** pending a wider property domain, more independent state data,
-uncertainty analysis and full cycle sensitivity tests.
+## First Friedman-Rapp benchmark comparison
 
-## Friedman & Rapp (2016) comparison
+A twelve-point conceptual-cycle solver based on Friedman & Rapp
+(2016), **Figure 2b and Table 2**, uses the 30-segment
+internal pinch-limited recuperator and accounts for all published
+piping and component pressure losses. The initial comparator
+interprets `T_low` as paper point **7** and `P_low` as paper point
+**8**, which is plausible from the schematic but not identified
+as a unique source EES boundary condition.
 
-The paper's Figure 2b provides a twelve-state **conceptual** cycle, while
-its Figure 4 EES model includes a separate compressor turbine and other
-plant-specific equations. Table 3 is an illustrative reactor coupled
-to a CO2 cycle; it is **not a CARBOSOLA or waste-heat rig measurement**.
+| Quantity | Paper Table 3 | Conceptual comparator |
+|---|---:|---:|
+| External heat input (MW) | 100.20 | 100.20 (normalization) |
+| Turbine power (MW) | 38.080 | 38.153 (normalized) |
+| Compressor power (MW) | 13.650 | 13.798 (normalized) |
+| Cooler (MW) | 75.80 | 75.846 (normalized) |
+| Net (MW) | 24.430 | 24.354 (normalized) |
+| Efficiency (%) | 24.381 | 24.306 |
 
-The source table states `T1 = 550 K`, `P1 = 30 MPa`,
-`eta_c = 0.85`, `eta_t = 0.90`, `epsilon_recup = 0.925`, with
-individual piping and exchanger pressure losses. The Table 3 case
-gives the low temperature and pressure as critical normalized values
-`T_low/T_crit = 1.0` and `P_low/P_crit = 1.13`.
-The source diagram labels `T7` as the low temperature; the comparator
-interprets low pressure as **point 8**. This is a **transparent mapping
-assumption**, not a verified translation of the EES Figure 4 model.
+**Difference in thermal efficiency: -0.0754 percentage points.**
+Net shaft-power difference after normalization: -0.0756 MW.
+The model's specific energy residual is `5.82e-11 J/kg`,
+within floating-point precision at the chosen state.
 
-Our comparator independently computes all 12 Figure 2b state
-enthalpies and pressures and an internally conserved cycle using
-CoolProp real CO2; it writes detailed outputs to a CI artifact.
-The paper's published Table 3 provides the following rounded
-aggregates (not exact state points):
+Note: the power numbers are not independent absolute size
+predictions; all model powers have been scaled to **exactly
+100.20 MW imposed heat input**. The comparison does **not** identify
+the original paper's compressor turbine, motor/generator or additional
+detailed EES hardware. A numerical agreement may arise despite
+non-equivalent plant models.
 
-- Heater input: 100.20 MW
-- Turbine output: 38.08 MW
-- Compressor input: 13.65 MW
-- Heat rejected: 75.80 MW
-- Derived net: 24.43 MW; derived efficiency: 24.3812%.
-- Printed first-law residual: approximately -0.03 MW due to rounding.
+The 2026-11-05 CI artifact includes all 12 CO2 thermodynamic
+states, source parameters and diagnostics:
+https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/41991114530/artifacts/13397788214
 
-**The absolute MW values from our source-mapped comparator are
-normalized to 100.20 MW heater input only to make power ratios
-comparable.** This does not infer a measured CO2 mass flow. No
-published tolerance or replication pass/fail threshold exists, so
-the diagnostic deliberately makes **no reproduction claim**,
-even if the aggregate numbers happen to agree.
+A subsequent sensitivity script (see `scripts/fr2016_sensitivity.py`)
+investigates 15/30/60 recuperator sections and low-pressure/
+temperature perturbations; it must not be called the original
+paper's parametric optimization.
 
-## Stage-gate status
+## Reference-model scope and future EOS
 
-- G0 source topology: substantially advanced, full proprietary EES
-  topology and original state table still unavailable.
-- G1-A analytic conservation: passed in earlier fixture tests.
-- G1-E real CO2 reference comparison: **CI result required; open
-  until logs and reference values inspected**.
-- G2 source-reported cycle reproduction: **open**, since a
-  twelve-point conceptual comparator is not the detailed EES plant.
+CoolProp uses the 1996 **Span–Wagner** equation of state. NIST
+published an alternative CO2 fundamental EOS in February 2026:
+https://www.nist.gov/publications/alternative-fundamental-equation-state-fluid-carbon-dioxide
 
-Outputs in `evidence/generated` are transient GitHub Actions artifacts
-and not automatically committed benchmark results.
+This is a future independent-model comparison candidate. Its
+published improvements near the critical region are **not yet
+implemented or validated in this repository**.
+
+## Stage gates
+
+- **G0 source provenance:** substantial progress on Figure 2b/Table 2;
+  original Figure 4 EES states and assumptions still unavailable.
+- **G1-A algebra:** passed on prior fixture/CI tests.
+- **G1-E property verification:** **PARTIAL reference agreement
+  established (CoolProp 8.0.0)**. Closure requires larger
+  independent TP/PH/PS tables, boundary/uncertainty tests and
+  independent critical-region reference models or measurements.
+- **G2 FR2016 cycle reproduction:** **OPEN**. Published aggregate
+  agreement is encouraging but topology and source boundary
+  conditions are not uniquely identifiable; no full EES replication.
+- **G3-G6:** open as documented in `docs/RESEARCH_STATUS.md`.

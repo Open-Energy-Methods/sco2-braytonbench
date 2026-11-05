@@ -25,14 +25,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install -e '.[test,co2]'
-      - name: CO2 EOS, published REFPROP and source comparison checks
-        run: python -m pytest -q tests/test_coolprop_optional.py tests/test_co2_nist_reference.py tests/test_fr2016_co2_exploratory.py
-      - name: Generate explicitly exploratory FR2016 comparison
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: NIST reference + real CO2 EOS tests + conceptual FR2016 cycle
+        run: python -m pytest -q tests/test_coolprop_optional.py tests/test_co2_nist_reference.py tests/test_co2_thermodynamic_consistency.py tests/test_fr2016_co2_exploratory.py
+      - name: Generate FR2016 conceptual diagnostic
         run: python scripts/fr2016_diagnostic.py
+      - name: Report discretization and near-critical input sensitivity
+        run: python scripts/fr2016_sensitivity.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fr2016-conceptual-diagnostic
-          path: evidence/generated/fr2016_conceptual_diagnostic.json
+          name: fr2016-reproducibility-evidence
+          path: evidence/generated/*.json
           if-no-files-found: ignore
