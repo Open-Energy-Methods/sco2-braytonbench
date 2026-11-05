@@ -66,6 +66,28 @@ class WasteGasSource:
 
 
 @dataclass(frozen=True)
+class PlantDesignLimits:
+    """Optional non-source-engineering constraints for sensitivity screening.
+
+    The 2014 paper uses recuperator *terminal* dT as a decision variable;
+    this class instead uses the resolved local minimum approach. These
+    quantities must not be identified as equivalent.
+    """
+    minimum_recuperator_approach_k: float = 0.0
+    maximum_cooler_duty_w: float | None = None
+
+    def __post_init__(self) -> None:
+        d = self.minimum_recuperator_approach_k
+        if not isfinite(d) or d < 0:
+            raise DomainError("recuperator minimum approach must be finite and nonnegative")
+        if self.maximum_cooler_duty_w is not None and (
+            not isfinite(self.maximum_cooler_duty_w)
+            or self.maximum_cooler_duty_w <= 0
+        ):
+            raise DomainError("maximum cooler duty must be finite and positive")
+
+
+@dataclass(frozen=True)
 class WHRPoint:
     inputs: CycleInputs
     cycle: CycleResult
@@ -103,7 +125,8 @@ class WHRScreen:
 
 
 def evaluate_whr_design(
-    props: Properties, inputs: CycleInputs, source: WasteGasSource
+    props: Properties, inputs: CycleInputs, source: WasteGasSource,
+    *, limits: PlantDesignLimits | None = None
 ) -> WHRPoint:
     """Check one externally selected CO2 mass flow and turbine-inlet T.
 
@@ -122,6 +145,14 @@ def evaluate_whr_design(
     cycle = solve_cycle(props, inputs)
     if cycle.net_w <= 0:
         raise DomainError("nonpositive net shaft power")
+    if limits is not None:
+        if cycle.recuperator.min_approach_k < (
+            limits.minimum_recuperator_approach_k - 1e-8
+        ):
+            raise DomainError("recuperator below additional minimum approach")
+        if (limits.maximum_cooler_duty_w is not None
+            and cycle.cooler_w > limits.maximum_cooler_duty_w*(1+1e-8)):
+            raise DomainError("cooler exceeds additional duty allowance")
     s3, s4 = cycle.states[2], cycle.states[3]
     heater = waste_gas_heater(
         props, s3, s4, inputs.mdot_kg_s,
@@ -161,6 +192,7 @@ def evaluate_whr_design(
 def screen_whr_designs(
     props: Properties, source: WasteGasSource,
     candidates: Iterable[CycleInputs],
+    *, limits: PlantDesignLimits | None = None
 ) -> WHRScreen:
     """Deterministic finite-grid screening, NOT a global GA optimization.
 
@@ -171,7 +203,7 @@ def screen_whr_designs(
     rejected: list[Rejection] = []
     for design in candidates:
         try:
-            feasible.append(evaluate_whr_design(props, design, source))
+            feasible.append(evaluate_whr_design(props, design, source, limits=limits))
         except DomainError as exc:
             rejected.append(Rejection(design, str(exc)))
     if not feasible:
