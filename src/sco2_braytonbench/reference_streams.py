@@ -165,13 +165,22 @@ class CoolPropLiquidWater:
     def temperature_for_delta_h(self,t_start_k:float,dh_j_kg:float)->float:
         if not isfinite(dh_j_kg):
             raise DomainError("nonfinite water sensible enthalpy change")
+        h_start=self._state(t_start_k,"Hmass")
+        if dh_j_kg==0:
+            return float(t_start_k)  # avoid unnecessary P/H flash for zero duty
         p=self._props()
-        h_target=self._state(t_start_k,"Hmass")+dh_j_kg
+        h_target=h_start+dh_j_kg
         try:
             t=p("T","P",self.pressure_pa,"Hmass",h_target,"HEOS::Water")
+            # Refine the P/H flash against direct P/T enthalpy with
+            # cp=(dh/dT)_P; very small segment duties can otherwise
+            # magnify the P/H numerical residual.
+            for _ in range(6):
+                self.cp(t)  # phase and declared-domain validation
+                residual=self._state(t,"Hmass")-h_target
+                if abs(residual)<=max(5e-5,1e-10*abs(dh_j_kg)):
+                    return float(t)
+                t-=residual/self.cp(t)
         except (ValueError,RuntimeError,OverflowError) as e:
             raise DomainError("water enthalpy inversion failed") from e
-        self.cp(t)  # domain and single-phase check
-        if abs(self._state(t,"Hmass")-h_target)>max(1e-3,1e-8*abs(dh_j_kg)):
-            raise DomainError("water enthalpy inversion did not close")
-        return float(t)
+        raise DomainError("water enthalpy inversion did not close")
