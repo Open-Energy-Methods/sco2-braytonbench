@@ -113,6 +113,24 @@ record a real-fluid, multi-point **component-level** mesh sensitivity
 with 6/12/24/48 segments. This is **not** full nested dual-UA
 operating-point grid convergence and does not close industrial G3.
 
+## G3.5 — external measured-derived CO₂ heat-transfer benchmark
+
+The source-reviewed [Stuttgart H1 campaign](docs/G35_STUTTGART_HTC.md)
+compares pinned CoolProp real-CO₂ bulk properties and independent
+turbulent forced-convection baseline correlations against **the complete
+54-run experimental dataset** from Theologou et al. (2022), Mendeley DOI
+10.17632/4mvk4nxrkz.1 (original data under **CC BY 4.0**).
+All 2,508 axial source records (2,398 local HTC records) are included
+with attribution in [the dataset folder](data/validation/stuttgart/README.md).
+
+The experiment with the anomalous 832.99 kW/m² source entry is preserved
+unchanged but **quarantined** from evaluation. Benchmark comparisons
+report per-orientation errors, source-reported HTC sigma-normalized
+residuals, domain exclusions, and four held-out nominal experiment
+families without fitting any coefficients. This is a **single-pipe
+forced-convection baseline**, not Brayton-cycle/PCHE validation.
+Run `python scripts/stuttgart_h1.py` with pinned CoolProp to reproduce.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

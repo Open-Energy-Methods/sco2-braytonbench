@@ -133,3 +133,25 @@ jobs:
           name: g33-reference-and-mesh-sensitivity
           path: evidence/generated/g33_component_mesh_sensitivity.json
           if-no-files-found: ignore
+
+  stuttgart-h1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Experimental-source integrity, grouping and analytic baseline tests
+        run: python -m pytest -q tests/test_stuttgart_h1.py
+      - name: Full 54-run real-CO2 measured-derived local HTC benchmark
+        run: python scripts/stuttgart_h1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35-stuttgart-h1
+          path: |
+            evidence/generated/stuttgart_h1/report.json
+            evidence/generated/stuttgart_h1/local_predictions.csv
+          if-no-files-found: ignore

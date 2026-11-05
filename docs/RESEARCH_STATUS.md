@@ -153,3 +153,9 @@ Draft stacked [PR #10](https://github.com/Open-Energy-Methods/sco2-braytonbench/
 At prescribed CO₂ input states 8.5 MPa/310 K/650 K and 9 MPa/314 K/690 K, the 24→48 refinement changes heat-exchanger required UA by **<0.04%** and cycle efficiency by **0.0021–0.0024 percentage points**, while the internal recuperator minimum approaches remain just **3.92/4.58 K** (below a hypothetical 10 K margin). [Full G3.3 numerical report](docs/G33_NUMERICAL_VERIFICATION.md) and [machine JSON](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42010735595/artifacts/13407415665).
 
 The new property/hydraulic job passed 35 tests and the fixture suites passed 205/9 skipped each. **G3.3 narrow component verification PARTIAL; full industrial coupled-UA convergence OPEN.** No measured geometry or compressor maps are claimed.
+
+## G3.5 — Stuttgart experimental heat-transfer benchmark (new stage)
+
+The [G3.5 methods](docs/G35_STUTTGART_HTC.md) and full CC-BY source-derived 54-experiment / 2,508-axial-record [dataset](data/validation/stuttgart/README.md) are now versioned. The model compares Gnielinski smooth-tube and heating Dittus–Boelter **uncalibrated orientation-blind forced-convection baselines**, with real-fluid CoolProp properties and an explicit measured-inlet-temperature/enthalpy-increment alignment to the REFPROP-derived source enthalpy.
+
+Nominal HB/HM/HT orientation triplets remain in a group-level held-out partition, no coefficients fitted. The STU-001 832.992 kW/m² source cell is preserved unchanged but its full experiment excluded from performance scoring. Descriptive local HTC uncertainty normalization does not claim independent errors or statistical experimental uncertainty propagation. **G3.5 model–measurement evaluation is ongoing until the real-fluid Actions report is inspected; full industrial G3 remains OPEN.**
