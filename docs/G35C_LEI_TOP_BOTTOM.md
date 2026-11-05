@@ -36,6 +36,19 @@ All temperatures are in kelvins, mass flux `G=4m_dot/(pi D²)`, Re=`G*D/mu_b`, `
 
 Lei HT `Gr_q` depends explicitly on `q''` and temperature/density, so both modes use the source heat flux. The result is not an independent flux prediction. Lei HB uses wall/bulk densities and conductivities but not `Gr_q` explicitly.
 
+### Wall-root numerical acceptance
+
+The fixed-point heat-flux comparison is accepted **only** when both
+the wall-temperature bisection bracket width is ≤**1e-5 K**
+and the explicit heat-flux energy residual is ≤**0.2%**
+(`|h(Tw)(Tw−Tb)−q''|/q''`). The initial exploratory
+run used an 0.008 K bracket width and rejected 234 out of
+1,580 flux inversions on energy-residual grounds, despite otherwise
+valid brackets. This numerical stop mismatch is a **solver artifact**,
+not physical model inapplicability. The current refinement corrects
+it before producing the final statistical comparison. Any genuinely
+unbracketed or multiply bracketed states remain explicit exclusions.
+
 ## Holdouts, original source QC and comparisons
 
 Preserve **all 54 original Stuttgart experiments**, 2,508 axial records and 2,398 reduced local HTC points. Source run STU-001 with anomalous original 832.992 kW/m² is never edited or included in scores. Reuse identical **four deterministic held-out nominal orientation families** (never randomly sample correlated axial points); no regression coefficients, calibration multiplier or new split fitting.
