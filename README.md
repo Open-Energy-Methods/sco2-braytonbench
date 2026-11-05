@@ -191,6 +191,18 @@ The copyrighted full PDF is **not included**. **No Kim 2019 numerical
 correlation, Stuttgart benchmark reproduction, or independent
 prediction has yet been implemented.**
 
+## G3.5 H1d — original Kim (2019) horizontal CO₂ correlation benchmark
+
+[Kim H1d source-aware methodology](docs/G35D_KIM2019_BENCHMARK.md)
+implements the original semi-empirical and empirical top/bottom mixed-
+convection equations with real-fluid temperature-integral properties.
+The printed Eq24 and empirical Table4 negative exponents give an
+unresolved source ambiguity; literal and separately labelled
+**unverified sign-hypothesis** comparisons are isolated.
+Stuttgart's entire source heat-flux range **exceeds Kim's original fit
+maximum**. All H1d comparisons are out-of-domain transfer studies, not
+original Kim parity or industrial HX/cycle validation.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

@@ -183,3 +183,7 @@ New [H1c methods](docs/G35C_LEI_TOP_BOTTOM.md) implement the **published Lei et 
 ### Original Kim et al. (2019) source retrieval — 2026-11-05
 
 The complete 12-page original published paper was uploaded, hash-verified and visually inspected. Original mixed-convection Eq. (24) and (30) plus quadratic superposition, alternative semi-empirical equations, full **Table 4** top/bottom coefficients, 7.75-mm/0.91-m test section, source domain and Table 6 author-reported errors are now traceable: [Kim source audit](docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md) and [transcription JSON](data/reference/kim2019_coefficients.json). **Source retrieval closed; correlation implementation and independent Stuttgart validation NOT STARTED.** The copyrighted paper PDF is not redistributed. [PR consolidation audit](docs/PR_CONSOLIDATION_AUDIT.md) retains the nine original development stages in Git history.
+
+### G3.5 H1d — Kim source-equation audit under real-fluid verification
+
+[H1d methods](docs/G35D_KIM2019_BENCHMARK.md) implement source Table4 empirical/semi-empirical top/bottom models and fixed-pressure integral-averaged CO₂ properties. **Critical Eq24/Table4 negative-exponent ambiguity** preserved, not silently corrected; the signed-exponent hypothesis is separately identified. No Kim HM equation, original four Stuttgart heldout groups remain fixed, source anomaly quarantined and coefficients not refitted. **Every Stuttgart heat flux exceeds Kim's original source maximum ~26.9 kW/m²**. Author original-data numerical parity and industrial model validation OPEN.

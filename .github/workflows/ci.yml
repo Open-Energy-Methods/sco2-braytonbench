@@ -210,3 +210,34 @@ jobs:
             evidence/generated/stuttgart_h1c/h1c_lei_report.json
             evidence/generated/stuttgart_h1b/h1b_report.json
           if-no-files-found: ignore
+
+  kim-h1d-stuttgart:
+    name: Kim H1d (${{ matrix.variant }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [semi_empirical, empirical_literal, empirical_hypothesis]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Source registry and independent equation tests
+        run: python -m pytest -q tests/test_kim2019_source_registry.py tests/test_kim2019_model.py
+      - name: Regenerate unchanged H1a baseline
+        run: python scripts/stuttgart_h1.py
+      - name: Regenerate unchanged H1b benchmark
+        run: python scripts/stuttgart_h1b.py
+      - name: Evaluate Kim source variant and source-domain exclusions
+        run: python scripts/stuttgart_h1d.py --variant "${{ matrix.variant }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35d-kim-${{ matrix.variant }}
+          path: |
+            evidence/generated/stuttgart_h1d/${{ matrix.variant }}/kim_report.json
+            evidence/generated/stuttgart_h1d/${{ matrix.variant }}/kim_pointwise.csv
+          if-no-files-found: ignore
