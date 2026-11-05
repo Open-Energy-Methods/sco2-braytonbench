@@ -145,3 +145,77 @@ print(json.dumps({k:v for k,v in report.items()
   if k not in ("rejects","limitations")},indent=2))
 print("Rejected:",json.dumps(report["rejects"],indent=2))
 print("Wrote evidence/generated/whr_design_screen.json and whr_grid_matrix.csv")
+
+# Scientific robustness extension. The limits below are independent,
+# hypothetical design constraints; they are NOT the paper's 10-40 K
+# terminal-dT decision variable or a published cooler sizing constraint.
+from dataclasses import replace
+from sco2_braytonbench.whr import PlantDesignLimits, evaluate_whr_design
+limits=PlantDesignLimits(
+    minimum_recuperator_approach_k=10.,
+    maximum_cooler_duty_w=15e6,
+)
+constrained=screen_whr_designs(CoolPropCO2(),source,candidates,limits=limits)
+
+# Finer segmentation at both originally selected operating points.
+# Changing n does not rescan the design grid: evaluate identical points
+# to distinguish mesh sensitivity from movement of the optimum.
+refinements={}
+for label,initial in (
+    ("maximum_shaft_power",screen.maximum_shaft_power),
+    ("maximum_cycle_efficiency",screen.maximum_cycle_efficiency),
+):
+    points=[]
+    for n in (12,24,48):
+        x=evaluate_whr_design(
+            CoolPropCO2(),
+            replace(initial.inputs,segments=n),
+            replace(source,segments=n),
+        )
+        points.append({
+            "segments":n,
+            "net_shaft_power_w":x.net_shaft_power_w,
+            "cycle_thermal_efficiency":x.cycle_thermal_efficiency,
+            "recuperator_minimum_approach_k":x.cycle.recuperator.min_approach_k,
+            "heater_minimum_approach_k":x.heater.min_approach_k,
+            "heater_UA_required_w_k":x.heater.required_ua_w_k,
+            "stack_temperature_k":x.heater.gas_out_k,
+        })
+    refinements[label]={
+        "T4_K":initial.inputs.t4_k,
+        "mdot_CO2_kg_s":initial.inputs.mdot_kg_s,
+        "mesh_points":points,
+        "net_shaft_power_change_rel_24_to_48":abs(
+            points[2]["net_shaft_power_w"]-points[1]["net_shaft_power_w"]
+        )/max(points[2]["net_shaft_power_w"],1.),
+        "minimum_heater_approach_change_K_24_to_48":abs(
+            points[2]["heater_minimum_approach_k"]-
+            points[1]["heater_minimum_approach_k"]
+        ),
+    }
+robustness={
+    "type":"exploratory WHR feasibility and mesh refinement",
+    "source_model_reproduction":False,
+    "baseline_power_max":best_power,
+    "baseline_efficiency_max":best_eta,
+    "additional_limits":{
+        "minimum_internal_recuperator_approach_K":limits.minimum_recuperator_approach_k,
+        "maximum_cooler_thermal_duty_W":limits.maximum_cooler_duty_w,
+        "note":"Independent hypothetical constraints, not MK2014 terminal dT or source-reported cooling design"},
+    "constrained_n_feasible":len(constrained.feasible),
+    "constrained_n_rejected":len(constrained.rejected),
+    "constrained_power_max":point_data(constrained.maximum_shaft_power),
+    "constrained_efficiency_max":point_data(constrained.maximum_cycle_efficiency),
+    "refinement":refinements,
+    "interpretation":"Optimum selection is grid- and constraint-dependent. These results do not close industrial validation gate G3.",
+}
+(outdir/"whr_robustness.json").write_text(
+    json.dumps(robustness,indent=2)+"\n")
+print("ROBUSTNESS",json.dumps({
+    "constrained_n_feasible":robustness["constrained_n_feasible"],
+    "constrained_n_rejected":robustness["constrained_n_rejected"],
+    "constrained_power_max":robustness["constrained_power_max"],
+    "constrained_efficiency_max":robustness["constrained_efficiency_max"],
+    "refinement":robustness["refinement"]
+},indent=2))
+print("Wrote evidence/generated/whr_robustness.json")
