@@ -1,0 +1,182 @@
+{
+  "schema_version": "kim2019-original-paper-table4-v1",
+  "citation": {
+    "authors": [
+      "Tae Ho Kim",
+      "Jin Gyu Kwon",
+      "Joo Hyun Park",
+      "Hyun Sun Park",
+      "Moo Hwan Kim"
+    ],
+    "year": 2019,
+    "title": "Heat transfer model for horizontal flows of CO2 at supercritical pressures in terms of mixed convection",
+    "journal": "International Journal of Heat and Mass Transfer",
+    "volume": 131,
+    "pages": "1117-1128",
+    "doi": "10.1016/j.ijheatmasstransfer.2018.11.075"
+  },
+  "source": {
+    "original_pdf_sha256": "8407a94d23a048cc8e3c1889296108b4da0d812bba6cd8ec91a13a3babb47651",
+    "copyright_notice": "Elsevier Ltd. All rights reserved; source PDF NOT rehosted",
+    "source_locations": [
+      "PDF p. 2: nomenclature and dimensionless groups",
+      "PDF p. 4: Table 1 and experimental geometry",
+      "PDF p. 8: Eqs. (23)-(24) and Table 4",
+      "PDF p. 10: Eqs. (29)-(31) and Table 6"
+    ]
+  },
+  "model_forms": {
+    "Nu_fc": "c1 * Re_b**0.8 * Pr_b**0.4 * (Q_b**n3/(Re_b**n1*Pr_b**n2)) * (rho_av/rho_b)**n4 * (mu_av/mu_b)**n5 * (k_av/k_b)**n6",
+    "inverse_Nu_nc": "c2 * Gr_q**m1 * Pr_b**m2 * (rho_av/rho_b)**m3 * (mu_av/mu_b)**m4 * (cp_av/cp_b)**m5 * (k_av/k_b)**m6",
+    "Nu_mixed": "sqrt(Nu_fc**2 + Nu_nc**2)"
+  },
+  "model_forms_notes": [
+    "Eq. (24) provides Nu_fc for the empirical model. Eq. (30) provides the reciprocal 1/Nu_nc, not Nu_nc.",
+    "Nu_mixed=quadrature combination in Section 3.4, not linear addition.",
+    "Properties subscript av are temperature-integral averages from Tb to inner wall Ti; units of the underlying property cancel in ratios.",
+    "Dimensionless Q_b=beta_b*q*D/k_b; Gr_q = g*beta_b*q*D**4/(nu_b**2*k_b), nu_b=mu_b/rho_b. beta_b is defined in original nomenclature using rho_b, rho_av and Ti-Tb; preserve exact source definitions before coding.",
+    "Do not treat wall-property-conditioned model as fully independent a-priori HTC prediction if Ti is measured."
+  ],
+  "coefficients": {
+    "semi_empirical": {
+      "top": {
+        "c1": 2.56,
+        "n": [
+          0.5416666666666666,
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333,
+          -0.6666666666666666,
+          1
+        ],
+        "c2": 989,
+        "m": [
+          -0.25,
+          -0.15,
+          -0.5,
+          0.35,
+          -0.15,
+          -0.6
+        ]
+      },
+      "bottom": {
+        "c1": 0.000406,
+        "n": [
+          0.5416666666666666,
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333,
+          -0.6666666666666666,
+          1
+        ],
+        "c2": 2.08,
+        "m": [
+          -0.25,
+          -0.15,
+          -0.5,
+          0.35,
+          -0.15,
+          -0.6
+        ]
+      }
+    },
+    "empirical": {
+      "top": {
+        "c1": 1.14,
+        "n": [
+          -0.5,
+          -0.36,
+          0.54,
+          0.83,
+          -3.48e-14,
+          0.52
+        ],
+        "c2": 7.05,
+        "m": [
+          -0.3,
+          -0.55,
+          -14.64,
+          0.00000352,
+          -8.23e-11,
+          -5.35
+        ]
+      },
+      "bottom": {
+        "c1": 0.11,
+        "n": [
+          -0.15,
+          -0.41,
+          0.26,
+          0.54,
+          -0.000412,
+          0.63
+        ],
+        "c2": 19,
+        "m": [
+          -0.33,
+          -0.14,
+          -0.4,
+          0.00000398,
+          -0.0000355,
+          -0.88
+        ]
+      }
+    }
+  },
+  "source_experimental_envelope": {
+    "postech": {
+      "tube_inner_diameter_m": 0.00775,
+      "heated_length_m": 0.91,
+      "unheated_entrance_length_m": 0.1,
+      "inlet_pressure_bar_min": 73.83,
+      "inlet_pressure_bar_max": 77.35,
+      "inlet_temperature_c_min": 24.5,
+      "inlet_temperature_c_max": 30.07,
+      "mass_flux_kg_m2_s_min": 52.1,
+      "mass_flux_kg_m2_s_max": 250.5,
+      "wall_heat_flux_kw_m2_min": 1.2,
+      "wall_heat_flux_kw_m2_max": 25.9
+    },
+    "additional_Adebiyi_Hall": {
+      "pressure_bar_min": 75.86,
+      "pressure_bar_max": 76.14,
+      "inlet_temperature_c_min": 13.8,
+      "inlet_temperature_c_max": 30.1,
+      "mass_flux_kg_m2_s_min": 104.34,
+      "mass_flux_kg_m2_s_max": 391.91,
+      "heat_flux_kw_m2_min": 5.1,
+      "heat_flux_kw_m2_max": 26.9
+    },
+    "validation": {
+      "points_total": 620,
+      "postech_points": 495,
+      "Adebiyi_Hall_points": 125,
+      "excluded_x_over_d_below": 10
+    }
+  },
+  "original_paper_error_percent": {
+    "semi_empirical": {
+      "top": 21.73,
+      "bottom": 22.35,
+      "mean_top_bottom": 20.44
+    },
+    "empirical": {
+      "top": 10,
+      "bottom": 10.44,
+      "mean_top_bottom": 8.71
+    },
+    "Lei_on_original_data": {
+      "top": 381.45,
+      "bottom": 115.79,
+      "mean_top_bottom": 60.35
+    }
+  },
+  "explicit_limits": [
+    "These numbers are ORIGINAL-PAPER claims, not reproduced against Stuttgart.",
+    "The uploaded source PDF is used only for verification; do not redistribute copyrighted article.",
+    "H1a/H1b/H1c benchmarks are on Stuttgart data; original Kim 2019 model has not yet been implemented or tested in this branch.",
+    "Original source includes measured-wall / property-dependent formulas; independent predictive validation must avoid measured-target leakage.",
+    "The fit originally uses mixed POSTECH and Adebiyi-Hall data; exact independence/training distinctions are not proven by copying Table 6.",
+    "Model validity should not be extrapolated to PCHE, Brayton cycles, high-temperature heaters, or other geometries without data."
+  ]
+}

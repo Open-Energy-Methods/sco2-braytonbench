@@ -1,0 +1,212 @@
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -e '.[test]'
+      - run: python -m pytest -q
+  co2-property-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Property verification including published experimental measurements
+        run: python -m pytest -q tests/test_coolprop_optional.py tests/test_co2_nist_reference.py tests/test_co2_thermodynamic_consistency.py tests/test_co2_measured_density.py tests/test_fr2016_co2_exploratory.py tests/test_fr2016_identifiability.py
+      - name: Generate FR2016 conceptual diagnostic
+        run: python scripts/fr2016_diagnostic.py
+      - name: Report numerical discretization and low-side input sensitivity
+        run: python scripts/fr2016_sensitivity.py
+      - name: Quantify residuals to 49 measured pure-CO2 densities
+        run: python scripts/co2_measured_density_report.py
+      - name: Scan FR2016 boundary-state interpretation sensitivity
+        run: python scripts/fr2016_identifiability.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sco2-validation-evidence
+          path: evidence/generated/*.json
+          if-no-files-found: ignore
+
+  whr-design-screen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Multi-point real CO2 steady-cycle and waste-gas checks
+        run: python -m pytest -q tests/test_whr_real_co2.py
+      - name: Industrial exhaust-gas design grid and objectives
+        run: python scripts/whr_design_screen.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g3-whr-reproducibility
+          path: |
+            evidence/generated/whr_design_screen.json
+            evidence/generated/whr_grid_matrix.csv
+            evidence/generated/whr_robustness.json
+          if-no-files-found: ignore
+
+  fixed-installed-heater-ua:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Coupled installed-UA / real-CO2 multipoint tests
+        run: python -m pytest -q tests/test_fixed_ua_real_co2.py
+      - name: Fixed-UA rating and exhaust-temperature perturbation diagnostic
+        run: python scripts/fixed_ua_coupled_demo.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g31-installed-ua-coupling
+          path: evidence/generated/fixed_ua_coupled_demo.json
+          if-no-files-found: ignore
+
+  coupled-heater-cooler:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Dual-UA coupled real-CO2 inverse test
+        run: python -m pytest -q tests/test_coupled_plant_co2.py
+      - name: Source and coolant finite-stream off-design diagnostic
+        run: python scripts/coupled_sink_demo.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g32-coupled-heater-cooler
+          path: evidence/generated/g32_coupled_cooler.json
+          if-no-files-found: ignore
+
+  reference-properties-hydraulic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Published NIST coefficients, real coolant and Darcy-Haaland checks
+        run: python -m pytest -q tests/test_nist_dry_air_reference.py tests/test_reference_water_co2.py tests/test_darcy_hydraulics.py
+  g33-component-convergence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Rated CO2 recuperator, NIST dry-air heater and real-water cooler
+        run: python scripts/g33_component_mesh_sensitivity.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g33-reference-and-mesh-sensitivity
+          path: evidence/generated/g33_component_mesh_sensitivity.json
+          if-no-files-found: ignore
+
+  stuttgart-h1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Experimental-source integrity, grouping and analytic baseline tests
+        run: python -m pytest -q tests/test_stuttgart_h1.py
+      - name: Full 54-run real-CO2 measured-derived local HTC benchmark
+        run: python scripts/stuttgart_h1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35-stuttgart-h1
+          path: |
+            evidence/generated/stuttgart_h1/report.json
+            evidence/generated/stuttgart_h1/local_predictions.csv
+          if-no-files-found: ignore
+
+  stuttgart-h1b-property-correlations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Mathematical and grouping tests
+        run: python -m pytest -q tests/test_stuttgart_h1b.py
+      - name: Regenerate unchanged original H1a baseline
+        run: python scripts/stuttgart_h1.py
+      - name: Evaluate 4 wall-property correlation modes
+        run: python scripts/stuttgart_h1b.py
+      - name: Paired model and source-reduced-HTC independent audit
+        run: python scripts/stuttgart_h1b_paired_audit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35b-stuttgart-property-correlations
+          path: |
+            evidence/generated/stuttgart_h1b/h1b_report.json
+            evidence/generated/stuttgart_h1b/h1b_pointwise.csv
+            evidence/generated/stuttgart_h1b/h1b_paired_audit.json
+            evidence/generated/stuttgart_h1/report.json
+          if-no-files-found: ignore
+
+  stuttgart-h1c-lei-orientation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Published Lei equations and implicit wall-solve identity tests
+        run: python -m pytest -q tests/test_lei_mixed_convection.py
+      - name: Reproduce original unchanged H1a baseline
+        run: python scripts/stuttgart_h1.py
+      - name: Reproduce original unchanged H1b wall-property comparisons
+        run: python scripts/stuttgart_h1b.py
+      - name: Evaluate Lei HB/HT experiment transfer and paired comparisons
+        run: python scripts/stuttgart_h1c.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35c-lei-top-bottom-stuttgart
+          path: |
+            evidence/generated/stuttgart_h1c/h1c_lei_pointwise.csv
+            evidence/generated/stuttgart_h1c/h1c_lei_report.json
+            evidence/generated/stuttgart_h1b/h1b_report.json
+          if-no-files-found: ignore

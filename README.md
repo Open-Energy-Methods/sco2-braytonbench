@@ -1,33 +1,207 @@
 # sCO₂-BraytonBench
 
-**Research software for modelling, verification, and control of recuperated supercritical-carbon-dioxide Brayton power cycles for industrial waste-heat recovery.**
+**Standalone research software for modelling, verifying and eventually controlling supercritical-CO₂ Brayton power cycles for industrial waste-heat recovery.**
 
-[Open Energy Methods](https://github.com/Open-Energy-Methods) · Independent research / reproducible engineering
+Maintained under [Open Energy Methods](https://github.com/Open-Energy-Methods).
 
-> **Status: pre-release research prototype.** This repository is being initialized from a separately audited v0.4 design/verification package and two source-paper audits. The earlier v0.5 numerical implementation is not yet imported. **No real-CO₂ cycle validation, experimental validation, or CARBOSOLA digital-twin capability is claimed.**
+> **Research status: 0.5.0-alpha reconstruction — not a validated sCO₂ power-cycle model.** The original v0.5 executable package reported in prior work was not available for direct import; this initial repository implementation was reconstructed from the available v0.4 specifications and the two screenshot-audited papers. The local tests use an artificial constant-property fluid unless otherwise stated.
 
-## Research objectives
+## What is implemented
 
-1. Implement traceable real-fluid CO₂ thermodynamic properties and independently check component calculations.
-2. Reconstruct the **Friedman & Rapp (2016)** recuperated-cycle pressure network separately from a simplified six-state cycle.
-3. Represent finite industrial waste-heat supply using gas-side energy balance and main-heater pinch constraints, following the design framing of **Mohagheghi & Kapat (2014)**.
-4. Progress through gated steady-state, dynamic, PI/MPC, uncertainty, and techno-economic studies **only after** the underlying conservation and numerical checks pass.
+- SI-unit six-state recuperated Brayton **steady-state** calculation.
+- Property adapter contract with **analytic ideal-gas test fixture** and optional **CoolProp HEOS CO₂** backend.
+- Segmented counterflow recuperator with local pinch checking, feasible limiting duty, effectiveness input or inferred finite UA.
+- Gas-source main heater with finite exhaust-gas energy balance, minimum pinch and estimated required UA.
+- Pressure-only reconstruction of Friedman & Rapp (2016), Figure 2b / Table 2, with 12 numbered points (not their detailed full EES thermodynamic model).
+- Independent tests and GitHub Actions workflow.
 
-## Modelling boundaries
+The demonstration code is in `src/sco2_braytonbench/`. Its 1–6 cycle-state numbering must **never** be mixed with the literature source's numbering.
 
-- The benchmark source cases are steady-state *research models*, not CARBOSOLA performance measurements.
-- **CARBOSOLA geometry, control architecture, and experimental data are not available here.**
-- An analytic constant-property test fluid may be used to verify implementation and conservation, but is **not** a substitute for real-CO₂ results.
-- Maximizing waste-heat-recovery **net power** may differ from maximizing thermal efficiency; both must be reported with clearly defined boundaries.
-- Experimental experience with an sCO₂ rig is **not claimed**.
+## Install and verify
 
-## Current structure
+```bash
+python -m pip install -e '.[test]'
+python -m pytest -q
+python examples/analytic_fixture_cycle.py
+```
 
-See `docs/` for the imported source provenance, original v0.4 plan, and verification protocol. Implementation and continuous integration are introduced on a separate pull request.
+Run separate optional real-fluid property smoke tests:
 
-## Reference studies
+```bash
+python -m pip install -e '.[test,co2]'
+python -m pytest tests/test_coolprop_optional.py -q
+```
 
-- Friedman, P. D., & Rapp, M. P. (2016), *Parametric Analysis of sCO2 Power Cycles Operating at Moderate Temperatures*. 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51.
-- Mohagheghi, M., & Kapat, J. (2014), *Thermodynamic Optimization of Recuperated S-CO2 Brayton Cycles for Waste Heat Recovery Applications*. 4th International Symposium on Supercritical CO₂ Power Cycles.
+**A passed smoke test is not numerical validation of a complete CO₂ cycle.**
 
-This project is **independent of** [HTHP-ControlBench](https://github.com/Open-Energy-Methods/hthp-controlbench); tested engineering methods may be adapted, but neither project's physics modules should be made dependent on the other.
+## Industrial waste-heat recovery — G3 exploratory screening
+
+A source-constrained six-state recuperated CO₂ model is now available
+on the G3 feature branch. It checks a finite exhaust-gas thermal
+inventory, counterflow heater pinch, stack-temperature floor,
+heat-exchanger sizing allowance, first-law conservation and an ideal-gas
+exergy ceiling. Both net **shaft power** and thermal efficiency are
+ranked over the **same finite feasible design grid**.
+
+Run the separately pinned CoolProp experiment with
+`python scripts/whr_design_screen.py`.
+Read [the G3 model specification](docs/G3_WASTE_HEAT_DESIGN_SCREENING.md)
+for explicit assumptions, source-versus-model distinctions, and limits. The [G3 screening results](docs/G3_STEADY_SCREENING_RESULTS.md) document numerical outcomes, added plant limits, and convergence checks.
+
+The branch's grid search is **not** a global optimizer, an MK2014
+REFPROP/GA reproduction, or a validated off-design sCO₂ rig model.
+
+## G3.1 — fixed installed heater UA and coupled operating point
+
+The `sco2_braytonbench.fixed_ua.solve_fixed_ua_whr` solver now
+determines the turbine-inlet temperature from the **installed** main-heater
+`UA`, source-gas inlet and mass flow, CO₂ circuit conditions and an
+explicit feasible operating-temperature interval.
+
+Unlike the earlier heater-sizing inequality, its accepted solution
+satisfies `UA_required ≈ UA_installed` together with gas-side
+and CO₂-cycle first-law balances. It also checks stack temperature,
+heater pinch and a stream exergy bound. It **does not** invoke a
+fictional bypass or usable-area adjustment.
+
+Read [the coupled operating-point specification](docs/G31_FIXED_UA_COUPLING.md)
+and run `python scripts/fixed_ua_coupled_demo.py` with CoolProp
+installed to generate an explicit real-fluid source-temperature
+perturbation report.
+
+No physical cooler-UA coupling, measured equipment maps or transient
+control is implemented. The initial heater-UA value in the example is
+sized from a chosen hypothetical nominal operating point, not
+measured hardware or a published benchmark.
+
+## G3.2 — two installed UAs, finite cooling stream and sensible-source cp
+
+The new `sco2_braytonbench.coupled_plant.solve_coupled_plant`
+function calculates both **compressor inlet T1** and **turbine inlet T4**
+from an installed heater UA, installed cooler UA, finite hot-gas flow,
+finite cooling-medium flow and a fixed-UA recuperator.
+
+The coolant outlet and exhaust gas outlet temperatures follow separate
+enthalpy balances; pinch and stack constraints are enforced. A
+documented linear sensible-heat-capacity model can be used for both
+streams, while constant cp remains the default for compatibility.
+An optional separately identified **quadratic flow-loss scaling scenario**
+is provided for sensitivity only, not a measured map.
+
+Read [the G3.2 physics and verification scope](docs/G32_COUPLED_COOLING.md) and the [G3.2 numerical verification](docs/G32_NUMERICAL_VERIFICATION.md).
+The model is still steady-state, with no phase change, real turbomachinery
+maps, calibrated heat-transfer correlations or transient control.
+
+## G3.3 — reference stream properties, hydraulics and HX sensitivity
+
+Research property options now include:
+- a **NIST Shomate** ideal, dry, fixed-composition 79/21 mole-fraction N₂/O₂ stream (300–1000 K);
+- a **CoolProp HEOS Water** liquid-coolant stream at user-specified
+  pressure with no boiling or freezing;
+- **Darcy–Weisbach** single-phase circular-pipe hydraulics with
+  laminar `64/Re` and turbulent Haaland/Colebrook friction, rejecting
+  transition regimes rather than interpolating fabricated accuracy.
+
+The previous linear/constant cp and assumed-flow-loss models are still
+available for comparative regressions. No industrial heat-exchanger
+geometry, wetted path or roughness was provided, so the pipe
+correlation is **not automatically applied to the cycle**.
+
+Read [G3.3 reference-property and convergence protocol](docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md) and [G3.3 numerical results](docs/G33_NUMERICAL_VERIFICATION.md)
+and run `python scripts/g33_component_mesh_sensitivity.py` to
+record a real-fluid, multi-point **component-level** mesh sensitivity
+with 6/12/24/48 segments. This is **not** full nested dual-UA
+operating-point grid convergence and does not close industrial G3.
+
+## G3.5 — external measured-derived CO₂ heat-transfer benchmark
+
+The source-reviewed [Stuttgart H1 campaign](docs/G35_STUTTGART_HTC.md)
+compares pinned CoolProp real-CO₂ bulk properties and independent
+turbulent forced-convection baseline correlations against **the complete
+54-run experimental dataset** from Theologou et al. (2022), Mendeley DOI
+10.17632/4mvk4nxrkz.1 (original data under **CC BY 4.0**).
+All 2,508 axial source records (2,398 local HTC records) are included
+with attribution in [the dataset folder](data/validation/stuttgart/README.md).
+
+The experiment with the anomalous 832.99 kW/m² source entry is preserved
+unchanged but **quarantined** from evaluation. Benchmark comparisons
+report per-orientation errors, source-reported HTC sigma-normalized
+residuals, domain exclusions, and four held-out nominal experiment
+families without fitting any coefficients. This is a **single-pipe
+forced-convection baseline**, not Brayton-cycle/PCHE validation.
+Run `python scripts/stuttgart_h1.py` with pinned CoolProp to reproduce.
+
+## G3.5 H1b — Bishop and Jackson–Hall comparison
+
+The [H1b research protocol](docs/G35B_WALL_PROPERTY_CORRELATIONS.md)
+adds Bishop and Jackson–Hall wall-property correlations and a
+Richardson buoyancy diagnostic to the unchanged Stuttgart H1a
+experiment benchmark. It distinguishes **measured-wall-conditioned
+diagnostics** from **flux-driven wall-temperature inversions**,
+without coefficient fitting or modifying the four nominal held-outs.
+
+## G3.5 H1b — first wall-property comparison results
+
+[The executed Bishop and Jackson–Hall experimental analysis](docs/G35B_RESULTS.md)
+separates measured-wall-conditioned diagnostics from flux-driven wall-T
+solutions. Flux-driven MAPE **46.40% (Bishop, 2,152 stations)**
+and **49.47% (Jackson–Hall, 2,318)** improve materially over
+the earlier forced-convection baselines, but top-wall MAPE remains
+~81–85%, and these remain cross-fluid/horizontal-domain extrapolations.
+A source-faithful Richardson indicator flags buoyancy risk rather
+than inventing a heat-transfer enhancement factor.
+
+## G3.5 H1c — orientation-specific published Lei equations
+
+[The H1c test protocol](docs/G35C_LEI_TOP_BOTTOM.md) adds the
+published Lei et al. **top (HT) and bottom (HB)** equations as an
+explicit cross-fluid/geometry stress test on the Stuttgart experimental
+dataset. These equations were fitted for supercritical WATER (26/43 mm),
+**not** this supercritical CO₂ 4/8 mm dataset. No middle-wall formula
+or angular interpolation is invented; measured-wall-conditioned
+diagnostics are separated from flux-driven predictions, with the
+same STU-001 quarantine and four held-out families.
+
+## G3.5 H1c — published Lei top/bottom transferability audit
+
+The [executed H1c results](docs/G35C_LEI_RESULTS.md) show the
+originally **supercritical-WATER**, 26/43-mm Lei top/bottom correlations
+transfer **very poorly** to Stuttgart CO₂ 4/8-mm tubes. On
+1,580 identical HB/HT stations, Lei flux-driven local HTC MAPE is
+**631.72%** (top **1065.72%**) compared with **55.52%** for the
+previous Jackson–Hall flux-driven comparison. The wall-inverse
+numerical flux balance closes to better than 0.0013%, so this
+is a cross-fluid transferability failure rather than a solver
+residual problem. No model correction, HM interpolation or
+new coefficient fit was introduced.
+
+## Consolidated research and recovered Kim 2019 source
+
+[Consolidation history and CI verification](docs/PR_CONSOLIDATION_AUDIT.md)
+covers the prior nine stacked research PRs without erasing their commit
+history. A merge into `main` is a **repository integration milestone
+only**, not an approval of all numerical model assumptions.
+
+The **original Kim et al. (2019) CO₂ mixed-convection paper** has now
+been obtained and its Eqs. (23), (24), (29), (30), top/bottom
+**Table 4** coefficients and original experimental limits recorded in
+[the source audit](docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md)
+and [machine-readable coefficient registry](data/reference/kim2019_coefficients.json).
+The copyrighted full PDF is **not included**. **No Kim 2019 numerical
+correlation, Stuttgart benchmark reproduction, or independent
+prediction has yet been implemented.**
+
+## Source literature
+
+- Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.
+- Mohagheghi, M., and Kapat, J. (2014), *Thermodynamic Optimization of Recuperated S-CO2 Brayton Cycles for Waste Heat Recovery Applications*, 4th International Symposium on Supercritical CO₂ Power Cycles. Supports open-loop source-gas balances and the distinction between maximum net-power and maximum-efficiency cycle designs.
+
+See [measured-density and identifiability evidence](docs/EXPERIMENTAL_DENSITY_AND_IDENTIFIABILITY.md), [source distinctions](docs/REFERENCES.md), [FR2016 source/benchmark review](docs/FR2016_COMPARISON_REVIEW.md), [real-fluid reference verification](docs/REFERENCE_VERIFICATION.md), [research gate status](docs/RESEARCH_STATUS.md), and [verification protocol](docs/VERIFICATION.md).
+
+## Explicit exclusions
+
+This is **not a CARBOSOLA digital twin**. No HZDR rig data, experimental campaign, real-sCO₂ cycle benchmark replication, source plant dynamic model, PI/MPC controller, or techno-economic optimum is claimed. An ideal-gas test-fluid result must never be labelled as a CO₂ prediction.
+
+The related [HTHP-ControlBench](https://github.com/Open-Energy-Methods/hthp-controlbench) is a separate repository; general testing/control methods may be adapted, but their physics models remain independent.
+
+BSD-3-Clause license. AI-assisted work is subject to scientific and human review.

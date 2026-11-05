@@ -1,0 +1,31 @@
+source_id: FR2016
+authors: [Peter D. Friedman, Michael P. Rapp]
+year: 2016
+title: Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures
+venue: 5th International Symposium - Supercritical CO2 Power Cycles
+paper_number: 51
+evidence: source PDF user supplied and 21-page screenshot audit
+physical_system: moderate-temperature reactor coupled with secondary sCO2 cycle
+publication_type: computational steady-state analysis
+validated_experimental_data: false
+high_temperature_K_at_point_1: 550
+high_pressure_Pa_at_point_1: 30000000
+turbine_isentropic_efficiency: 0.90
+compressor_isentropic_efficiency: 0.85
+recuperator_effectiveness: 0.925
+component_dP_kPa:
+  pre_cooler: 100
+  intermediate_heater: 150
+  recuperator_cold: 30
+  recuperator_hot: 50
+pipe_dP_kPa:
+  point_1_to_2: 80
+  point_3_to_4: 10
+  point_5_to_6: 5
+  point_7_to_8: 40
+  point_9_to_10: 35
+  point_11_to_12: 200
+sum_component_kPa: 330
+sum_piping_kPa: 370
+scope_note: pressure-only topology, not entire EES thermodynamic model
+benchmark_replication: not_established
