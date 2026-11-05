@@ -131,6 +131,15 @@ families without fitting any coefficients. This is a **single-pipe
 forced-convection baseline**, not Brayton-cycle/PCHE validation.
 Run `python scripts/stuttgart_h1.py` with pinned CoolProp to reproduce.
 
+## G3.5 H1b — Bishop and Jackson–Hall comparison
+
+The [H1b research protocol](docs/G35B_WALL_PROPERTY_CORRELATIONS.md)
+adds Bishop and Jackson–Hall wall-property correlations and a
+Richardson buoyancy diagnostic to the unchanged Stuttgart H1a
+experiment benchmark. It distinguishes **measured-wall-conditioned
+diagnostics** from **flux-driven wall-temperature inversions**,
+without coefficient fitting or modifying the four nominal held-outs.
+
 ## Source literature
 
 - Friedman, P. D., and Rapp, M. P. (2016), *Parametric Analysis of SCO2 Power Cycles Operating at Moderate Temperatures*, 5th International Symposium on Supercritical CO₂ Power Cycles, Paper 51. Supports pressure-network mapping, recuperator-pinch methodology and moderate-temperature cycle studies.

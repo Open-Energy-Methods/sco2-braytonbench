@@ -155,3 +155,28 @@ jobs:
             evidence/generated/stuttgart_h1/report.json
             evidence/generated/stuttgart_h1/local_predictions.csv
           if-no-files-found: ignore
+
+  stuttgart-h1b-property-correlations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Mathematical and grouping tests
+        run: python -m pytest -q tests/test_stuttgart_h1b.py
+      - name: Regenerate unchanged original H1a baseline
+        run: python scripts/stuttgart_h1.py
+      - name: Evaluate 4 wall-property correlation modes
+        run: python scripts/stuttgart_h1b.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35b-stuttgart-property-correlations
+          path: |
+            evidence/generated/stuttgart_h1b/h1b_report.json
+            evidence/generated/stuttgart_h1b/h1b_pointwise.csv
+            evidence/generated/stuttgart_h1/report.json
+          if-no-files-found: ignore
