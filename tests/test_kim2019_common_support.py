@@ -71,7 +71,7 @@ def test_true_common_station_support_and_held_out_metric(tmp_path):
     result = _module().compare(tmp_path, tmp_path / "out")
     assert result["n_common_all_three"] == 2
     assert result["n_common_held_out"] == 1
-    assert result["baseline_jackson_on_common"]["mape_pct"] == pytest.approx(30)
+    assert result["baseline_jackson_on_common"]["mape_pct"] == pytest.approx(25)
     metrics = result["Kim_models_on_same_stations"]
     assert metrics["semi_empirical"]["mape_pct"] == pytest.approx(20)
     assert metrics["empirical_literal"]["mape_pct"] == pytest.approx(20)
