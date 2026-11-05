@@ -131,3 +131,47 @@ or claim that the selected design is economic has been established.
    calibrated time constants and admissible control actuators.
 
 **G3 is partial / exploratory, not validated industrial operation.**
+
+## Robustness audit — additional independent constraints
+
+The source paper's recuperator terminal temperature-difference
+design variable is **not** equivalent to our internal minimum
+recuperator approach. Our optional `PlantDesignLimits` checks an
+**independent engineering scenario** with:
+
+- Minimum resolved recuperator approach: **10 K**.
+- Cooler heat-rejection sizing allowance: **15 MW_th**.
+
+Both are explicitly assumed here for sensitivity only, not as
+measurements or values published by Mohagheghi & Kapat. They are
+optional; the primary screening remains unchanged. For the original
+unconstrained optimum, the initial coarse calculation found:
+
+| Metric | Power-max case | Efficiency-max case |
+|---|---:|---:|
+| Turbine inlet T | 700 K | 700 K |
+| CO₂ flow | 100 kg/s | 20 kg/s |
+| Net shaft power | 8.110 MW | 1.622 MW |
+| Cycle thermal efficiency | 25.218% | 33.504% |
+| Available source heat recovered | 73.087% | 11.003% |
+| Heater minimum approach | 13.108 K | 60.0 K |
+| Recuperator minimum approach | 64.738 K | 4.627 K |
+| Cooler thermal rejection | 24.049 MW_th | 3.219 MW_th |
+
+The power-max design fails the additional **15 MW_th** cooler
+constraint; the efficiency-max design fails the additional **10 K
+internal recuperator approach** constraint. Neither baseline
+winner is therefore robust to both of these **illustrative new
+constraints**.
+
+The script now rescans the complete grid under the new constraints,
+and re-evaluates both original winners using **12, 24 and 48**
+segments for the recuperator and gas heater. The reported
+`whr_robustness.json` includes the quantitative mesh changes and
+new feasible rankings. This is an independent engineering sensitivity
+check, not a full convergence study over the entire parameter domain.
+
+In the future, a fixed installed heater design requires equality
+`UA_required ≈ UA_installed` or justified operation with
+controlled bypass. A screening UA *upper limit* alone must not be
+misrepresented as a closed off-design plant model.
