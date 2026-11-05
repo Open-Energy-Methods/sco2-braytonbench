@@ -107,7 +107,7 @@ available for comparative regressions. No industrial heat-exchanger
 geometry, wetted path or roughness was provided, so the pipe
 correlation is **not automatically applied to the cycle**.
 
-Read [G3.3 reference-property and convergence protocol](docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md)
+Read [G3.3 reference-property and convergence protocol](docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md) and [G3.3 numerical results](docs/G33_NUMERICAL_VERIFICATION.md)
 and run `python scripts/g33_component_mesh_sensitivity.py` to
 record a real-fluid, multi-point **component-level** mesh sensitivity
 with 6/12/24/48 segments. This is **not** full nested dual-UA

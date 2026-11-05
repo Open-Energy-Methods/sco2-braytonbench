@@ -145,3 +145,11 @@ See [G3.1 methods](docs/G31_FIXED_UA_COUPLING.md), [G3.1 numerical results](docs
 At a synthetic installed heater UA **21.626 kW/K** and cooler UA **100.514 kW/K**, coolant inlet 285→287 K changed calculated **T1 310.005→310.464 K**, **T4 650.020→652.217 K**, net shaft power **1.424→1.406 MW**, and cooler outlet **295.173→297.025 K**, with both UA errors below the declared solver tolerances. See [full numerical record](docs/G32_NUMERICAL_VERIFICATION.md).
 
 **Status:** G3.2 numerical prototype verified at these tests; industrial G3 gate **still OPEN**, pending calibrated geometry/flow properties, near-critical convergence, actual cooling equipment constraints and machine maps.
+
+## G3.3 — sourced dry-air and real-water properties; component mesh check
+
+Draft stacked [PR #10](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/10) adds NIST N₂/O₂ Shomate dry-air sensible properties (300–1000 K), CoolProp single-phase Water coolant properties at specified pressure, Darcy–Weisbach/Haaland circular-pipe friction functions **without inventing equipment geometry**, and two-point real-CO₂ component mesh refinement 6/12/24/48 sections. These are optional, with legacy simple cp/flow models preserved.
+
+At prescribed CO₂ input states 8.5 MPa/310 K/650 K and 9 MPa/314 K/690 K, the 24→48 refinement changes heat-exchanger required UA by **<0.04%** and cycle efficiency by **0.0021–0.0024 percentage points**, while the internal recuperator minimum approaches remain just **3.92/4.58 K** (below a hypothetical 10 K margin). [Full G3.3 numerical report](docs/G33_NUMERICAL_VERIFICATION.md) and [machine JSON](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42010735595/artifacts/13407415665).
+
+The new property/hydraulic job passed 35 tests and the fixture suites passed 205/9 skipped each. **G3.3 narrow component verification PARTIAL; full industrial coupled-UA convergence OPEN.** No measured geometry or compressor maps are claimed.
