@@ -174,7 +174,7 @@
   "explicit_limits": [
     "These numbers are ORIGINAL-PAPER claims, not reproduced against Stuttgart.",
     "The uploaded source PDF is used only for verification; do not redistribute copyrighted article.",
-    "H1a/H1b/H1c benchmarks are on Stuttgart data; original Kim 2019 model has not yet been implemented or tested in this branch.",
+    "H1d has now implemented three clearly separated source interpretations and compared them with Stuttgart, but original author's Eq24 sign convention and 620-point original-data numerical parity remain unverified.",
     "Original source includes measured-wall / property-dependent formulas; independent predictive validation must avoid measured-target leakage.",
     "The fit originally uses mixed POSTECH and Adebiyi-Hall data; exact independence/training distinctions are not proven by copying Table 6.",
     "Model validity should not be extrapolated to PCHE, Brayton cycles, high-temperature heaters, or other geometries without data."

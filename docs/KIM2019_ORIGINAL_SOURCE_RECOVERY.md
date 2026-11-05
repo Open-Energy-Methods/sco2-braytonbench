@@ -1,6 +1,6 @@
 # Kim et al. (2019): original source recovered and verified
 
-**Status:** original full 12-page source PDF **obtained and inspected** on 2026-11-05. The source-recovery gate is CLOSED. **Implementing the correlation and validating it against Stuttgart are separate and OPEN.**
+**Status:** original full 12-page source PDF **obtained and inspected** on 2026-11-05. The source-recovery gate is CLOSED. **H1d source-equation implementations and out-of-domain Stuttgart comparisons have since executed. Original author's exact empirical Eq24 interpretation and original-data numerical parity remain OPEN.**
 
 Citation: Tae Ho Kim, Jin Gyu Kwon, Joo Hyun Park, Hyun Sun Park and Moo Hwan Kim, *Heat transfer model for horizontal flows of CO₂ at supercritical pressures in terms of mixed convection*, *International Journal of Heat and Mass Transfer* **131** (2019), pp. 1117–1128. DOI: [10.1016/j.ijheatmasstransfer.2018.11.075](https://doi.org/10.1016/j.ijheatmasstransfer.2018.11.075).
 
@@ -48,7 +48,7 @@ Additional caution: the model uses temperature-averaged **near-wall properties**
 - **Original eqs. (23), (24), (29), (30), superposition and Table 4: VERIFIED and machine-transcribed.**
 - **Original source fit region and published error table: RECORDED.**
 - **Original paper full text: NOT redistributed.**
-- **Numerical implementation, original-study pointwise replication and Stuttgart hold-out transfer validation: NOT YET DONE.**
+- **H1d numerical interpretation comparison and unchanged Stuttgart held-out scoring: EXECUTED, with substantial source-level ambiguity and poor out-of-fit-range performance. Exact original-study 620-point replication and in-domain validation: NOT YET DONE.**
 
 This source audit is part of the release/integration provenance; scientific model work remains in [Issue #17](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/17).
 
