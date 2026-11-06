@@ -33,9 +33,9 @@ report-status: "Research software technical record; not experimental plant-valid
 | Field | Recorded status |
 |---|---|
 | Software / public project | **sCO₂-BraytonBench**, GitHub [Open-Energy-Methods/sco2-braytonbench](https://github.com/Open-Energy-Methods/sco2-braytonbench) |
-| Publisher / maintainer | Open Energy Methods; \`CITATION.cff\` names Abhijith Sivaprasadan |
-| Package name and current version | \`sco2-braytonbench\`, **0.5.0a0** (alpha; not v1.0) |
-| Snapshot commit | \`8df1711a425e21da342bd3f401da61a1375bbc0a\` on \`main\` |
+| Publisher / maintainer | Open Energy Methods; `CITATION.cff` names Abhijith Sivaprasadan |
+| Package name and current version | `sco2-braytonbench`, **0.5.0a0** (alpha; not v1.0) |
+| Snapshot commit | `8df1711a425e21da342bd3f401da61a1375bbc0a` on `main` |
 | Snapshot date | **6 November 2026** |
 | Source licence | **BSD-3-Clause** for original repository software; third-party datasets retain **their own** terms |
 | Current integrated GitHub PRs | #22 (WP0/1/2a), #23 (WP2b), #24 (WP3), #25 (WP4), #26 (WP5), #29 (data-rights cleanup) |
@@ -92,11 +92,11 @@ The distinctive engineering practice is not the existence of a cycle solver. It 
 - A bounded sampled bypass PI demonstration with conserved source mass and enthalpy and explicit heat-recovery versus tracking trade-off.
 - 35 **proposed/unconfirmed** experimental channels and 13 **proposed/unapproved** laboratory cases, validated as data schemas but not field measurements.
 - Machine-readable offline release audit, separate wheel/sdist build and installation, same-scenario output comparison, and SHA256 evidence manifests.
-- Latest integrated HEAD \`8df1711a…\` with [20 successful CI jobs](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348).
+- Latest integrated HEAD `8df1711a…` with [20 successful CI jobs](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348).
 
 ### 1.3 What has not been demonstrated
 
-No experimental CARBOSOLA power-cycle validation, turbine/compressor machine map identification, inventory-based full CO₂ transient, hydraulic bypass valve \`C_v\` relation, plant-approved control, verified installed sensor list, calibrated wall thermal capacity, measured PCHE geometry-specific UA transfer, rigorous techno-economic optimum or independent human reviewer approval exists in the integrated baseline.
+No experimental CARBOSOLA power-cycle validation, turbine/compressor machine map identification, inventory-based full CO₂ transient, hydraulic bypass valve `C_v` relation, plant-approved control, verified installed sensor list, calibrated wall thermal capacity, measured PCHE geometry-specific UA transfer, rigorous techno-economic optimum or independent human reviewer approval exists in the integrated baseline.
 
 Measured-derived local heat-transfer correlations exhibit substantial prediction errors, especially in thermally stratified top-wall zones. A small first-law residual shows coherent mathematical accounting; it does not heal those physical gaps.
 
@@ -153,13 +153,13 @@ The early G3.5 H1d Kim analysis remained on exploratory [draft PR #19](https://g
 | [#26](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/26) | WP5 distributions, SHA256, dual-install numerical replay, release acceptance and technical audit | Engineering prerequisites, no automatic tag/release |
 | [#29](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/29) | Current-HEAD removal of disputed NIST ThermoML table, optional external-data tests/report, archive failure gate | Reduced future redistribution exposure; historical Git risk remains |
 
-All six were merged sequentially into \`main\` while preserving \`0.5.0a0\). A “merged” software PR means GitHub integration, **not independent peer review, licence approval or scientific field validation**.
+All six were merged sequentially into `main` while preserving `0.5.0a0\). A “merged” software PR means GitHub integration, **not independent peer review, licence approval or scientific field validation**.
 
 ### 3.3 Traceable integrated commits
 
-The WP0–WP5 integrated development commit was \`88579f7ff8a723124744dde0ac53a38e8adf1837\`, verified by [20/20 CI jobs in run #42258225916](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42258225916).
+The WP0–WP5 integrated development commit was `88579f7ff8a723124744dde0ac53a38e8adf1837`, verified by [20/20 CI jobs in run #42258225916](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42258225916).
 
-The subsequent data-rights cleanup produced the current main SHA \`8df1711a425e21da342bd3f401da61a1375bbc0a\`. [Run #42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) succeeded in all **20** jobs. Thus the report's present state is **after** the cleanup, not the earlier CI checkpoint that had one job pending.
+The subsequent data-rights cleanup produced the current main SHA `8df1711a425e21da342bd3f401da61a1375bbc0a`. [Run #42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) succeeded in all **20** jobs. Thus the report's present state is **after** the cleanup, not the earlier CI checkpoint that had one job pending.
 
 ### 3.4 GitHub discipline
 
@@ -173,19 +173,19 @@ Every published number belongs to a run/commit and a supporting source. Source d
 
 | Location | Function |
 |---|---|
-| \`src/sco2_braytonbench/\` | Core property interfaces, cycle, recuperator/HXs, finite source, cooler, installed-UA solvers, thermal dynamics, bypass/PI, experiment-readiness utilities |
-| \`tests/\` | Unit, domain, regression, analytic, numerical, source and optional real-CoolProp verification |
-| \`examples/\` | Reproducible ideal-gas and real-fluid scientific examples; synthetic transient/control and prospective readiness scenarios |
-| \`scripts/\` | Research benchmark scripts, original-source comparisons, reporting tools, WP5 offline release gate |
-| \`data/reference/\` | Reference-source metadata and permitted model inputs; Mantilla 49-point CSV no longer in current HEAD |
-| \`data/validation/\` | Attribution-labelled validation-source transformations, e.g. Stuttgart reduced measurements |
-| \`data_requests/\` | Publication/data recovery requests, known source gaps and prospective intake templates |
-| \`protocols/wp4/\` | Candidate sensor/channel registry, test matrix, blank standard-uncertainty ledger and synthetic DAQ-format fixture |
-| \`docs/\` | Engineering derivations, source-recovery audits, numerical tables, physical limitations, release/rights decisions |
-| \`evidence/generated/\` | Reproducible scenario artifacts when executed; CI uploaded artifacts are evidence tied to a run |
-| \`.github/workflows/ci.yml\` | Independent Python-version, CoolProp, research and distribution gates |
-| \`MANIFEST.in\` | Source archive include/exclude policy with explicit protection for disputed data |
-| \`CITATION.cff\`, \`pyproject.toml\`, \`LICENSE\` | Authorship, software identity, supported versions, licensing and packaging contract |
+| `src/sco2_braytonbench/` | Core property interfaces, cycle, recuperator/HXs, finite source, cooler, installed-UA solvers, thermal dynamics, bypass/PI, experiment-readiness utilities |
+| `tests/` | Unit, domain, regression, analytic, numerical, source and optional real-CoolProp verification |
+| `examples/` | Reproducible ideal-gas and real-fluid scientific examples; synthetic transient/control and prospective readiness scenarios |
+| `scripts/` | Research benchmark scripts, original-source comparisons, reporting tools, WP5 offline release gate |
+| `data/reference/` | Reference-source metadata and permitted model inputs; Mantilla 49-point CSV no longer in current HEAD |
+| `data/validation/` | Attribution-labelled validation-source transformations, e.g. Stuttgart reduced measurements |
+| `data_requests/` | Publication/data recovery requests, known source gaps and prospective intake templates |
+| `protocols/wp4/` | Candidate sensor/channel registry, test matrix, blank standard-uncertainty ledger and synthetic DAQ-format fixture |
+| `docs/` | Engineering derivations, source-recovery audits, numerical tables, physical limitations, release/rights decisions |
+| `evidence/generated/` | Reproducible scenario artifacts when executed; CI uploaded artifacts are evidence tied to a run |
+| `.github/workflows/ci.yml` | Independent Python-version, CoolProp, research and distribution gates |
+| `MANIFEST.in` | Source archive include/exclude policy with explicit protection for disputed data |
+| `CITATION.cff`, `pyproject.toml`, `LICENSE` | Authorship, software identity, supported versions, licensing and packaging contract |
 
 ### 4.2 Separation of independent roles
 
@@ -195,7 +195,7 @@ This separation allows testing the equations at deliberately simple ideal-gas li
 
 ### 4.3 Software dependencies and portability
 
-The alpha package declares Python \`>=3.10\`, no unconditional runtime dependencies, and optional CoolProp \`>=6.6,<9\`. The cross-version CI test suite runs Python 3.10/3.11/3.12; the dedicated real-CO₂ checks pin a known CoolProp version for reproducible comparisons. The source package is under BSD-3-Clause; the Stuttgart data and any other third-party evidence require their separate source licenses and attribution.
+The alpha package declares Python `>=3.10`, no unconditional runtime dependencies, and optional CoolProp `>=6.6,<9`. The cross-version CI test suite runs Python 3.10/3.11/3.12; the dedicated real-CO₂ checks pin a known CoolProp version for reproducible comparisons. The source package is under BSD-3-Clause; the Stuttgart data and any other third-party evidence require their separate source licenses and attribution.
 
 The package's supported-domain claims are narrower than Python syntax compatibility: a numerical result is meaningful only for physically admissible temperatures, pressures, composition assumptions and component approach constraints.
 
@@ -304,9 +304,9 @@ Historical November 5 tests compared CoolProp 8.0.0 with **49 Mantilla et al. (2
 | Maximum absolute relative residual | 0.090241% |
 | Earlier tighter screen | 0.2% maximum / 0.1% RMS, passed |
 
-**Current evidence caveat:** the 49-row normalized original-source transcription has since been **removed from current HEAD** because the downstream NIST ThermoML/journal-publisher redistribution grant is unconfirmed. Default CI therefore **does not rerun those measured-density observations**. The test and report now require a user-obtained external CSV through \`SCO2_MANTILLA_DENSITY_CSV\`; in its absence the measurement check is explicitly skipped. Historical values are historical run evidence, not a fresh current-version independent experimental validation claim.
+**Current evidence caveat:** the 49-row normalized original-source transcription has since been **removed from current HEAD** because the downstream NIST ThermoML/journal-publisher redistribution grant is unconfirmed. Default CI therefore **does not rerun those measured-density observations**. The test and report now require a user-obtained external CSV through `SCO2_MANTILLA_DENSITY_CSV`; in its absence the measurement check is explicitly skipped. Historical values are historical run evidence, not a fresh current-version independent experimental validation claim.
 
-See \`docs/EXPERIMENTAL_DENSITY_DECISION.md\`, \`data/reference/README_MANTILLA_OPT_IN.md\` and [rights issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27).
+See `docs/EXPERIMENTAL_DENSITY_DECISION.md`, `data/reference/README_MANTILLA_OPT_IN.md` and [rights issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27).
 
 ### 6.4 Property-model boundary
 
@@ -330,7 +330,7 @@ The project documented that the original reference used a larger 12-state struct
 
 The current six-state abstraction and the literature reference do not have identical thermal and pressure state maps. Calibrating unknown parameters until one efficiency matches would risk absorbing physical or numerical differences into arbitrary assumed losses.
 
-The appropriate citation is \`docs/FR2016_COMPARISON_REVIEW.md\` together with \`docs/FR2016_ORIGINAL_MODEL_RECOVERY.md\`. Future parity requires published operating-point and state definitions, not merely another digit of efficiency agreement.
+The appropriate citation is `docs/FR2016_COMPARISON_REVIEW.md` together with `docs/FR2016_ORIGINAL_MODEL_RECOVERY.md`. Future parity requires published operating-point and state definitions, not merely another digit of efficiency agreement.
 
 ## 8. G3 — finite-source industrial waste-heat screening
 
@@ -396,7 +396,7 @@ A numerical segmentation sensitivity on the original winners reported efficiency
 
 G3 is a **design screening/sizing tool**: it estimates which combinations demand a feasible \(\mathrm{UA}_{required}\). It does not force a single installed primary-heater UA across load cases, identify turbine maps, model actual pipe flow or enforce transient heat storage. That limitation motivated G3.1.
 
-See \`docs/G3_WASTE_HEAT_DESIGN_SCREENING.md\` and \`docs/G3_STEADY_SCREENING_RESULTS.md\`.
+See `docs/G3_WASTE_HEAT_DESIGN_SCREENING.md` and `docs/G3_STEADY_SCREENING_RESULTS.md`.
 
 ## 9. G3.1 — solve the cycle around a fixed installed heater UA
 
@@ -501,7 +501,7 @@ For the 24→48 refinement, the first-case cooler UA changed about **0.0358%** w
 
 This checks segment sensitivity at **two points**; it is not a proof of uniform convergence everywhere. Near heat-exchanger pinch, pseudo-critical \(c_p\) features, mixed phases or branch changes, numerical resolution and EOS interpolation may demand much finer treatment. A future engineering claim should test event/phase boundaries, root-conditioned states and a spatial or finite-volume refinement strategy.
 
-The numerical evidence is preserved in \`docs/G33_NUMERICAL_VERIFICATION.md\`, \`docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md\`, and associated CI examples.
+The numerical evidence is preserved in `docs/G33_NUMERICAL_VERIFICATION.md`, `docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md`, and associated CI examples.
 
 ---
 
@@ -525,7 +525,7 @@ The G3.4 intake introduced an evidence taxonomy: **direct measurements**, **expe
 | HZDR-TPMS-2026 | ANSYS CAD/Fluent geometry/CFD archive | Geometry/CFD methods context | Measured plant pressure/temperature/HTC points |
 | KTH industrial demonstrator context | Public concept/infrastructure descriptions | Possible future data contacts and research needs | Unpublished lab data or current operational authorization |
 
-The source file \`docs/G34_EXTERNAL_VALIDATION_INTAKE.md\` distinguishes these sources and tracks which have enough detail for an admissible numerical comparison.
+The source file `docs/G34_EXTERNAL_VALIDATION_INTAKE.md` distinguishes these sources and tracks which have enough detail for an admissible numerical comparison.
 
 ### 12.2 STU-001 source anomaly
 
@@ -618,7 +618,7 @@ The top-wall degradation is a signal of inadequate representation of circumferen
 
 H1a established a reproducible pipeline for *source-attributed measured-derived* local correlation comparisons, with an original-data ledger, exclusion audit, meaningful group-based holdouts, and negative model-transfer evidence. It **did not validate** these correlations as reliable plant PCHE prediction laws or recover the original entire experimental rig and its uncertainty budget.
 
-Detailed outputs: \`docs/G35_STUTTGART_HTC.md\` and \`docs/G35_STUTTGART_RESULTS.md\`.
+Detailed outputs: `docs/G35_STUTTGART_HTC.md` and `docs/G35_STUTTGART_RESULTS.md`.
 
 ## 14. H1b — wall-conditioned Bishop and Jackson–Hall tests
 
@@ -654,7 +654,7 @@ Even the improved flux-driven models had **~81–85%** top-wall MAPE. A model la
 
 The key H1b achievement is a careful diagnostic/predictive boundary, not a declaration that the problem was solved.
 
-See \`docs/G35B_WALL_PROPERTY_CORRELATIONS.md\` and \`docs/G35B_RESULTS.md\`.
+See `docs/G35B_WALL_PROPERTY_CORRELATIONS.md` and `docs/G35B_RESULTS.md`.
 
 ## 15. H1c — Lei top/bottom transfer is a recorded negative result
 
@@ -687,7 +687,7 @@ Therefore the final 631.72% MAPE is **not primarily a root residual artefact**. 
 
 Negative source-to-model evidence is a valuable output. The physically appropriate response is to characterize buoyancy, fluid/geometry domains and identify truly in-domain tests—not to hide an apparently nonphysical source or tune coefficients until an unrelated data population yields a pleasing headline.
 
-See \`docs/G35C_LEI_TOP_BOTTOM.md\` and \`docs/G35C_LEI_RESULTS.md\`.
+See `docs/G35C_LEI_TOP_BOTTOM.md` and `docs/G35C_LEI_RESULTS.md`.
 
 ## 16. H1d — Kim 2019 original-source recovery and research branch
 
@@ -729,9 +729,9 @@ The extremely large literal-interpretation error must not be silently clipped or
 - All compared Stuttgart heat fluxes lie outside the stated original Kim experimental flux range.
 - Empirical formula interpretation remains unresolved; independent source-author/publisher clarification is needed.
 - Root failures, original-sample exclusion and held-out coverage remain part of the record.
-- **No H1d model is designated a newly validated default in the current \`main\` package.**
+- **No H1d model is designated a newly validated default in the current `main` package.**
 
-See \`docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md\`, historical PR #21, and research PR #19.
+See `docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md`, historical PR #21, and research PR #19.
 
 ## 17. Experimental density and source/data rights: two separate questions
 
@@ -743,9 +743,9 @@ The original Mantilla record is linked through NIST/TRC ThermoML and the journal
 
 ### 17.2 Current HEAD mitigation
 
-[PR #29](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/29) removed the full 49-point normalized CSV from current \`main\`. The WP5 gate checks that it cannot reappear in the candidate source snapshot or source distribution. The optional density test and historical-density report require an **external user-supplied file**; neither silently substitutes a fake measurement.
+[PR #29](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/29) removed the full 49-point normalized CSV from current `main`. The WP5 gate checks that it cannot reappear in the candidate source snapshot or source distribution. The optional density test and historical-density report require an **external user-supplied file**; neither silently substitutes a fake measurement.
 
-Provenance and opt-in documentation remain, including \`data/reference/mantilla2010_provenance.yaml\` and \`data/reference/README_MANTILLA_OPT_IN.md\`.
+Provenance and opt-in documentation remain, including `data/reference/mantilla2010_provenance.yaml` and `data/reference/README_MANTILLA_OPT_IN.md`.
 
 ### 17.3 Rights still outstanding
 
@@ -828,7 +828,7 @@ At constant hot/cold inputs over a step \(\Delta t\):
 T_{w,1}=T_{eq}+(T_{w,0}-T_{eq})e^{-\Delta t/\tau}.
 \]
 
-The integration should use a numerically stable representation near \(\Delta t/\tau\to0\), rather than subtracting two almost equal floating-point exponentials. The implementation uses an \`expm1\`-based small-step form to preserve energy accuracy.
+The integration should use a numerically stable representation near \(\Delta t/\tau\to0\), rather than subtracting two almost equal floating-point exponentials. The implementation uses an `expm1`-based small-step form to preserve energy accuracy.
 
 ### 19.3 Integrated heat versus wall energy
 
@@ -863,7 +863,7 @@ An isolated exact wall kernel tests whether thermal capacitance is treated as st
 
 WP2a by itself does not know the CO₂ turbine inlet state, gas stack temperature, or Brayton net power. It therefore must not be described as a “dynamic sCO₂ power plant simulation.” That system coupling is the distinct WP2b task.
 
-Source: \`src/sco2_braytonbench/thermal_dynamics.py\`, \`tests/test_thermal_dynamics.py\`, \`examples/thermal_wall_step_response.py\`, \`docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md\`.
+Source: `src/sco2_braytonbench/thermal_dynamics.py`, `tests/test_thermal_dynamics.py`, `examples/thermal_wall_step_response.py`, `docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md`.
 
 ## 20. WP2b — finite gas source, thermal-wall inventory and quasi-steady Brayton cycle
 
@@ -1015,7 +1015,7 @@ Passing such a test means the *algorithm* is compatible with nonideal thermophys
 
 The real system may require source cp variation, radiation, heat leaks, axial metal gradients, gas-side flow-dependent UA, multiple wall zones, fluid phase effects and a dynamic coolant inventory. Those are **outside** the WP2b abstract model.
 
-Source: \`src/sco2_braytonbench/dynamic_whr.py\`, \`tests/test_dynamic_whr.py\`, \`tests/test_dynamic_whr_co2.py\`, \`docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md\`.
+Source: `src/sco2_braytonbench/dynamic_whr.py`, `tests/test_dynamic_whr.py`, `tests/test_dynamic_whr_co2.py`, `docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md`.
 
 ## 21. WP3 — conserved waste-gas bypass and sampled wall-temperature PI
 
@@ -1103,7 +1103,7 @@ The open-loop and PI comparisons use the same initial wall state, source sequenc
 
 Real plant bypass hardware may have significant pressure loss, hysteresis, temperature-dependent density, actuator lag, nonlinear position-to-flow calibration, sonic conditions and safety shutdown states. None is identified in the toy flow-fraction model. A true closed-loop operation design would require control-authority measurements and facility-specific protection logic.
 
-Source: \`src/sco2_braytonbench/control_whr.py\`, \`tests/test_control_whr.py\`, \`tests/test_control_whr_co2.py\`, and \`docs/G5_WP3_BYPASS_PI_CONTROL.md\`.
+Source: `src/sco2_braytonbench/control_whr.py`, `tests/test_control_whr.py`, `tests/test_control_whr_co2.py`, and `docs/G5_WP3_BYPASS_PI_CONTROL.md`.
 
 ## 22. WP3 numerical control outcome and its important trade-off
 
@@ -1149,7 +1149,7 @@ The ~10⁻⁷ J numerical residual is small compared with multi-megajoule model 
 
 **It does not establish** universal PI superiority, field-tuned stability, safety, or a CARBOSOLA supervisory control implementation.
 
-Detailed source: \`docs/G5_WP3_RESULTS.md\` and the machine CSV/JSON from the dedicated WP3 CI artifact.
+Detailed source: `docs/G5_WP3_RESULTS.md` and the machine CSV/JSON from the dedicated WP3 CI artifact.
 
 ---
 
@@ -1165,7 +1165,7 @@ WP4 therefore designed a **prospective experimental-readiness package**, with ex
 
 ### 23.2 Measurement register
 
-The 35 candidate channels in \`protocols/wp4/measurement_channels.csv\` cover distinct physical boundaries:
+The 35 candidate channels in `protocols/wp4/measurement_channels.csv` cover distinct physical boundaries:
 
 | Channel group | Proposed observables | Research purpose |
 |---|---|---|
@@ -1201,7 +1201,7 @@ The [13-case matrix](https://github.com/Open-Energy-Methods/sco2-braytonbench/bl
 | WP4-V01 | Sealed validation | Whole-run independent holdouts after fit/tuning freeze |
 | WP4-A01 | Passive safety-log audit | Read-only trip/status and timestamp evidence; no forced interlock operation |
 
-All thirteen cases are **proposed** and have \`approval_status=not_requested\`. Their appropriate operating points, perturbation amplitudes, hold durations, sensor sample rates, safety limits and scheduling can only be set after facility-specific review.
+All thirteen cases are **proposed** and have `approval_status=not_requested`. Their appropriate operating points, perturbation amplitudes, hold durations, sensor sample rates, safety limits and scheduling can only be set after facility-specific review.
 
 ### 23.4 First required deliverable at a real laboratory
 
@@ -1288,7 +1288,7 @@ The long-format DAQ validator checks:
 - Exact channel IDs and SI unit matches against the candidate register.
 - Numeric time stamps, unique tag/time combinations and monotonic order per tag.
 - Optional maximum sample-gap violations.
-- Explicit \`OK\`, \`MISSING\` and \`REJECTED\` statuses.
+- Explicit `OK`, `MISSING` and `REJECTED` statuses.
 - Finite values in nonmissing rows and nonphysical nonpositive kelvin inputs in accepted samples.
 - Run IDs, file columns and malformed rows.
 
@@ -1298,7 +1298,7 @@ For actual data, raw immutable files need independent hashes, a DAQ configuratio
 
 ### 24.6 Run provenance and external attestation
 
-The prospective manifest \`protocols/wp4/prospective_run_manifest.json\` requires fields for run ID, source facility and P&ID revision, run authorization, calibration manifest, timing evidence and SHA256 of raw files/register. In the supplied example these evidence fields are **null** because no laboratory event occurred.
+The prospective manifest `protocols/wp4/prospective_run_manifest.json` requires fields for run ID, source facility and P&ID revision, run authorization, calibration manifest, timing evidence and SHA256 of raw files/register. In the supplied example these evidence fields are **null** because no laboratory event occurred.
 
 The structural validator can reject malformed/missing fields. It cannot authenticate whether a certificate signature exists, a safety approval is genuine, a Git hash corresponds to original device bytes, or an instrument was installed. Even syntactically complete external-looking metadata remain subject to independent stewardship.
 
@@ -1328,7 +1328,7 @@ The final measurement plan should predeclare fit parameters, allowed corrections
 
 ### 24.9 WP4 numerical audit outcome
 
-The executable \`examples/wp4_readiness_audit.py\` reports:
+The executable `examples/wp4_readiness_audit.py` reports:
 
 | Readiness audit field | Result |
 |---|---:|
@@ -1342,7 +1342,7 @@ The executable \`examples/wp4_readiness_audit.py\` reports:
 
 A report showing **zero** ready cases is correct and desirable when external metrology evidence is absent. Treating those blocked gates as “passed experiments” would be a serious scientific error.
 
-Sources: \`docs/WP4_EXPERIMENTAL_READINESS_PROTOCOL.md\`, \`src/sco2_braytonbench/experimental_readiness.py\`, \`tests/test_experimental_readiness.py\`.
+Sources: `docs/WP4_EXPERIMENTAL_READINESS_PROTOCOL.md`, `src/sco2_braytonbench/experimental_readiness.py`, `tests/test_experimental_readiness.py`.
 
 ## 25. WP5 — distribution, installation and reproducibility engineering
 
@@ -1356,9 +1356,9 @@ WP5 therefore introduced independently reviewable source-distribution, wheel, pr
 
 **Wheel:** installable software package with its expected modules and SPDX/BSD licence metadata. The wheel does not pretend to install every research script or full external dataset.
 
-**Source distribution (sdist):** source files, model scripts, methods documentation, tests, prospective protocols and any research fixtures authorized for redistribution. The \`MANIFEST.in\` policy excludes generated traces and the uncleared Mantilla transcription.
+**Source distribution (sdist):** source files, model scripts, methods documentation, tests, prospective protocols and any research fixtures authorized for redistribution. The `MANIFEST.in` policy excludes generated traces and the uncleared Mantilla transcription.
 
-**Citation:** \`pyproject.toml\` and \`CITATION.cff\` both declare package **0.5.0a0**, BSD-3-Clause and a nonvalidated research-software identity. Any future RC must update version strings coherently.
+**Citation:** `pyproject.toml` and `CITATION.cff` both declare package **0.5.0a0**, BSD-3-Clause and a nonvalidated research-software identity. Any future RC must update version strings coherently.
 
 ### 25.3 Fresh-install replay method
 
@@ -1379,7 +1379,7 @@ A successful comparison is **numerical reproducibility within a specific environ
 
 ### 25.5 Release-gate tool and machine audit
 
-\`scripts/v1_release_gate.py\` performs:
+`scripts/v1_release_gate.py` performs:
 
 - Project name, version, Python support, BSD licence and CFF agreement checks.
 - Required documentation/production module checks.
@@ -1409,9 +1409,9 @@ This approach is stronger than testing only that the success path prints “PASS
 
 ### 25.7 Actual version and release action
 
-The alpha code has **not** been bumped to \`1.0.0rc1\` or \`1.0.0\`. No new GitHub Release or Zenodo DOI is represented by WP5. The project has a **release-candidate preparation mechanism**, not independent authorization to publish.
+The alpha code has **not** been bumped to `1.0.0rc1` or `1.0.0`. No new GitHub Release or Zenodo DOI is represented by WP5. The project has a **release-candidate preparation mechanism**, not independent authorization to publish.
 
-Full detail: \`docs/WP5_RELEASE_ACCEPTANCE.md\`, \`tests/test_v1_release_gate.py\`, \`MANIFEST.in\`, \`.github/workflows/ci.yml\`.
+Full detail: `docs/WP5_RELEASE_ACCEPTANCE.md`, `tests/test_v1_release_gate.py`, `MANIFEST.in`, `.github/workflows/ci.yml`.
 
 ## 26. Complete verification and CI evidence chain
 
@@ -1431,11 +1431,11 @@ Similarly, a density measurement test may now be intentionally skipped without t
 | [#42246699219](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42246699219) | WP3 controller/real-fluid smoke head | **17/17** successful |
 | [#42250403856](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42250403856) | WP4 prospective metrology, format/uncertainty/holdout | **18/18** successful |
 | [#42256499369](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42256499369) | WP5 data-rights quarantined source branch | **20/20** successful |
-| [#42258225916](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42258225916) | First WP0–WP5 integrated \`main\` SHA \`88579f7...\` | **20/20** successful |
+| [#42258225916](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42258225916) | First WP0–WP5 integrated `main` SHA `88579f7...` | **20/20** successful |
 | [#42264837301](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42264837301) | Rights-cleanup PR #29 | **20/20** successful |
-| [#42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) | Current after-rights-cleanup \`main\`, SHA \`8df1711...\` | **20/20** successful |
+| [#42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) | Current after-rights-cleanup `main`, SHA `8df1711...` | **20/20** successful |
 
-The latest current \`main\` jobs, not an earlier successful PR run, are the decisive integrated software evidence for this report.
+The latest current `main` jobs, not an earlier successful PR run, are the decisive integrated software evidence for this report.
 
 ### 26.3 General Python and real-CoolProp division
 
@@ -1491,7 +1491,7 @@ Those last two points mean issue #27 should remain open pending rights-holder re
 
 Numerical coefficients copied from journal equations, textbook correlations and source-reported benchmark values also require proper attribution and a case-specific assessment of allowed reuse. The original Kim paper PDF is **not** to be rehosted as part of this repository by default. HZDR numerical RODARE images/tables, Sandia plots and turbine source figures should be treated according to their own explicit terms and research provenance.
 
-A release steward should inspect **every actual archive member**, not just \`LICENSE\` at repository root. Exact data content and rights matter, especially for all-version Git snapshots and future Zenodo tarballs.
+A release steward should inspect **every actual archive member**, not just `LICENSE` at repository root. Exact data content and rights matter, especially for all-version Git snapshots and future Zenodo tarballs.
 
 ### 27.5 Research integrity beyond copyright
 
@@ -1554,7 +1554,7 @@ For a **doctoral research programme**, the highest scientific return is independ
 | Full final integrated-main CI | **20/20 passed** | Software test success; not external validation |
 | Independent human scientific review | **OPEN, issue #28** | Qualified reviewer must actually deliver assessment |
 | Final v1.0 licence/historical content review | **OPEN, issue #27** | Written rights/history decision needed |
-| \`1.0.0rc1\` and \`1.0.0\` publication | **NOT ISSUED** | A deliberate authorized release step |
+| `1.0.0rc1` and `1.0.0` publication | **NOT ISSUED** | A deliberate authorized release step |
 
 ### 29.2 Why “integration complete” and “v1.0 complete” differ
 
@@ -1569,4 +1569,357 @@ The repository's internal AI-assisted technical audit, even with correct analyti
 Therefore an honest status statement is: **alpha source and integrated CI are ready; independent approval/licence-history decisions are not yet complete**.
 
 ---
+
+# Part VI — Research relevance, continuation and preservation
+
+## 30. Relation to a dynamic sCO₂ Brayton doctoral research programme
+
+### 30.1 Research contribution already available
+
+A future investigator can start with a numerically checked thermodynamic reference, finite heat-source and cooler boundary-value framework, separate property backend and synthetic dynamic-control method. The codebase offers a transparent way to introduce, test and reject assumptions.
+
+For a doctoral programme involving dynamic simulation, changing waste-heat streams and experimental operation, the transferable capabilities include:
+
+- Formulating state/enthalpy first laws rather than treating energy as an arbitrary control knob.
+- Distinguishing fixed installed heat-transfer equipment from required heat-exchanger design sizing.
+- Propagating finite-source disturbances through a defensible stored-heat control volume.
+- Developing a controller whose physical input has a source-side energy/enthalpy trace.
+- Designing test matrices around measurable observables and identifiable parameters.
+- Preserving negative transferability findings and scientific source discrepancies.
+- Building versioned, reproducible research software with independent verification gates.
+
+These are **methods and preparations**. They must not be described as HZDR experimental outputs or proof of readiness for unsupervised operation of a 300-bar test facility.
+
+### 30.2 Connection to facility-focused research
+
+A facility-oriented dynamic study would need the actual layout, installed compressor/expander, high/low pressure volumes, heat exchangers, valves, pump/cooler, metal masses and control/protection hardware. Only then could the software boundaries be mapped to the real system.
+
+The immediate scientific question is not merely “Can this model reproduce 520 °C?” It is whether measured time series can uniquely constrain the model parameters and whether any simulated dynamic pressure, fluid enthalpy and heat-transfer responses are physically correct across independent load cases.
+
+A research programme should explicitly reserve opportunities to **reject** the present single-wall or constant-UA abstractions when measured data demand a more complex model.
+
+### 30.3 Transfer to an HZDR application portfolio
+
+As an application artifact, the repository can substantiate Python/research software, nonideal thermodynamics, numerical analysis, structured model verification, finite heat-source reasoning, and experimental-test planning. The qualified description is:
+
+> An independently developed, CI-verified sCO₂ Brayton-cycle research framework combining real-fluid steady thermodynamics, finite-source and installed-UA heat-exchanger studies, a synthetic thermal-storage/PI demonstrator, and a documented prospective laboratory-validation protocol.
+
+It is not accurate to call it a published v1.0 experimentally validated CARBOSOLA digital twin or a complete dynamic process simulator.
+
+### 30.4 Formulation of defensible original-work contributions
+
+A methods paper or software note could emphasize *model boundary separation, reproducible negative correlation transfer, source-data provenance and first-law-consistent transient surrogate coupling*. These are contributions demonstrably visible in the repository. Experimental predictive accuracy on real plant dynamics would require later evidence, probably in a distinct research paper.
+
+## 31. Forward research roadmap — after the integrated alpha baseline
+
+The roadmap is not a list of features to claim as already built. Each stage has a hypothesis, required evidence, failure criteria and a decision to make.
+
+### 31.1 R0 — final research-software release clearance (near-term)
+
+**Hypothesis:** the current alpha source can be released as v1.0 research software while preserving its narrow scientific claims.
+
+Required actions:
+
+- Obtain written advice/rights clarification for Mantilla historic Git copies and other source-derived materials, or authorise an appropriate archive/history remediation under policy.
+- Obtain a named independent technical reviewer’s signed assessment of thermodynamics, heat flow, numerical behaviour and limits.
+- Verify latest integrated-main CI on a deliberate immutable RC candidate SHA.
+- Audit exact tag/Zenodo source membership, not merely the Python sdist.
+- Make source/citation metadata, CHANGELOG and release notes mutually consistent.
+- Issue a version only after an explicit maintainer release decision.
+
+**Failure condition:** unsupported validation claim, unapproved data in a public tag/source archive, reviewer critical objection or non-green candidate CI.
+
+### 31.2 R1 — physical metadata and independent pilot data intake
+
+**Hypothesis:** a specific available laboratory configuration can support identifiable heat-exchanger and source-control terms.
+
+Required: P&ID; working fluid composition and charge, wall geometry/material, sensor locations and calibrations, clock synchronization, safety/operating authorization, raw repeat measurements and full source licences.
+
+Acceptance: source/sink and gas/CO₂ energy balances *within justified uncertainty*, calibrated instrument timing, documented exclusions and explicit topology agreement. A forced residual of zero using shared computed outputs is not sufficient.
+
+Failure: source properties unknown, independent flow and temperatures missing, calibration older/invalid or physical flow path mismatched.
+
+### 31.3 R2 — source-side, wall and flow-dependent UA identification
+
+**Hypothesis:** the lumped thermal wall and two independent installed conductances are adequate over a limited measured domain.
+
+Perform repeated steady operating points and low-amplitude transients over approved gas flows/temperatures. Estimate wall capacitance from independently inferred rates and measured metal temperature; distinguish source-side UA from wall–CO₂ UA, wall-to-ambient loss and sensor thermal lag. Test flow/temperature dependence.
+
+Acceptance: parameter covariance/conditioning acceptable, held-out transient predictions with genuine measured uncertainty, and evidence that independent parameter directions are excited.
+
+Failure: different parameter sets fit equally well, wall gradients cannot be neglected or fitted time constant collapses into sensor lag.
+
+### 31.4 R3 — dynamic CO₂ fluid inventory and pressure-network model
+
+**Hypothesis:** steady algebraic cycle states are insufficient to predict real start-up, pressure/flow transients and shaft interaction.
+
+Required physics for each control volume:
+
+\[
+\frac{dm_i}{dt}
+=\sum\dot m_{in}-\sum\dot m_{out},
+\]
+
+\[
+\frac{d(m_iu_i)}{dt}
+=\sum \dot m_{in}h_{in}
+-\sum\dot m_{out}h_{out}
++\dot Q_i-\dot W_i
+\]
+
+with a robust EOS inverse \((\rho,u)\mapsto(p,T)\) and actual volume/geometry. Dynamic connections must model pressure-driven mass flow and machine maps; compressors/turbines cannot both be treated as imposed mass-flow devices independent of pressure network.
+
+Potential additional shaft state:
+
+\[
+J\frac{d\omega}{dt}
+=\tau_t-\tau_c-\tau_{generator}-\tau_{loss}.
+\]
+
+These equations are **future scope**, not present implementation. A real dynamic system needs consistent energy-work accounting at flow-connected components and protection constraints, including critical-region numerical regularization.
+
+Acceptance: conservation tests on simple closed volumes, verified EOS inverse/domain behaviour, stable time integration, independent measured pressure/temperature/flow transients.
+
+Failure: missing inventory identification, unphysical negative mass, unresolved phase branch or implied compressor flow exceeding published hardware envelope.
+
+### 31.5 R4 — turbomachinery and actuator maps
+
+**Hypothesis:** calibrated pressure/flow/efficiency/speed characteristics materially alter transient recovered power and control authority.
+
+Required: measured compressor and expander data with clearly defined shaft/electrical boundaries, speed/surge/choke/regulation limits, turbine leakage and bypass valve flow coefficient with hysteresis/rate limits.
+
+Acceptance: off-design maps tested against independent measured operating points, uncertainty bands and realistic actuating pressure differences. Do not infer a map merely from an isolated point or a source paper’s design table.
+
+### 31.6 R5 — next-generation thermal and buoyancy models
+
+**Hypothesis:** a single wall temperature and a scalar global UA conceal important transient/stratification effects.
+
+Candidate progression: multiple axial wall segments; conjugate fluid-wall heat transfer; gas/CO₂ variable property correlations conditioned on real geometry; buoyancy/stratification-aware horizontal tube models; separate top/bottom wall fields; and dynamic cooler boundary.
+
+Validation demands geometry-appropriate experimental stations rather than reusing the Stuttgart 4/8 mm tube error as if it were a PCHE response.
+
+**Failure condition:** model complexity increases without independently identifiable new parameters or measurable predictive improvement.
+
+### 31.7 R6 — source variation, control, robustness and operation strategy
+
+**Hypothesis:** a plant-informed control strategy can improve thermal constraints and net delivered energy under specified industrial waste-heat disturbances.
+
+Compare open loop, sampled PI, state-feedback and possible MPC **only after** physical actuators and dynamic pressure/flow constraints are available. Define a cost function with recovered heat, net exported electricity, metal-temperature safety, source exhaust/stack requirements, valve motion and availability.
+
+Evaluate disturbances on *whole heldout runs* and distinguish predictive control from tuning to a known prerecorded future profile.
+
+Acceptance: parameter/measurement uncertainty robustness, identified actuator performance, safe release/override mechanisms, and statistically defensible differences in predeclared performance metrics.
+
+### 31.8 R7 — plant-level techno-economic analysis
+
+**Hypothesis:** extra recovered shaft power is worthwhile after adding real equipment, cooling, auxiliary power, materials, maintenance and availability costs.
+
+Needed inputs include calibrated HX dimensions/material and pressure losses, power-block equipment prices, coolant/pump/fan energy, waste-heat opportunity cost, duty-cycle distributions, downtime, maintenance, electricity value and investment discount assumptions.
+
+Do not multiply nominal simulated Brayton net power by annual hours and call that a credible investment case without auxiliary/availability data. Levelized energy cost or payback becomes meaningful only with traceable sources, sensitivity and uncertainty.
+
+### 31.9 R8 — publication and public evidence stewardship
+
+Publish code, negative results and measured-derived data separately according to their rights; distinguish experimental instrument uncertainty from model residuals. Archive immutable source releases only when allowed. Provide data dictionaries and raw-to-reduced transformations, reviewer conflict/policy statements, independently rerunnable numerical examples and unambiguous author/DOI attribution.
+
+## 32. Reproduction guide — exact current-source baseline
+
+### 32.1 Select the verified commit
+
+For the integrated 6 November evidence snapshot:
+
+~~~bash
+git clone https://github.com/Open-Energy-Methods/sco2-braytonbench.git
+cd sco2-braytonbench
+git checkout 8df1711a425e21da342bd3f401da61a1375bbc0a
+git rev-parse HEAD
+~~~
+
+If reproducing a later report-edit PR, use that specific merged commit and verify its CI separately. Version/date labels alone are not immutable content identifiers.
+
+### 32.2 Set up a local Python environment
+
+~~~bash
+python -m venv .venv
+source .venv/bin/activate            # Linux/macOS
+# On PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e '.[test]'
+~~~
+
+For real-fluid CO₂ analyses, separately install optional CoolProp:
+
+~~~bash
+python -m pip install -e '.[test,co2]'
+python -m pip install 'CoolProp==8.0.0'
+~~~
+
+The version is pinned for the documented scientific CI checks; later versions may produce small numerical differences requiring new evidence. No live internet calls occur inside the scientific computational scripts other than package installation requirements.
+
+### 32.3 Run general numerical tests
+
+~~~bash
+python -m pytest -q
+python -m pytest -q tests/test_thermal_dynamics.py
+python -m pytest -q tests/test_dynamic_whr.py
+python -m pytest -q tests/test_control_whr.py
+python -m pytest -q tests/test_experimental_readiness.py
+python -m pytest -q tests/test_v1_release_gate.py
+~~~
+
+If CoolProp is not installed, certain tests are intentionally skipped. Read test summaries and do not reinterpret skips as successes. A project checkout **without the external Mantilla file** will skip its optional measured-density regression.
+
+### 32.4 Reproduce the thermal and control examples
+
+~~~bash
+python examples/thermal_wall_step_response.py
+python examples/waste_heat_wall_coupled_cycle.py
+python examples/waste_heat_bypass_pi_comparison.py
+python examples/wp4_readiness_audit.py
+~~~
+
+Example outputs are written under:
+
+~~~text
+evidence/generated/v1_thermal_wall/
+evidence/generated/v1_wp2b/
+evidence/generated/v1_wp3/
+evidence/generated/v1_wp4/
+~~~
+
+These generated CSV/JSON files reflect **synthetic scenario fixtures**. Check the scenario metadata's physical assumptions and whether real CO₂ properties were actually used before citing a number.
+
+### 32.5 Run the optional measured-density case responsibly
+
+The current source does **not** contain the 49 Mantilla original-source observations. Obtain any experimental records independently and under suitable terms before preparing an external normalized CSV. Then:
+
+~~~bash
+SCO2_MANTILLA_DENSITY_CSV=/absolute/local/path/thermoml_density.csv \
+  python -m pytest -q tests/test_co2_measured_density.py
+~~~
+
+Alternatively set the corresponding environment variable in PowerShell. Never commit or upload source rows to this repository without resolving [issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27). An explicit missing-file skip is a legitimate conditional result, not a failed software installation.
+
+### 32.6 Reproduce source-archive release checks
+
+~~~bash
+python -m pip install 'build>=1,<2'
+python -m build --sdist --wheel
+~~~
+
+The complete WP5 gate requires two clean environments and independent execution of the four example families from wheel and sdist, followed by comparison and audit:
+
+~~~bash
+python scripts/v1_release_gate.py compare \
+  --reference /path/to/wheel-workspace \
+  --candidate /path/to/sdist-workspace \
+  --out evidence/generated/v1_wp5/wheel_sdist_numerical_comparison.json
+
+python scripts/v1_release_gate.py audit \
+  --root . --dist dist \
+  --out evidence/generated/v1_wp5/release_gate_report.json
+~~~
+
+Run the commands after the necessary workspaces have actually been populated by fresh-installed replay, as done in GitHub Actions. Running `audit` without generated evidence or archives correctly fails; it is not a missing feature to “fix” with fake files.
+
+### 32.7 Expected original-source/data exclusions
+
+- The Mantilla complete normalized density CSV must **not** be present in current source or release archive.
+- Stuttgart source-derived files need original CC BY 4.0 attribution and adapted-source notice.
+- The H1d Kim exploratory branch can be inspected separately, but is **not** part of current main by default.
+- Lab-readiness metadata deliberately show no approved experimental runs.
+- No released experiment data or safety credentials should be inferred from the synthetic WP4 fixture.
+
+### 32.8 Check the final integrated CI directly
+
+Use [the actual latest main run #42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348). It records all 20 jobs successful at `8df1711a…`. Download artifacts if still retained; remember artifact IDs and retention vary over time.
+
+The two-install replay is useful precisely because a local editable install might otherwise shadow an incorrect distribution.
+
+## 33. Source, file and evidence index
+
+### 33.1 Internal scientific documents
+
+| Reference | Use this for |
+|---|---|
+| `docs/RESEARCH_STATUS.md` | Historical work through G3.5; some earlier timestamps describe planned G4/G5 before WP integration |
+| `docs/FR2016_COMPARISON_REVIEW.md` | Friedman–Rapp original/parity and state-map limitations |
+| `docs/EXPERIMENTAL_DENSITY_DECISION.md` | Historical EOS-to-measured-density numerical comparison only |
+| `docs/G3_STEADY_SCREENING_RESULTS.md` | Exact finite source screening input grid, winner points and approaches |
+| `docs/G31_FIXED_UA_NUMERICAL_RESULTS.md` | Single installed heater inverse and perturbation numbers |
+| `docs/G32_NUMERICAL_VERIFICATION.md` | Installed heater and cooler inverse verification with finite sink |
+| `docs/G33_NUMERICAL_VERIFICATION.md` | Source property alternatives and 6/12/24/48 segment study |
+| `docs/G34_EXTERNAL_VALIDATION_INTAKE.md` | External evidence class and STU/ZH/KAIST/Sandia concerns |
+| `docs/G35_STUTTGART_RESULTS.md` | H1a source gate and forced-convection errors |
+| `docs/G35B_RESULTS.md` | Bishop/Jackson conditioned vs flux-driven and heldout comparisons |
+| `docs/G35C_LEI_RESULTS.md` | Cross-fluid Lei negative-transfer results |
+| `docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md` | Source equations, table coefficients and Eq.24 ambiguity |
+| `docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md` | Exact lumped-wall kernel requirements |
+| `docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md` | Finite gas→stored wall→quasi-steady cycle equations and analytic limit |
+| `docs/G5_WP3_BYPASS_PI_CONTROL.md` | Conserved bypass and PI control physics |
+| `docs/G5_WP3_RESULTS.md` | 90-s open/closed synthetic comparison and energy cost |
+| `docs/WP4_EXPERIMENTAL_READINESS_PROTOCOL.md` | Candidate instrumentation, uncertainty, safety and holdout design |
+| `docs/WP5_RELEASE_ACCEPTANCE.md` | Required science, licensing, CI, packaging and release gates |
+| `docs/V1_TECHNICAL_AUDIT_2026-11-06.md` | AI-assisted numerical/model-boundary audit, not independent reviewer signoff |
+| `docs/DATA_RIGHTS_V1.md` | Dataset-by-dataset copyright/reuse inventory |
+| `docs/V1_0_RELEASE_CONTRACT.md` | Stable and experimental software-release scope |
+| `docs/V1_0_VERIFICATION_MATRIX.md` | Requirement-to-evidence mapping and remaining gates |
+
+### 33.2 Original article/data references
+
+- Friedman–Rapp (2016): original recuperated cycle comparison, source model not fully recoverable from report detail. Refer to repository original comparison audit and bibliography for full citation.
+- Mantilla, Cristancho, Ejaz & Hall (2010), *J. Chem. Eng. Data*, DOI **10.1021/je1001158**. NIST ThermoML original archive. Current downstream data copy excluded.
+- Theologou, Mertz, Laurien and Starflinger (2022), horizontal sCO₂ tube heat transfer; Mendeley Data version 1 DOI **10.17632/4mvk4nxrkz.1**, CC BY 4.0.
+- Zhang et al. (2022), sodium/CO₂ PCHE source, DOI **10.3389/fenrg.2022.835224**.
+- Wright et al., Sandia report **SAND2010-0171**, compressor development, measured figures separate from predicted design table.
+- Kim et al. (2019), *Int. J. Heat Mass Transfer*, DOI **10.1016/j.ijheatmasstransfer.2018.11.075**; Eq.24 ambiguity remains open.
+- HZDR PCHE archive, DOI **10.14278/rodare.3928**, numerical studies and cost sensitivity, not measured CARBOSOLA validation.
+- JCGM 100:2008 (GUM), DOI **10.59161/JCGM100-2008E**; JCGM 101:2008 Monte Carlo supplement, DOI **10.59161/JCGM101-2008**.
+
+These references are included for provenance and scientific context; the exact implemented expressions and any original-author fit-domain restrictions must be checked against the cited source documents, not extrapolated from a shortened report table.
+
+### 33.3 Unmerged and historical GitHub references
+
+| Resource | Interpretation |
+|---|---|
+| [Draft PR #21](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/21) | Historical comprehensive 5 Nov research report; deliberately not rewritten here |
+| [Draft PR #19](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/19) | Kim original-source interpretation and same-station H1d work; not in main |
+| [Issue #20](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/20) | Kim empirical Eq.24 / Table 4 source discrepancy |
+| [Issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27) | ThermoML source-data rights and historical Git reuse |
+| [Issue #28](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/28) | Named qualified independent reviewer / release-signoff gate |
+| [Main integrated Actions #42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) | 20/20 successful integrated-main software CI |
+
+### 33.4 Data-rights and source-of-truth hierarchy
+
+**Highest priority:** original full source and explicit licence/certificate; public measurements with source-data dictionaries; signed lab records; independent numerical derivations.
+
+**Intermediate:** project source inputs and instrumented logs; code/tests/CI tied to an immutable SHA; source-author equations and explanatory papers.
+
+**Lower authority for external physical claims:** synthetic examples, internal model predictions, demonstration plots, project proposals, unmatched literature headlines and AI-assisted editorial interpretation.
+
+When numbers conflict, use the original source and a traceable difference ledger. Do not silently overwrite source observations or claim that the repository independently settled an ambiguity solely through a lower residual.
+
+## 34. Final preservation statement and handover
+
+### 34.1 What this report preserves
+
+This report joins the project's prior G0–G3.5 physical and data-source reconstruction with the subsequently integrated WP0–WP5 development sequence and the current source-rights cleanup. It records governing equations, real numerical benchmark values, table denominators, fit-domain limitations, design/control assumptions, uncertainty categories, provenance, executable tests, CI evidence, and the remaining independent scientific/reuse approvals.
+
+It does **not** turn an unmerged exploratory branch into shipped functionality, a numerical property-library test into a field experiment, a drafted email into rights-holder permission, or a thermal-wall PI demonstration into a full transient turbine controller.
+
+### 34.2 Defensible current status sentence
+
+> At 6 November 2026, sCO₂-BraytonBench is an **integrated, CI-verified alpha research-software framework (0.5.0a0)** for recuperated real-fluid Brayton thermodynamics, finite-source and installed-UA heat-transfer analysis, with analytically verified synthetic thermal-wall dynamics, an energy-conserving sampled bypass/PI demonstrator, prospective measurement/uncertainty protocols, and independently replayed wheel/source-distribution evidence. The project is **not an experimentally validated CARBOSOLA dynamic plant model** and its formal v1.0 publication remains pending external qualified review and historical third-party data-rights determination.
+
+### 34.3 Instructions to the next maintainer or reviewer
+
+Verify the referenced SHA and successful CI **first**. Read the release contract and rights ledger **before** publishing an archive. Keep original experimental source transformations distinct from toy fixtures, and review negative stratification and out-of-domain results rather than deleting them. Do not impose a new set of assumed UAs or controller parameters as if they were calibrated.
+
+For future experimental work, the first high-value contribution is **independently measured and traceable source/CO₂/coolant/wall transients** with clear P&ID and covariance—not a new arbitrary correlation. For software v1.0, the remaining external permissions/review must be genuinely completed and documented at an immutable commit.
+
+### 34.4 Document maintenance rule
+
+Do not rewrite this dated report in place to make future work appear to have existed on 6 November. Create a new dated report/release record referencing this one, and update a lightweight “latest report” pointer in the repository README. Correct a discovered factual error with a source-supported erratum referencing the exact affected text and commit rather than silently changing numerical claims.
+
+**End of comprehensive report.**
 
