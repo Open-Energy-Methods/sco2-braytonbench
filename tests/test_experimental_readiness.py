@@ -211,7 +211,7 @@ def test_zero_temperature_difference_retains_nonzero_uncertainty():
     assert out.relative_standard_uncertainty is None
 
 
-@pytest.mark.parametrize("bad",[-.1,1.1,float("nan"),float("inf"),True])
+@pytest.mark.parametrize("bad",[-1.1,1.1,float("nan"),float("inf"),True])
 def test_invalid_correlation_rejected(bad):
     with pytest.raises(DomainError,match="correlation"):
         sensible_duty_uncertainty(
