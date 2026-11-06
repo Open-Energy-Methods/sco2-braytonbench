@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — WP4 prospective metrology and experimental design (2026-11-06)
+
+- Added 35 *candidate*, unconfirmed sensor/metadata channels; 13 proposed and **unapproved** steady/transient/control/holdout cases; blank traceable standard-uncertainty register.
+- Added strict CSV/DAQ sample schema, provenance/readiness blocking checks, first-order JCGM sensible-gas heat-duty uncertainty with temperature covariance and local experimental sensitivity-rank screening.
+- Added independent mathematical/fault-injection tests and a synthetic data-format fixture; audit outputs readable CSV/JSON blockers without any fabricated plant measurements.
+- Added a staged prospective CARBOSOLA **adaptation** and safety/holdout protocol. No facility access, instrument calibration, approval, measured time series or experimental validation is claimed.
+- Package version remains `0.5.0a0`.
+
 ## Unreleased — WP3 source-gas bypass and sampled PI (2026-11-06)
 
 - Adds finite hot-gas bypass **mass split**, uncooled branch return, constant-cp source enthalpy mixing, and wall/cycle first-law checks against the **total** source stream.
