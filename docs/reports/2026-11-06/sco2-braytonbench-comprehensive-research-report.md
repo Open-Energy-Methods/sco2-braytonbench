@@ -505,3 +505,257 @@ The numerical evidence is preserved in \`docs/G33_NUMERICAL_VERIFICATION.md\`, \
 
 ---
 
+# Part III — External evidence and heat-transfer transferability
+
+## 12. G3.4 — external-source inventory, eligibility and anomalies
+
+### 12.1 Evidence intake as its own research method
+
+An independent validation project fails if it labels published design-state calculations as observations, uses authors' fitted/calibration data as sealed holdouts, or transfers a measured coefficient from an unrelated geometry without qualification.
+
+The G3.4 intake introduced an evidence taxonomy: **direct measurements**, **experimentally reduced quantities**, **model-corrected values**, **source authors' numerical predictions**, and **proposed comparisons that have not been admitted**.
+
+| Record | Original origin | What it can support | What it cannot support directly |
+|---|---|---|---|
+| STUTTGART-2022 | Theologou et al. 2022, Mendeley Data DOI 10.17632/4mvk4nxrkz.1, CC BY 4.0 | Horizontal circular-tube measured-derived local thermal behaviour and orientation effects | CARBOSOLA PCHE or complete cycle validation |
+| ZHANG-2022 | Zhang et al. 2022 sodium/CO₂ PCHE paper DOI 10.3389/fenrg.2022.835224 | Geometry-specific coarse exchanger context | Direct conversion to gas–CO₂ recuperator or water precooler |
+| KAIST-2024 | Lee et al. turbine-sweep/sCO₂ Symposium material | Qualified measured rpm/flow/pressure behaviour; separated model-corrected inlet estimates | Unqualified measured turbine efficiency map at every row |
+| SANDIA-2010 | Wright et al. SAND2010-0171 | Design states plus separate measured compressor figures | Treating prediction table as experimental compressor measurements |
+| HZDR-PCHE-2025 | RODARE modelling/cost outputs DOI 10.14278/rodare.3928 | Comparative modelling and techno-economic context | Direct calorimetric validation of an installed CARBOSOLA exchanger |
+| HZDR-TPMS-2026 | ANSYS CAD/Fluent geometry/CFD archive | Geometry/CFD methods context | Measured plant pressure/temperature/HTC points |
+| KTH industrial demonstrator context | Public concept/infrastructure descriptions | Possible future data contacts and research needs | Unpublished lab data or current operational authorization |
+
+The source file \`docs/G34_EXTERNAL_VALIDATION_INTAKE.md\` distinguishes these sources and tracks which have enough detail for an admissible numerical comparison.
+
+### 12.2 STU-001 source anomaly
+
+One Stuttgart observation contained an anomalous source heat-flux value around **833 kW/m²** in a context inconsistent with the rest of its source family. The project recorded the original row and exclusion rationale as **STU-001**, quarantining the affected run/stations rather than “correcting” a number without an authoritative source answer.
+
+This is an important measurement-data practice. An unexplained outlier may represent transcription, sensor, unit, geometry, control or operating-point information that cannot be resolved by a third-party analyst. Preserve the original and report the effect of any exclusion.
+
+### 12.3 ZH-001, KAIST-001 and SANDIA-001
+
+The Zhang PCHE source reported a rated heat-transfer coefficient that could not be obtained straightforwardly from the published terminal temperature/heat/area table under one apparent common LMTD convention. The project documented the quantitative discrepancy, including a derived value roughly **1,368.451 W/(m²·K)** versus an apparently stated **1,264 W/(m²·K)** (8.264% difference), as an unresolved source-equation issue rather than an excuse to assign a tuned UA.
+
+The KAIST reference contained operating data that mixed direct measurements with a model-corrected turbine inlet. The Sandia source distinguished design calculations from real compressor performance figures. In both cases the correct action was to preserve original measurement type and require source review before using any row as an experimental machine-map calibration point.
+
+### 12.4 Intake acceptance gate
+
+A new external dataset should have: original DOI and authors; source licence and permitted redistribution scope; equipment topology, material/geometry, pressure and temperature definitions; instrument or reduction uncertainty; original units and coordinate map; eligibility/exclusion log; fit-versus-holdout restrictions; and numerical diagnostics showing if a formula is operating outside the source's original validation domain.
+
+An accessible PDF alone is not a machine-readable experimental benchmark, and a property or correlation source can be scientifically useful without becoming a universal “validation” dataset.
+
+## 13. G3.5 H1a — horizontal sCO₂ benchmark and forced-convection baseline
+
+### 13.1 The source's scientific importance
+
+Supercritical CO₂ in a heated horizontal tube can develop large radial and circumferential gradients, notably through density/viscosity changes and buoyancy. A simple bulk Reynolds–Prandtl forced-convection correlation cannot capture all top/bottom stratification effects.
+
+The Stuttgart/Theologou dataset contains original experiments with measured-derived wall and bulk thermal information, local heat-flux/HTC reductions, and different circumferential orientations. It makes orientation-specific model errors visible rather than hiding them in a single average.
+
+### 13.2 Exact source ledger and sample eligibility
+
+The recorded source inventory was:
+
+| Source stage | Count | Meaning |
+|---|---:|---|
+| Original experiment identifiers | **54** | Source runs, before anomaly processing |
+| Original axial position records | **2,508** | Full axial ledger, not all local HTC cells |
+| Source local experimentally reduced HTC cells | **2,398** | Original local cells |
+| Quarantined STU-001 experiment | 1 | Exclusion tracked, not deleted from provenance |
+| Quarantined local HTC stations | **50** | Affected entries |
+| Retained local observations before other gates | **2,348** | Unquarantined data |
+| Additional x/D/applicability exclusions | **30** | Model-specific admissibility |
+| Final H1a successfully evaluated comparisons | **2,318** | Common Gnielinski/Dittus reference |
+| Distinct contributing runs | 53 | Source run count after quarantine |
+| Nominal source families | 18 | Used for group-based comparisons |
+| Original heldout families | 4 | Predeclared families |
+| Heldout valid stations per H1a formula | **534** | Not randomly shuffled sample rows |
+
+A robust benchmark distinguishes *original measurement denominator*, *eligible set*, *success set* and *held-out count*. The 2,318 comparisons should never be described as 2,318 completely independent experiments.
+
+### 13.3 Reconstruction and performance statistic
+
+Using source input pressure/flow and an accepted enthalpy alignment, the code reconstructs CO₂ bulk thermodynamic states with CoolProp and predicts local forced-convection heat-transfer coefficients. The reference “measured HTC” is actually a **source experimentally reduced HTC**, not a raw sensor voltage. Source HTC and wall temperature may share the same reduction equations.
+
+Pointwise mean absolute percentage error:
+
+\[
+\mathrm{MAPE} = \frac{100}{N}\sum_{i=1}^{N}
+\left|\frac{h_{model,i}-h_{source,i}}{h_{source,i}}\right|.
+\]
+
+A signed relative bias and distributional metrics are also needed; one global MAPE can obscure systematic overprediction.
+
+### 13.4 H1a full baseline errors
+
+| H1a local thermal model | Gnielinski | Dittus–Boelter |
+|---|---:|---:|
+| Successfully evaluated local stations | 2,318 | 2,318 |
+| **Overall MAPE** | **150.15%** | **119.60%** |
+| Mean signed relative bias | +137.05% | +100.55% |
+| Median APE | 55.07% | 47.17% |
+| 90th percentile APE | 385.05% | 298.15% |
+| RMS percentage error | 266.27% | 210.29% |
+| Experiment-macro mean MAPE | 156.89% | 124.70% |
+| Heldout-family station MAPE | 158.10% | 121.82% |
+
+The large bias is physically and statistically important. An off-domain forced-convection formula can be systematically optimistic rather than randomly noisy.
+
+### 13.5 Orientation and diameter explain substantial heterogeneity
+
+| Source subset | Stations | Gnielinski MAPE | Dittus–Boelter MAPE |
+|---|---:|---:|---:|
+| HB — bottom, 180° | 790 | 87.71% | 69.65% |
+| HM — middle, 90° | 738 | 124.23% | 98.76% |
+| HT — top, 0° | 790 | **236.81%** | **189.01%** |
+| 4 mm source tube | 1,150 | 96.13% | 78.65% |
+| 8 mm source tube | 1,168 | **203.34%** | **159.91%** |
+
+The top-wall degradation is a signal of inadequate representation of circumferential thermal physics, not an inconvenience to be averaged away.
+
+### 13.6 What H1a actually established
+
+H1a established a reproducible pipeline for *source-attributed measured-derived* local correlation comparisons, with an original-data ledger, exclusion audit, meaningful group-based holdouts, and negative model-transfer evidence. It **did not validate** these correlations as reliable plant PCHE prediction laws or recover the original entire experimental rig and its uncertainty budget.
+
+Detailed outputs: \`docs/G35_STUTTGART_HTC.md\` and \`docs/G35_STUTTGART_RESULTS.md\`.
+
+## 14. H1b — wall-conditioned Bishop and Jackson–Hall tests
+
+### 14.1 Physical hypothesis
+
+H1b investigated whether wall-dependent property ratios or buoyancy-aware correction structures would improve prediction compared with uncorrected forced-convection baselines. It also distinguished two operationally different questions:
+
+1. **Measured-wall-conditioned diagnostic:** using the source’s measured wall temperature as a correlation input and comparing the implied HTC against the source-reduced HTC.
+2. **Flux-driven wall prediction:** given source heating rate \(q''\), bulk fluid state and model geometry, solve \(q''=h(T_w)(T_w-T_b)\) for \(T_w\) and compare the resulting HTC—**without inputting measured wall temperature**.
+
+Conditioned models can achieve lower apparent MAPE partly because HTC and wall-temperature measurements share a reduction relationship; that is not the same as prospective heat-transfer prediction.
+
+### 14.2 Results on eligible source samples
+
+| H1b comparison | Measured wall T supplied? | Stations | Overall MAPE | Heldout MAPE | Bottom MAPE | Top MAPE |
+|---|---|---:|---:|---:|---:|---:|
+| Baseline Gnielinski | No | 2,318 | 150.15% | 158.10% | 87.71% | 236.81% |
+| Baseline Dittus–Boelter | No | 2,318 | 119.60% | 121.82% | 69.65% | 189.01% |
+| Bishop conditioned | **Yes** | 2,152 | **21.94%** | 20.72% | 14.23% | 33.94% |
+| Jackson–Hall conditioned | **Yes** | 2,318 | **28.46%** | 24.16% | 17.84% | 44.48% |
+| Bishop flux-driven | **No** | 2,152 | **46.40%** | 39.72% | 24.79% | 80.65% |
+| Jackson–Hall flux-driven | **No** | 2,318 | **49.47%** | 43.16% | 26.41% | 84.63% |
+
+These row populations differ. A direct claim that 46.40 is universally better than 49.47 requires comparing on the **same eligible station keys**, not just juxtaposing unmatched overall statistics.
+
+### 14.3 Matched-support inference
+
+On the common 2,152 Bishop-eligible stations, the Jackson flux-driven MAPE was about **52.14%**, versus Bishop **46.40%**. Across 18 nominal families, Bishop had the lower error in 12 and Jackson in 6. Family-resampled difference uncertainty was broad, with a preliminary percentile range crossing zero. This is **not a formal measurement-error confidence interval** and is insufficient to assert universal Bishop superiority.
+
+### 14.4 Orientation-blindness remains
+
+Even the improved flux-driven models had **~81–85%** top-wall MAPE. A model lacking genuine angular physics can respond to wall property changes without resolving circumferential flow, buoyancy, stratification or different top/bottom heat-transfer processes.
+
+The key H1b achievement is a careful diagnostic/predictive boundary, not a declaration that the problem was solved.
+
+See \`docs/G35B_WALL_PROPERTY_CORRELATIONS.md\` and \`docs/G35B_RESULTS.md\`.
+
+## 15. H1c — Lei top/bottom transfer is a recorded negative result
+
+### 15.1 Hypothesis and mismatch
+
+A published top/bottom heat-transfer relation from a different working-fluid/flow context was applied to the Stuttgart horizontal sCO₂ source. The test was intended to assess *transferability*, not to presume cross-fluid universality.
+
+Because correlation development ranges depend on fluid properties, geometry, heat flux and buoyancy regime, out-of-domain use can fail dramatically even if numerical equation evaluation succeeds.
+
+### 15.2 Matching the same HB/HT support
+
+The original two wall orientations yielded **1,580** eligible HB+HT stations. The final refined H1c evaluation used the same station population for Lei and compared a Jackson–Hall baseline on matching keys:
+
+| Flux/HTC comparison | Stations | Overall MAPE | Bottom HB | Top HT | Heldout MAPE |
+|---|---:|---:|---:|---:|---:|
+| Lei, measured-wall conditioned | 1,580 | **175.18%** | 76.26% | 274.09% | 177.26% |
+| **Lei, flux-driven wall inversion** | **1,580** | **631.72%** | **197.73%** | **1065.72%** | **638.83%** |
+| Jackson–Hall, flux-driven | 1,580 | 55.52% | 26.41% | 84.63% | 49.35% |
+| Gnielinski, bulk | 1,580 | 162.26% | 87.71% | 236.81% | 170.29% |
+
+Bishop flux-driven could be evaluated on only **1,468** corresponding HB/HT stations due to its own additional eligibility gate. Its 52.72% MAPE on that *smaller* subset is not an interchangeable matched-support comparator for the 1,580 rows.
+
+### 15.3 Distinguish solver convergence from model fidelity
+
+An early wall-root solve had discretisation/stopping precision issues, which were fixed. The final revised solver evaluated all 1,580 points without numerical rejection, with largest relative \(q''\) balance residual near **1.2722×10⁻⁵** and median about **4.4174×10⁻⁷**.
+
+Therefore the final 631.72% MAPE is **not primarily a root residual artefact**. It reflects a severe model-form and fit-domain mismatch for this transfer.
+
+### 15.4 Research lesson
+
+Negative source-to-model evidence is a valuable output. The physically appropriate response is to characterize buoyancy, fluid/geometry domains and identify truly in-domain tests—not to hide an apparently nonphysical source or tune coefficients until an unrelated data population yields a pleasing headline.
+
+See \`docs/G35C_LEI_TOP_BOTTOM.md\` and \`docs/G35C_LEI_RESULTS.md\`.
+
+## 16. H1d — Kim 2019 original-source recovery and research branch
+
+### 16.1 Why exact source transcription mattered
+
+Kim et al. (2019) investigated top/bottom local supercritical CO₂ heat-transfer correlations. The team retrieved the original article to inspect the actual equations, coefficient tables and experimental ranges rather than extrapolating from an abstract.
+
+The source audit identified the empirical form built on a Dittus–Boelter-like \(Re_b^{0.8}Pr_b^{0.4}\) component with property and buoyancy corrections, plus separately fitted semi-empirical alternatives. Mixing coefficient sets between equations would generate a formula never published by the authors.
+
+### 16.2 Original equation discrepancy
+
+An unresolved **Eq. (24) versus Table 4** exponent/sign-placement ambiguity affects the empirical model's numerical output. One evaluation follows the published printed form literally; another tests a **hypothesised** alternate interpretation. The hypothesis is *not* an author-confirmed correction, regardless of whether its numerical error is lower.
+
+[Issue #20](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/20) preserves this unresolved source question. [Draft PR #19](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/19) is a research branch and **is not part of the integrated main release**. Neither variant should be silently promoted as the authoritative Kim empirical law.
+
+### 16.3 Source-domain mismatch
+
+The original Kim heating flux range ended around **26.9 kW/m²** in the documented source model study. The retained Stuttgart H1d comparison candidates were **all above** that original maximum. The entire H1d transfer is thus an *extrapolative stress test*, not direct replication of published experimental fidelity.
+
+### 16.4 Exact common-station audit from historical H1d branch
+
+An initial comparison mixed separately successful root populations: candidate evaluations were on 1,580 HB/HT stations, but some formulas failed to converge or violated admissibility. The hardening step intersected the exact successful station IDs before comparing model accuracy.
+
+At the H1d branch [run #42058735222](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42058735222), all **15 CI jobs succeeded**. Exactly **1,275 of 1,580** candidates entered the *three-way common successful-root* intersection, including **272** original held-out-family stations.
+
+| H1d model on exactly the same 1,275 source stations | Pointwise MAPE | Equal-family macro MAPE | Heldout MAPE on same 272 stations |
+|---|---:|---:|---:|
+| Jackson–Hall flux-driven reference | **33.89%** | **35.31%** | **21.70%** |
+| Kim semi-empirical, published form | 54.39% | 55.23% | 52.67% |
+| Kim empirical, **printed literal** interpretation | **29,622,281.81%** | 33,696,878.32% | 22,756,407.13% |
+| Kim empirical, **unverified sign-placement hypothesis** | 45.73% | 45.75% | 37.54% |
+
+The extremely large literal-interpretation error must not be silently clipped or transformed into a usable correlation. The common-support results also show that a comparison on each method’s own successful population could reverse model ranking; convergence/coverage are themselves outcomes.
+
+### 16.5 Scientific status and gate
+
+- Original source equations and the coefficient transcription have been inspected and preserved.
+- Exact matched station comparison is executed **on the research branch**.
+- All compared Stuttgart heat fluxes lie outside the stated original Kim experimental flux range.
+- Empirical formula interpretation remains unresolved; independent source-author/publisher clarification is needed.
+- Root failures, original-sample exclusion and held-out coverage remain part of the record.
+- **No H1d model is designated a newly validated default in the current \`main\` package.**
+
+See \`docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md\`, historical PR #21, and research PR #19.
+
+## 17. Experimental density and source/data rights: two separate questions
+
+### 17.1 Scientific validity is not a licence
+
+Independent experimental property comparisons can support numerical EOS verification, but the right to *access* a journal-curated dataset and the right to *rehost a complete adapted table* are legally distinct. An attribution line does not automatically confer a redistribution licence.
+
+The original Mantilla record is linked through NIST/TRC ThermoML and the journal DOI **10.1021/je1001158**. NIST states that ThermoML archive files are hosted with participating journal publishers' permission. The project has not established an unambiguous downstream grant for redistributing a normalized full 49-point dataset under BSD software packaging.
+
+### 17.2 Current HEAD mitigation
+
+[PR #29](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/29) removed the full 49-point normalized CSV from current \`main\`. The WP5 gate checks that it cannot reappear in the candidate source snapshot or source distribution. The optional density test and historical-density report require an **external user-supplied file**; neither silently substitutes a fake measurement.
+
+Provenance and opt-in documentation remain, including \`data/reference/mantilla2010_provenance.yaml\` and \`data/reference/README_MANTILLA_OPT_IN.md\`.
+
+### 17.3 Rights still outstanding
+
+Older public Git objects and any earlier downloaded source archives may still contain the table. Removing a file from HEAD **does not erase Git history** or retrospectively grant permission. A draft message seeking NIST/authorized-rights guidance has been prepared but not sent; no licence reply is recorded. The possible need to obtain specific publisher permission or repair historical copies is tracked in [issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27).
+
+### 17.4 What can be honestly reported
+
+A paper or application can cite the historic 49-point numerical error **as historical, source-attributed software evidence from an earlier recorded CI run**. It should not say the current default CI freshly validates all 49 measured points, and it should not distribute a complete source table that remains uncleared.
+
+The broader lesson applies to every research dataset: scientific credit, numerical reproducibility and publisher/file-reuse rights are three distinct acceptance dimensions.
+
+---
+
