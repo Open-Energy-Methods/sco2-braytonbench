@@ -328,3 +328,25 @@ jobs:
       - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
       - name: WP3 bypass mixing through real-CO2 quasi-steady Brayton step (synthetic)
         run: python -m pytest -q tests/test_control_whr_co2.py
+
+  v1-wp4-experimental-protocol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: Prospective sensor/campaign schema, DAQ QC, GUM and rank tests
+        run: python -m pytest -q tests/test_experimental_readiness.py
+      - name: Generate explicitly non-experimental WP4 readiness audit
+        run: python examples/wp4_readiness_audit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v1-wp4-prospective-protocol-and-mathematical-audit
+          path: |
+            evidence/generated/v1_wp4/readiness_audit.json
+            evidence/generated/v1_wp4/campaign_gate_summary.csv
+          if-no-files-found: error
