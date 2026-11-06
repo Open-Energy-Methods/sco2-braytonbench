@@ -34,7 +34,7 @@ SAMPLE_FIELDS = (
     "run_id", "time_s", "tag_id", "value", "unit", "quality_flag",
 )
 APPROVED_UNITS = {
-    "s", "K", "Pa", "kg/s", "J/kg", "W", "W/K", "N*m",
+    "s", "K", "Pa", "kg/s", "J/kg", "J/(kg K)", "W", "W/K", "N*m",
     "rad/s", "1", "Hz", "J/K", "m3/s",
 }
 
