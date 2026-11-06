@@ -210,3 +210,25 @@ jobs:
             evidence/generated/stuttgart_h1c/h1c_lei_report.json
             evidence/generated/stuttgart_h1b/h1b_report.json
           if-no-files-found: ignore
+
+  v1-thermal-physics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: WP1 numerical domain guards and WP2a analytical thermal CV
+        run: python -m pytest -q tests/test_v1_numeric_contracts.py tests/test_thermal_dynamics.py
+      - name: Execute synthetic time-varying thermal load and energy accounting
+        run: python examples/thermal_wall_step_response.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v1-thermal-wall-analytical-evidence
+          path: |
+            evidence/generated/v1_thermal_wall/thermal_wall_trace.csv
+            evidence/generated/v1_thermal_wall/thermal_wall_summary.json
+          if-no-files-found: error
