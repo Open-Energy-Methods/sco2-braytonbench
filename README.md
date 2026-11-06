@@ -274,7 +274,7 @@ See [measured-density and identifiability evidence](docs/EXPERIMENTAL_DENSITY_AN
 
 ## Explicit exclusions
 
-This is **not a CARBOSOLA digital twin**. No HZDR rig data, experimental campaign, real-sCO₂ cycle benchmark replication, source plant dynamic model, PI/MPC controller, or techno-economic optimum is claimed. An ideal-gas test-fluid result must never be labelled as a CO₂ prediction.
+This is **not a CARBOSOLA digital twin**. No HZDR rig measurements, experimental campaign, validated real-sCO₂ cycle benchmark replication, full CO₂-inventory plant dynamics, experimentally identified plant PI/MPC controller, or techno-economic optimum is claimed. The WP3 wall-temperature PI is a synthetic, uncalibrated research demonstrator only. An ideal-gas test-fluid result must never be labelled as a CO₂ prediction.
 
 The related [HTHP-ControlBench](https://github.com/Open-Energy-Methods/hthp-controlbench) is a separate repository; general testing/control methods may be adapted, but their physics models remain independent.
 
