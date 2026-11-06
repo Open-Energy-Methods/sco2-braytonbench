@@ -28,7 +28,7 @@ A **reproducible, numerically verified research software toolkit** for steady re
 | WP0 | This contract, source/provenance baseline, truthful README/limitations, traceability matrix | Architectural decisions and explicit version scope accepted |
 | WP1 | Input-domain guards, dimensional/conservation/infeasibility checks, numerical convergence and built-distribution checks | Targeted tests green, no regression in real-CO₂ CI |
 | WP2a | Analytically solved heat-capacitance control-volume kernel | Independent exponential limiting solution, integrated heat/storage closure, time-step invariance |
-| WP2b | Explicit synthetic waste-heat load input coupled to a carefully defined steady power block or a new CV solver | Time-dependent control volume, energy accounting and rigorous applicability statement; **not** a loop of unrelated steady states mislabeled dynamic |
+| WP2b | [Finite gas→stored wall→quasi-steady Brayton cycle](G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md), independent analytic fixture, RK4 energy ledger | **Implemented on stacked PR #23; CI and independent review pending.** No CO₂-inventory transient, calibrated UA or G3.2 finite-coolant dynamics |
 | WP3 | Real physical source-side actuator + PI; saturation, antiwindup and sampled disturbances | Same-input open/closed comparison; tracking/constraint metric calculations checked |
 | WP4 | Measurement matrix, uncertainty, sensor/actuator/data schema and identified-versus-assumed parameter ledger | Experimental-readiness document, no fake CARBOSOLA data |
 | WP5 | Fresh install, pinned real EOS CI, tests and artifact manifests, source and wheel build, changelog, citation, RC | Immutable `v1.0.0-rc1` passes reproducibility review |
