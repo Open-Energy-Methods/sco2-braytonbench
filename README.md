@@ -6,6 +6,22 @@ Maintained under [Open Energy Methods](https://github.com/Open-Energy-Methods).
 
 > **Research status: 0.5.0-alpha reconstruction — not a validated sCO₂ power-cycle model.** The original v0.5 executable package reported in prior work was not available for direct import; this initial repository implementation was reconstructed from the available v0.4 specifications and the two screenshot-audited papers. The local tests use an artificial constant-property fluid unless otherwise stated.
 
+## v1.0 research release programme — work in progress
+
+The [v1.0 scope and scientific release contract](docs/V1_0_RELEASE_CONTRACT.md)
+and [requirements/evidence matrix](docs/V1_0_VERIFICATION_MATRIX.md) document
+what **would** be required for a stable software release; **no v1.0 release
+or CARBOSOLA experimental validation currently exists**.
+
+An isolated [analytical lumped thermal-wall demonstration](docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md)
+is being developed as the **first primitive** for later transient work.
+It has real time dependence and integrated stored-energy accounting, but
+**does not model CO₂ mass inventory, transient Brayton cycle pressures,
+turbomachinery dynamics or PI/MPC control**. Run the illustrative
+`python examples/thermal_wall_step_response.py` to produce a reproducible
+synthetic step-response CSV/JSON (after installing `pip install -e .`).
+The original stable six-state steady-state calculations remain distinct.
+
 ## What is implemented
 
 - SI-unit six-state recuperated Brayton **steady-state** calculation.

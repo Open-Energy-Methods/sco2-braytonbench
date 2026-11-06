@@ -1,5 +1,6 @@
 """Independent six-state recuperated steady cycle; not the CARBOSOLA rig."""
 from dataclasses import dataclass
+from math import isfinite
 from .core import PressureLosses, cycle_pressures, compressor_outlet, turbine_outlet
 from .exchangers import HXResult, segmented_recuperator
 from .properties import DomainError, Properties, State
@@ -31,8 +32,9 @@ class CycleResult:
     first_law_residual_w: float
 
 def solve_cycle(props:Properties,c:CycleInputs) -> CycleResult:
-    if c.mdot_kg_s<=0:
-        raise DomainError('positive cycle mass flow required')
+    if (not isinstance(c.mdot_kg_s, (int, float))
+            or not isfinite(c.mdot_kg_s) or c.mdot_kg_s<=0):
+        raise DomainError('finite positive cycle mass flow required')
     p=cycle_pressures(c.p1_pa,c.p4_pa,c.losses)
     s1=props.tp(p.p1,c.t1_k)
     s2s=props.ps(p.p2,s1.s)

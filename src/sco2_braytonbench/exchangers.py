@@ -19,6 +19,8 @@ class HXResult:
     hot_out: State
 
 def _lmtd(a: float,b: float) -> float:
+    if not isfinite(a) or not isfinite(b):
+        raise DomainError('nonfinite exchanger temperature approach')
     if a<=0 or b<=0:
         raise DomainError('temperature crossing or zero approach in heat exchanger')
     if abs(a-b)<1e-9*max(a,b):
@@ -44,13 +46,27 @@ def segmented_recuperator(props:Properties,cold:State,hot:State,
                           ua_w_k:float | None = None,n:int=30) -> HXResult:
     if (effectiveness is None)==(ua_w_k is None):
         raise DomainError('choose exactly one of effectiveness or UA')
-    if n<3 or m_cold<=0 or m_hot<=0 or p_cold_out<=0 or p_hot_out<=0:
+    if not isinstance(n, int) or isinstance(n, bool) or n<3:
+        raise DomainError('HX segment count must be an integer >= 3')
+    numbers = (m_cold, m_hot, p_cold_out, p_hot_out,
+               cold.p, cold.t, cold.h, hot.p, hot.t, hot.h)
+    if not all(isinstance(v, (int, float)) and isfinite(v) for v in numbers):
+        raise DomainError('nonfinite or nonnumeric HX state, flow or pressure')
+    if (m_cold<=0 or m_hot<=0 or p_cold_out<=0 or p_hot_out<=0
+            or cold.p<=0 or hot.p<=0 or cold.t<=0 or hot.t<=0):
         raise DomainError('invalid HX geometry, mass flow or pressure')
     if p_cold_out>cold.p or p_hot_out>hot.p:
         raise DomainError('recuperator outlet pressures exceed inlet pressures')
-    if effectiveness is not None and not 0<=effectiveness<=1:
-        raise DomainError('effectiveness outside [0,1]')
-    if ua_w_k is not None and (not isfinite(ua_w_k) or ua_w_k<0):
+    if effectiveness is not None and (
+        not isinstance(effectiveness, (int, float))
+        or not isfinite(effectiveness)
+        or not 0<=effectiveness<=1
+    ):
+        raise DomainError('effectiveness must be finite and within [0,1]')
+    if ua_w_k is not None and (
+        not isinstance(ua_w_k, (int, float))
+        or not isfinite(ua_w_k) or ua_w_k<0
+    ):
         raise DomainError('invalid UA')
     if hot.t<=cold.t:
         raise DomainError('hot recuperator inlet must exceed cold inlet temperature')
@@ -104,7 +120,15 @@ def waste_gas_heater(props:Properties,co2_in:State,co2_out:State,
                      *,cp_slope_j_kg_k2:float=0.,
                      cp_reference_temperature_k:float=300.,
                      gas_property_model:SensibleStream|None=None) -> HeaterResult:
-    if n<3 or min(m_co2,m_gas,cp_gas,t_gas_in)<=0 or min_pinch_k<0:
+    if not isinstance(n,int) or isinstance(n,bool) or n<3:
+        raise DomainError('heater segment count must be an integer >= 3')
+    numbers = (m_co2,m_gas,cp_gas,t_gas_in,min_pinch_k,
+               co2_in.p,co2_in.t,co2_in.h,
+               co2_out.p,co2_out.t,co2_out.h)
+    if not all(isinstance(v, (int,float)) and isfinite(v) for v in numbers):
+        raise DomainError('nonfinite or nonnumeric heater inputs')
+    if (min(m_co2,m_gas,cp_gas,t_gas_in,co2_in.p,co2_in.t,
+            co2_out.p,co2_out.t)<=0 or min_pinch_k<0):
         raise DomainError('invalid heater inputs')
     if co2_out.p>co2_in.p:
         raise DomainError('heater pressure must not rise')
