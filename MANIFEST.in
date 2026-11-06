@@ -1,0 +1,17 @@
+# WP5 candidate source distribution: self-contained research methods and fixtures.
+# Packaging third-party dataset files does not establish redistribution permission;
+# the research-data provenance/licensing gate remains OPEN before publication.
+include LICENSE README.md CHANGELOG.md CITATION.cff CONTRIBUTING.md
+recursive-include docs *.md *.yaml *.yml *.json
+recursive-include examples *.py
+recursive-include scripts *.py
+recursive-include protocols *.csv *.json *.md
+recursive-include tests *.py
+recursive-include data *.csv *.json *.yaml *.yml *.txt *.tsv *.md
+# NIST ThermoML data are publisher-permission hosted, but downstream
+# redistribution of this extracted density table is unconfirmed.
+# Preserve provenance + opt-in source-repository tests; do not ship in sdist.
+exclude data/reference/mantilla2010_thermoml_density.csv
+recursive-include data_requests *.csv *.json *.md
+prune evidence/generated
+global-exclude __pycache__ *.py[cod] .DS_Store
