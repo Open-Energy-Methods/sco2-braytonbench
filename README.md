@@ -82,7 +82,7 @@ safety interlocks, plant-identified controller gains, or MPC.
 
 ### WP4 — prospective laboratory measurement and validation readiness
 
-The [WP4 experimental-readiness protocol](docs/G6_WP4_EXPERIMENTAL_READINESS_PROTOCOL.md)
+The [WP4 experimental-readiness protocol](docs/WP4_EXPERIMENTAL_READINESS_PROTOCOL.md)
 now specifies a *proposed*, staged campaign for testing finite-source
 thermal storage and the WP3 wall-temperature controller against future
 facility observations. It introduces **35 candidate measurement/data tags**
