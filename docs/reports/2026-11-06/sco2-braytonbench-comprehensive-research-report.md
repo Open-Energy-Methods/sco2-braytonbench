@@ -201,3 +201,307 @@ The package's supported-domain claims are narrower than Python syntax compatibil
 
 ---
 
+# Part II — Thermodynamic models and installed heat-transfer boundaries
+
+## 5. Six-state recuperated Brayton model: system boundary and laws
+
+### 5.1 State numbering and physical interpretation
+
+The baseline is a recuperated Brayton-cycle *mathematical abstraction* using six thermodynamic states. Actual piping and equipment geometry are not reconstructed from a plant P&ID.
+
+| Station | Functional designation | What a measurement would require |
+|---|---|---|
+| 1 | Compressor inlet | CO₂ inlet pressure/temperature, composition, flow and near-critical margin |
+| 2 | Compressor outlet / cold recuperator entry | Compressor pressure/enthalpy rise and efficiency reference state |
+| 3 | Recuperator cold outlet / primary-heater inlet | Exchanger enthalpy and pressure, potential wall approach |
+| 4 | Primary-heater outlet / turbine inlet | Turbine high-pressure boundary and allowable temperature |
+| 5 | Turbine outlet / hot recuperator inlet | Turbine isentropic outlet relation, actual pressure/flow |
+| 6 | Recuperator hot outlet / cooler inlet | Heat-rejection requirement and low-pressure heat-exchanger entry |
+
+Topology is an assumption. The real HZDR demonstrator must be inspected before assigning these software station numbers to physical ports; some documented test stages may not have operated a turbine.
+
+### 5.2 Compression and expansion
+
+For compressor inlet 1 and compressor discharge pressure 2, the isentropic reference state has entropy \(s_{2s}=s_1\), while compressor efficiency gives:
+
+\[
+h_2=h_1+\frac{h_{2s}-h_1}{\eta_c},\quad
+W_c=\dot m_{\rm CO2}(h_2-h_1).
+\]
+
+For turbine inlet 4 and outlet pressure 5:
+
+\[
+h_5=h_4-\eta_t(h_4-h_{5s}),\quad
+W_t=\dot m_{\rm CO2}(h_4-h_5),\quad
+W_{\rm net}=W_t-W_c.
+\]
+
+These are steady *device isentropic-efficiency relations*, not compressor and turbine maps, not speed-dependent pressure-flow constraints, and not shaft-inertia dynamics. For an ideal-gas fixture with constant \(c_p\) and gas constant \(R\), the isentropic temperature ratio is \((p_2/p_1)^{R/c_p}\), giving a textbook independent check.
+
+Pressure loss terms for the recuperator cold side, primary heater, recuperator hot side and cooler are prescribed component inputs. Their numerical values in example cases are not calibrated pressure-loss maps.
+
+### 5.3 Recuperator, external heater and cooler
+
+The recuperator transfers enthalpy from the hot post-expansion stream to the colder post-compression stream. With separate hot/cold pressure losses, source/sink heat rates at an algebraic operating point must satisfy mass and enthalpy balances. The baseline can use prescribed effectiveness or segmented UA, but the two alternatives are not interchangeable independent design constraints.
+
+At the steady cycle boundary:
+
+\[
+Q_{\rm heater}=\dot m(h_4-h_3), \qquad
+Q_{\rm cooler}=\dot m(h_6-h_1).
+\]
+
+For the idealised complete cycle:
+
+\[
+Q_{\rm heater}-Q_{\rm cooler}-W_{\rm net}=0,\qquad
+\eta_{\rm th}=W_{\rm net}/Q_{\rm heater}.
+\]
+
+A small residual means the code has reconciled its declared boundary terms. **It does not establish** that real fan/pump/valve parasitics, exchanger leakage, mechanical losses, electrical conversion or plant casing losses have been included.
+
+### 5.4 Efficiency, recovered heat and net export
+
+Three attractive but different optimisation targets must not be confused:
+
+- \(\eta_{\rm th}\) compares net shaft power with heat *accepted into the modelled cycle*.
+- \(W_{\rm net}\) is turbine-minus-compressor shaft power, subject to assumed efficiencies and pressure conditions.
+- Source heat-recovery fraction compares absorbed thermal energy to the finite exhaust enthalpy potentially available above the declared stack floor.
+
+High thermal efficiency can coexist with small recovered heat and low power. A credible power-plant objective must also consider auxiliary loads, rejected heat, installed equipment, unavailable heat, safety and economics.
+
+### 5.5 Well-posedness and failure modes
+
+A valid solution needs positive absolute pressure, positive thermodynamic temperature, finite mass flow, compatible pressure station ordering, valid fluid state evaluations and feasible recuperator/heater/cooler approaches. Nonphysical root branches or property exceptions are not to be silently converted into ordinary zero-power points.
+
+Near the critical region, EOS behaviour is steep: finite-difference derivative conditioning, resolution and property-library version need explicit attention. There are no independently measured compressor maps or shaft dynamics in the integrated solver.
+
+## 6. Thermophysical properties: EOS versus engineering assumptions
+
+### 6.1 Property service contract
+
+The software exposes thermodynamic states containing pressure, temperature, specific enthalpy and entropy. Properties can be obtained using \(p,T\), \(p,h\) and \(p,s\) transformations. The principal real-fluid backend is CoolProp CO₂; the artificial ideal-gas fixture supplies an independently controlled mathematical reference.
+
+The ideal-gas fixture is **not a surrogate calibrated to sCO₂**. It is deliberately simple so conservation, inverse-UA and transient-wall algorithms can be verified against equations without hiding errors in numerical EOS inversion.
+
+### 6.2 What “real-fluid verification” means
+
+CoolProp can resolve nonideal density/enthalpy/entropy values and exhibit the strong thermal-property variation near supercritical operating states. A successful cycle solve with real CO₂ verifies compatibility between numerical algorithms and a thermophysical library for the tested pressures and temperatures.
+
+It does not independently prove that CoolProp matches REFPROP or measured density over every fluid region. That requires separate source data and uncertainty analyses; library-to-library consistency is not the same as measurement independence.
+
+### 6.3 Density reference and the present distribution change
+
+Historical November 5 tests compared CoolProp 8.0.0 with **49 Mantilla et al. (2010) experimentally reported density points** over stated isotherms 310, 350, 400 and 450 K, spanning approximately 0.999–159.844 MPa. The historical recorded summary was:
+
+| Historical statistic | Reported value |
+|---|---:|
+| Number of measured points | 49 |
+| CoolProp backend | 8.0.0, HEOS::CO₂ |
+| Mean relative residual | −0.005608% |
+| RMS relative residual | 0.034731% |
+| Maximum absolute relative residual | 0.090241% |
+| Earlier tighter screen | 0.2% maximum / 0.1% RMS, passed |
+
+**Current evidence caveat:** the 49-row normalized original-source transcription has since been **removed from current HEAD** because the downstream NIST ThermoML/journal-publisher redistribution grant is unconfirmed. Default CI therefore **does not rerun those measured-density observations**. The test and report now require a user-obtained external CSV through \`SCO2_MANTILLA_DENSITY_CSV\`; in its absence the measurement check is explicitly skipped. Historical values are historical run evidence, not a fresh current-version independent experimental validation claim.
+
+See \`docs/EXPERIMENTAL_DENSITY_DECISION.md\`, \`data/reference/README_MANTILLA_OPT_IN.md\` and [rights issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27).
+
+### 6.4 Property-model boundary
+
+A full time-dependent CO₂ volume model needs density and internal energy state transformations, consistent inverse \((\rho,u)\to(p,T)\), and a network of mass/enthalpy fluxes. The present property interface and quasi-steady six-state cycle do **not** supply that missing inventory model, even though CoolProp as a separate library supports richer property calls.
+
+## 7. Friedman–Rapp 2016 comparison: meaningful but nonidentical models
+
+### 7.1 Why it was investigated
+
+The project's early literature work sought a credible source-to-model sanity check for recuperated Brayton thermodynamics. Friedman–Rapp (2016) provided a moderately heated cycle reference with reported nominal efficiency, making it more useful than an arbitrary textbook ideal-gas target.
+
+A close matching headline is insufficient if the original paper’s internal state map, pressure losses, heat exchangers, turbine/compressor efficiency definitions and recuperator treatment differ.
+
+### 7.2 Source-to-model numerical outcome
+
+The historically recorded project comparison yielded about **24.3058%** thermal efficiency versus the literature table's **24.3812%**, a difference of approximately **−0.07544 percentage points** on the selected reconstruction. That is a numerical comparison under explicit assumptions, not exact recovery of the source's entire simulation.
+
+The project documented that the original reference used a larger 12-state structure and model details that could not be fully identified from the accessible article. Therefore one cannot claim the proprietary/source EES model was reproduced or its hidden losses inferred uniquely from a single published efficiency number.
+
+### 7.3 Structural limitation
+
+The current six-state abstraction and the literature reference do not have identical thermal and pressure state maps. Calibrating unknown parameters until one efficiency matches would risk absorbing physical or numerical differences into arbitrary assumed losses.
+
+The appropriate citation is \`docs/FR2016_COMPARISON_REVIEW.md\` together with \`docs/FR2016_ORIGINAL_MODEL_RECOVERY.md\`. Future parity requires published operating-point and state definitions, not merely another digit of efficiency agreement.
+
+## 8. G3 — finite-source industrial waste-heat screening
+
+### 8.1 Change from imposed inlet temperature
+
+G3 introduced an explicit finite exhaust-gas enthalpy budget and heater temperature-approach constraints. Before that stage, an imposed turbine inlet state made the source effectively inexhaustible if not paired with an actual heat-source control volume.
+
+For constant sensible exhaust \(c_p\), with source mass flow \(\dot m_g\):
+
+\[
+Q_g=\dot m_g c_{p,g}(T_{g,in}-T_{g,out}),\quad
+Q_{g,\max}=\dot m_g c_{p,g}(T_{g,in}-T_{\rm stack,min}).
+\]
+
+This budget does not guarantee enough exchanger area/conductance to achieve a chosen duty. A counterflow temperature profile must remain feasible; the required UA must be computed and checked, rather than automatically assumed installed.
+
+### 8.2 Illustrative screening inputs
+
+The archived G3 screening example used:
+
+| Quantity | Explicit example assumption |
+|---|---:|
+| Gas source | 100 kg/s at 760 K |
+| Gas constant \(c_p\) | 1100 J/(kg·K) |
+| Minimum stack temperature | 360 K |
+| Minimum heater local approach | 10 K |
+| Maximum allowed **sizing** UA | 1.2 MW/K |
+| CO₂ compressor inlet | 8.5 MPa, 310 K |
+| High-pressure turbine inlet | 24 MPa |
+| Compressor / turbine efficiencies | 0.89 / 0.90 |
+| Recuperator input | fixed 200 kW/K |
+| Cold recuperator/heater/hot recuperator/cooler pressure losses | 100/150/100/50 kPa |
+| Sampled turbine inlet temperatures | 550, 600, 650, 700, 770 K |
+| Sampled CO₂ flows | 20, 40, 70, 100 kg/s |
+
+The parameter grid and constraints are **illustrative and discretely screened**, not an industrial optimisation over all continuously accessible machine settings.
+
+### 8.3 Power maximum and thermal-efficiency maximum were different points
+
+| G3 result | Power-max selected point | Efficiency-max selected point |
+|---|---:|---:|
+| CO₂ flow | 100 kg/s | 20 kg/s |
+| Turbine inlet T | 700 K | 700 K |
+| Net shaft power | **8.109835 MW** | 1.621967 MW |
+| Cycle thermal efficiency | 25.2184% | **33.5039%** |
+| External heat absorbed | 32.1585 MW | 4.8411 MW |
+| Cooler heat rejected | 24.0486 MW | 3.2192 MW |
+| Stack outlet | 467.650 K | 715.990 K |
+| Source sensible heat recovered | 73.087% | 11.003% |
+| Recuperator minimum internal approach | 64.738 K | 4.627 K |
+| Heater minimum approach | 13.108 K | 60.000 K |
+| Heater **required** UA | 923.866 kW/K | 40.528 kW/K |
+
+This contrast is central: the power-max solution uses far more source energy and requires far greater transfer surface/conductance. The efficiency-max solution achieves a larger *ratio* by consuming less heat. They are not competing measurements from one installed rig.
+
+### 8.4 Additional imposed constraints
+
+Under further hypothetical limits, archived selected points included power **4.983670 MW** at 70 kg/s / 650 K and efficiency **30.7281%** at 40 kg/s / 700 K. These are constrained scenario outputs, not independent performance measurements.
+
+A numerical segmentation sensitivity on the original winners reported efficiency values that shifted slightly between 12, 24 and 48 heat-exchanger sections. The sensitivity indicates the chosen discretisation matters; it does not establish grid independence under all near-pinch states.
+
+### 8.5 Engineering meaning
+
+G3 is a **design screening/sizing tool**: it estimates which combinations demand a feasible \(\mathrm{UA}_{required}\). It does not force a single installed primary-heater UA across load cases, identify turbine maps, model actual pipe flow or enforce transient heat storage. That limitation motivated G3.1.
+
+See \`docs/G3_WASTE_HEAT_DESIGN_SCREENING.md\` and \`docs/G3_STEADY_SCREENING_RESULTS.md\`.
+
+## 9. G3.1 — solve the cycle around a fixed installed heater UA
+
+### 9.1 A different boundary-value problem
+
+Rather than computing the UA needed for a user-imposed \(T_4\), G3.1 fixes a hypothetical installed gas-heater conductance. The cycle state must respond to the finite gas source until:
+
+\[
+F(T_4)=\mathrm{UA}_{required}(T_4)-\mathrm{UA}_{installed}=0.
+\]
+
+The hot stream cools at finite flow; the CO₂ heating path satisfies its enthalpy duty; pinch and local exchanger profile remain admissible. A bracketed bisection avoids reporting an arbitrary root when the exchanger is infeasible.
+
+### 9.2 Executed nominal and perturbed source example
+
+The archived synthetic installed heater rating was approximately **21.783328 kW/K**. For a hot-gas inlet perturbation 800→810 K:
+
+| G3.1 quantity | 800 K source | 810 K source |
+|---|---:|---:|
+| Fixed installed heater UA | 21.783328 kW/K | 21.783328 kW/K |
+| Solved CO₂ turbine inlet \(T_4\) | **649.989014 K** | **658.953857 K** |
+| Source gas exit | 758.003237 K | 767.638266 K |
+| Net shaft power | 1.4238615 MW | 1.4599094 MW |
+| Cycle thermal efficiency | 30.8218883% | 31.3299343% |
+| Numerically required UA | 21.782025 kW/K | 21.782885 kW/K |
+| UA residual | −1.303 W/K | −0.443 W/K |
+| Relative UA error | 0.0059802% | 0.0020320% |
+
+This is an **installed-UA equality response**, so the turbine inlet is an *output* of the coupled operating point, not the target imposed at all source conditions. Bisection/root stopping tolerance explains the small UA residual.
+
+### 9.3 Independent mathematical verification and limits
+
+An artificial constant-\(c_p\) ideal-gas exchanger admits well-defined sensible heat capacity rates and an independently derived exponential effectiveness limit. The dedicated tests verify the nonlinear boundary solver against that controlled fixture, then use real CoolProp for feasible cases.
+
+The same installed conductance is a model hypothesis. Real exchanger UA often changes with flow, Reynolds/Prandtl regime, temperature, fouling and wall conductivity. No measured primary-heater UA distribution across operating points was supplied.
+
+## 10. G3.2 — coupled installed heater and cooler with finite sink
+
+### 10.1 Two temperatures solved simultaneously
+
+G3.2 extends the fixed-UA boundary conditions to a cooler with finite coolant mass-flow and sensible heat capacity. The model solves for compressor inlet \(T_1\) and turbine inlet \(T_4\) such that **both** the installed heater and cooler UA equalities are fulfilled, subject to cycle feasibility and the finite source/sink states.
+
+This prevents silently fixing compressor inlet temperature in a case where the cooler cannot maintain it as sink temperature rises. The warmer compressor inlet then influences compression work and cycle efficiency.
+
+### 10.2 Illustrative installed equipment
+
+A documented real-CoolProp/synthetic-hardware case used source **800 K**, 100 kg/s, dry-gas sensible cp approximately 1100 J/(kg·K) at 300 K with a small linear slope; coolant 75 kg/s, cp 4180 J/(kg·K), nominal inlet 285 K; CO₂ 20 kg/s, low pressure 8.5 MPa, high 24 MPa; recuperator UA 200 kW/K; heater installed UA about **21.625962 kW/K** and cooler installed UA **100.514392 kW/K**. The coarse five-section model is illustrative.
+
+### 10.3 Cooler inlet disturbance result
+
+| G3.2 output | Coolant at 285 K | Coolant at 287 K |
+|---|---:|---:|
+| Solved compressor inlet T1 | 310.004883 K | 310.463867 K |
+| Solved turbine inlet T4 | 650.019531 K | 652.216797 K |
+| Exhaust gas outlet | 761.434830 K | 761.969130 K |
+| Coolant exit | 295.172950 K | 297.025449 K |
+| Net shaft power | **1.423728 MW** | **1.406263 MW** |
+| Thermal efficiency | 30.863734% | 30.912031% |
+| Heater heat transferred | 4.612948 MW | 4.549241 MW |
+| Cooler rejected heat | 3.189220 MW | 3.142978 MW |
+| Heater required UA | 21.625691 kW/K | 21.627529 kW/K |
+| Cooler required UA | 100.448503 kW/K | 100.572653 kW/K |
+| Cooler entropy generation | 1154.805 W/K | 1125.584 W/K |
+
+The output illustrates a finite heat sink's effect on the compressor-side boundary. An increase in computed thermal efficiency does not mean higher electrical power: net shaft output **decreases** in this example.
+
+### 10.4 Residual and off-design distinctions
+
+The archived heater equality residual was approximately **0.0013–0.0072%**, cooler equality residual **0.058–0.066%**, under the declared stopping tolerances. The outer boundary search and inner thermal calculations have distinct iteration counts.
+
+A supplementary flow-scaling model varies quadratic pressure loss and efficiency penalties under prescribed parameters. It is **only a scenario extension**, not an identified compressor/turbine flow map or experimental part-load characteristic.
+
+G3.2 is a coupled **steady** problem. Its finite coolant *stream* is not itself a transient coolant **inventory**. Likewise, WP2b later added a dynamic wall but did not silently transplant the G3.2 finite-coolant stream into a full transient cooling model.
+
+## 11. G3.3 — sourced property alternatives, hydraulic models and mesh sensitivity
+
+### 11.1 Property upgrades
+
+The G3.3 research stage investigated temperature-dependent dry-air/gas sensible properties and actual liquid-water property calls for the cooling stream, rather than relying on constant cp for every stream. NIST Shomate dry-air inputs, CoolProp water and circular-pipe Darcy/Fanning conventions were documented. They are **source-grounded engineering formulas**, not calibrated representations of a specific industrial exhaust composition or heat exchanger.
+
+### 11.2 Hydraulics and applicability
+
+Pipe friction depends on Reynolds number, roughness and flow regime. A circular-pipe relationship is not automatically a valid pressure-loss model for printed circuit heat exchangers, manifold networks, compact fin passages or CO₂ compressors. Geometry-specific identification is still required. Friction factor conventions must be consistent: a Darcy factor differs by four from the corresponding Fanning factor.
+
+### 11.3 Independent mesh/segment check
+
+Two real-fluid operating points were solved at **6, 12, 24 and 48 exchanger sections**. One case had CO₂ low state 8.5 MPa / 310 K and turbine inlet 650 K; the second 9 MPa / 314 K and turbine inlet 690 K. The high pressure was 24 MPa, CO₂ flow 20 kg/s, and recuperator installed UA 200 kW/K.
+
+Representative numerical trend at the first case:
+
+| Output | 6 sections | 12 | 24 | 48 |
+|---|---:|---:|---:|---:|
+| Cycle thermal efficiency | 30.850478% | 30.822519% | 30.813657% | **30.811261%** |
+| Recuperator duty | 4.503075 MW | 4.498888 MW | 4.497560 MW | 4.497200 MW |
+| Recuperator minimum approach | 3.728545 K | 3.864567 K | 3.907765 K | 3.919449 K |
+| Heater required UA | 21.766931 kW/K | 21.777700 | 21.781380 | 21.782395 |
+| Cooler required UA | 100.798020 kW/K | 101.347517 | 101.490975 | 101.527335 |
+
+For the 24→48 refinement, the first-case cooler UA changed about **0.0358%** while efficiency shifted **0.002396 percentage points**; the second case had corresponding changes about **0.0300%** and **0.002072 percentage points**.
+
+### 11.4 Interpretation
+
+This checks segment sensitivity at **two points**; it is not a proof of uniform convergence everywhere. Near heat-exchanger pinch, pseudo-critical \(c_p\) features, mixed phases or branch changes, numerical resolution and EOS interpolation may demand much finer treatment. A future engineering claim should test event/phase boundaries, root-conditioned states and a spatial or finite-volume refinement strategy.
+
+The numerical evidence is preserved in \`docs/G33_NUMERICAL_VERIFICATION.md\`, \`docs/G33_REFERENCE_PROPERTIES_AND_CONVERGENCE.md\`, and associated CI examples.
+
+---
+
