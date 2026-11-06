@@ -253,6 +253,7 @@ jobs:
           python -c "from sco2_braytonbench import IdealGasFixture, CycleInputs, PressureLosses, solve_cycle; from sco2_braytonbench.thermal_dynamics import ThermalWall, thermal_wall_step, ThermalStepInput; w=ThermalWall(1e4,50.,30.); r=thermal_wall_step(w,300.,ThermalStepInput(400.,280.,30.)); assert abs(r.energy_residual_j) < 1e-8"
           python examples/analytic_fixture_cycle.py
           python examples/thermal_wall_step_response.py
+          python examples/waste_heat_bypass_pi_comparison.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
