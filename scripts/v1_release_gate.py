@@ -59,13 +59,20 @@ MUST_SHIP_SDIST = (
     "scripts/v1_release_gate.py",
 )
 MANUAL_BLOCKERS = (
-    "Required stacked PRs #22, #23, #24 and #25 are not yet independently reviewed and integrated.",
-    "A v1.0.0-rc1 freeze/tag has not been authorized, tested or issued.",
-    "External data source rights, provenance and any redistribution restrictions require review.",
-    "Unresolved scientific interpretation and source-applicability limitations (including Kim Eq.24) remain documented.",
-    "Uncalibrated thermal wall/bypass and no measured CARBOSOLA/independent dynamic-cycle validation.",
-    "Real laboratory run approval, calibrated sensors and operating/safety evidence are absent.",
+    "Required stacked PRs #22, #23, #24 and #25 await scientific review and integration.",
+    "Version/commit/source freeze and v1.0.0-rc1 candidate approval not issued.",
+    "Third-party research source data redistribution/attribution rights require review.",
+    "Independent governing-equation, numerical reliability and API/limits review pending.",
+    "Full integrated-main final-commit CI and explicit reviewer sign-off pending.",
 )
+SCIENTIFIC_SCOPE_LIMITATIONS = (
+    "No experimentally calibrated CARBOSOLA or other whole-cycle dynamic predictions.",
+    "No CO2 fluid inventory, dynamic pressure/turbomachinery machinery-map or shaft-inertia model.",
+    "Lumped wall, UAs, gas mixing and PI gains are hypothetical except stated real-fluid property calls.",
+    "Unresolved Kim Eq.24 research interpretation excluded from stable default claims.",
+    "WP4 is prospective: no facility measurements, calibrated sensors, approval or research runs.",
+)
+
 
 
 def _sha256(path: Path) -> str:
@@ -243,6 +250,7 @@ def audit(root: Path, dist: Path, out: Path) -> dict[str, Any]:
         "scenario_evidence_sha256":_outputs(root),
         "software_artifact_checks_passed":True,
         "manual_scientific_and_governance_blockers":list(MANUAL_BLOCKERS),
+        "disclosed_scientific_scope_limitations":list(SCIENTIFIC_SCOPE_LIMITATIONS),
         "tag_or_zenodo_release_authorized":False,
         "release_promotion_gate":"BLOCKED_PENDING_INDEPENDENT_REVIEW",
     }
