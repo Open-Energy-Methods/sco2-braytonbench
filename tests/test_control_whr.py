@@ -81,7 +81,7 @@ def test_bypass_branch_mass_conservation_and_independent_energy_mixing():
         assert load.mass_flow_kg_s == pytest.approx(
             row.active_gas_flow_kg_s
         )
-        t_gas = 850.
+        t_gas = load.inlet_temperature_k  # Actual step source; may change.
         active_t_initial = row.plant.initial.hot_gas_outlet_temperature_k
         mixed = (
             (row.active_gas_flow_kg_s*active_t_initial
