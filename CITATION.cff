@@ -2,9 +2,10 @@ cff-version: 1.2.0
 message: "If you use this software, cite the repository and the specific released version."
 title: "sCO2-BraytonBench"
 type: software
+version: "0.5.0a0"
 authors:
   - family-names: Sivaprasadan
     given-names: Abhijith
 repository-code: "https://github.com/Open-Energy-Methods/sco2-braytonbench"
 license: "BSD-3-Clause"
-abstract: "Pre-alpha research prototype for thermodynamic verification of recuperated supercritical CO2 Brayton cycles. Not experimentally validated."
+abstract: "Alpha-stage numerical research software for steady sCO2 Brayton cycle and finite-source analyses, with explicitly synthetic thermal-wall transient/control examples and prospective laboratory-readiness tools. Not a validated CARBOSOLA plant model."
