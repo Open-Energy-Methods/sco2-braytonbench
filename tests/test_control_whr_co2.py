@@ -44,7 +44,7 @@ def test_real_co2_bypass_mixing_and_wall_PI_single_step():
     )
     controller=WallPI(
         setpoint_temperature_k=780.,kp_fraction_k=.02,
-        ki_fraction_k_s=.001,bias_fraction=.2,
+        ki_fraction_k_s=.001,bias_fraction=.35,
         tracking_gain_s=.2,integral_limit_fraction=.5
     )
     result=simulate_bypass_control(
@@ -58,9 +58,12 @@ def test_real_co2_bypass_mixing_and_wall_PI_single_step():
     )
     assert len(result)==1
     row=result[0]
-    assert row.active_gas_flow_kg_s==pytest.approx(80.)
-    assert row.diverted_gas_flow_kg_s==pytest.approx(20.)
-    assert row.bypass_fraction==pytest.approx(.2)
+    assert row.active_gas_flow_kg_s==pytest.approx(77.)
+    assert row.diverted_gas_flow_kg_s==pytest.approx(23.)
+    assert row.bypass_fraction==pytest.approx(.23)
+    assert row.requested_fraction==pytest.approx(.35)
+    assert row.applied_rate_fraction_s==pytest.approx(.03)
+    assert row.integral_fraction_after < 0.  # PI tracks achieved valve, not raw command
     assert row.mixed_gas_outlet_initial_k > (
         row.plant.initial.hot_gas_outlet_temperature_k
     )
