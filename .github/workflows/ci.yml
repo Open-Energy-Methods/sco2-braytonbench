@@ -293,3 +293,25 @@ jobs:
       - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
       - name: One real-CO2 fixed-wall UA and thermal transient step (synthetic)
         run: python -m pytest -q tests/test_dynamic_whr_co2.py
+
+  v1-wp3-source-bypass-pi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: WP3 physical bypass source mixing, antiwindup, actuator limits and causal PI tests
+        run: python -m pytest -q tests/test_control_whr.py
+      - name: Matched fixed bypass / PI synthetic control experiment and energy ledger
+        run: python examples/waste_heat_bypass_pi_comparison.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v1-wp3-source-bypass-pi-evidence
+          path: |
+            evidence/generated/v1_wp3/control_trace.csv
+            evidence/generated/v1_wp3/control_summary.json
+          if-no-files-found: error
