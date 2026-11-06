@@ -57,7 +57,8 @@ MUST_SHIP_SDIST = (
     "protocols/wp4/prospective_run_manifest.json",
     "examples/waste_heat_bypass_pi_comparison.py",
     "examples/wp4_readiness_audit.py",
-    "data/reference/mantilla2010_thermoml_density.csv",
+    "data/reference/mantilla2010_provenance.yaml",
+    "data/validation/stuttgart/README.md",
     "tests/test_experimental_readiness.py",
     "scripts/v1_release_gate.py",
 )
@@ -186,6 +187,9 @@ def _read_distributions(dist: Path, version: str) -> dict[str, Any]:
     for required in MUST_SHIP_SDIST + REQUIRED_DOCS:
         _check(any(name.endswith("/"+required) for name in names),
                f"sdist missing research/reproduction file: {required}")
+    embargoed = "data/reference/mantilla2010_thermoml_density.csv"
+    _check(not any(name.endswith("/"+embargoed) for name in names),
+           "sdist illegally/without approval bundles Mantilla ThermoML extracted data")
     return {
         "wheel": {"filename":wheel.name,"sha256":_sha256(wheel),
                   "size_bytes":wheel.stat().st_size},
