@@ -76,7 +76,7 @@ For `m=2±0.1 kg/s, cp=1000±20 J/kg/K, Tin=400±1 K, Tout=350±2 K` at `rho=0.2
 ## 5. Source/licensing and research-evidence audit
 
 - **Stuttgart:** original Mendeley Data landing page lists **CC BY 4.0** for Theologou et al. (2022) [10.17632/4mvk4nxrkz.1](https://data.mendeley.com/datasets/4mvk4nxrkz/1). The source-extracted 54-run/2,508-axial-record tables require clear original attribution, adapted notice and source preservation. No claim of full independent HTC prediction: many correlations are outside their fitted envelope, and STU-001 source anomaly remains unchanged/quarantined.
-- **Mantilla ThermoML:** archive publisher permission is not explicit downstream grant for repackaging an entire 49-observation study. See [data-rights dossier](../DATA_RIGHTS_V1.md) and [issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27). Candidate source archive intentionally **excludes** the transcribed CSV pending written permission, while retaining provenance. Existing public Git visibility must be reviewed separately.
+- **Mantilla ThermoML:** archive publisher permission is not explicit downstream grant for repackaging an entire 49-observation study. See [data-rights dossier](../DATA_RIGHTS_V1.md) and [issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27). Current repository HEAD and candidate source archive intentionally **exclude** the transcribed CSV pending written permission, while retaining provenance and optional user-supplied test support. Earlier public Git revisions remain a historical-rights review issue.
 - **Kim (2019):** historical `Nu_fc` exponent sign ambiguity [issue #20](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/20) remains unresolved. Do not merge experimental [PR #19](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/19) into the stable v1 line without source confirmation. Equations/coefficients source copied as research hypotheses are not original-paper replication.
 - **Other source-model comparisons:** Friedman–Rapp is a 12-state *conceptual* comparator; underlying detailed EES plant is not recovered. The fixed 54-run Stuttgart benchmark with out-of-domain correlation performance is negative/limited evidence, not hardware prediction.
 
@@ -88,7 +88,7 @@ For `m=2±0.1 kg/s, cp=1000±20 J/kg/K, Tin=400±1 K, Tout=350±2 K` at `rho=0.2
 | Changed final WP5 branch after archive/quarantine and audit | **PENDING new head CI** until matching run completes. |
 | Final integrated `main` CI | **PENDING** until sequential merge commits exist. |
 | Current planned release version | **0.5.0a0**, not `1.0.0rc1` or `1.0.0`. |
-| Dataset redistribution | **PARTIAL:** Stuttgart CC BY confirmed; Mantilla archive remains blocked and excluded. |
+| Dataset redistribution | **PARTIAL:** Stuttgart CC BY confirmed; Mantilla 49-point file removed from HEAD and new source distributions, but historical Git rights remain unresolved. |
 | Independent *human* scientific and source licence review | **NOT DONE:** this AI-assisted adversarial desk review is not an independent qualified sign-off. |
 | Future experimental CO₂ cycle/thermal/control validation | **OUT OF SCOPE:** must remain transparently excluded from v1 research-software claims. |
 | Tag/Zenodo DOI | **NO RELEASE AUTHORIZED** before independent review and permission resolution. |
