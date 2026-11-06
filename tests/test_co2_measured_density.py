@@ -12,6 +12,18 @@ pytest.importorskip("CoolProp", reason="requires real-fluid CI extras")
 from CoolProp.CoolProp import PropsSI
 
 CSV = Path(__file__).resolve().parents[1] / "data/reference/mantilla2010_thermoml_density.csv"
+# The full 49-point journal-publisher sourced ThermoML transcription is
+# intentionally excluded from redistributable candidate sdists until
+# specific downstream rights are cleared (see issue #27). The original
+# source Git checkout still runs this real-measurement test. An installed
+# source archive without that third-party dataset skips explicitly rather
+# than silently substituting synthetic density data.
+if not CSV.is_file():
+    pytest.skip(
+        "Mantilla NIST ThermoML observations not distributed in this source "
+        "archive pending publisher reuse rights (issue #27)",
+        allow_module_level=True,
+    )
 
 def observations():
     with CSV.open(newline="") as f:
