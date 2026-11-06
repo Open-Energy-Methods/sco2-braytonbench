@@ -22,6 +22,34 @@ turbomachinery dynamics or PI/MPC control**. Run the illustrative
 synthetic step-response CSV/JSON (after installing `pip install -e .`).
 The original stable six-state steady-state calculations remain distinct.
 
+### WP2b — finite-source storage coupled to the steady Brayton power block
+
+The [WP2b physical specification](docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md)
+documents an experimental **thermal transient** connecting three
+nonidentical energy paths: finite hot waste gas → dynamic lumped
+thermal wall → an installed-UA CO₂ heater → quasi-steady recuperated
+six-state Brayton cycle. The real thermal wall temperature is solved
+from its stored-energy differential equation, not a sequence of
+independent steady-state temperature inputs.
+
+`src/sco2_braytonbench/dynamic_whr.py` uses a separately rated,
+isothermal wall-to-CO₂ UA so that the already-counted cycle heater
+duty is the **only** heat leaving the wall. Matched RK4 stage quadrature
+records integrated gas/wall/cooler/net-shaft energies, with an
+independently derived ideal-gas/zero-recuperator closed-form test.
+
+```bash
+python -m pip install -e '.[test]'
+python -m pytest -q tests/test_dynamic_whr.py
+python examples/waste_heat_wall_coupled_cycle.py
+```
+
+This is **not a full dynamic CO₂ Brayton-cycle model**: compressor
+inlet, pressure, mass flow, machine efficiencies and recuperator remain
+algebraic/prescribed, cooler medium is not an inventory, and all wall
+capacity/UAs, loads and properties in the example are synthetic. There
+is no CARBOSOLA facility calibration, valve, PI or MPC controller.
+
 ## What is implemented
 
 - SI-unit six-state recuperated Brayton **steady-state** calculation.
