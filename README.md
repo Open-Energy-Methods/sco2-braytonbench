@@ -80,6 +80,34 @@ an *artificial ideal gas*, not experimentally validated CO₂ or CARBOSOLA.
 There are no CO₂ mass/pressure inventories, calibrated valve flow maps,
 safety interlocks, plant-identified controller gains, or MPC.
 
+### WP4 — prospective laboratory measurement and validation readiness
+
+The [WP4 experimental-readiness protocol](docs/WP4_EXPERIMENTAL_READINESS_PROTOCOL.md)
+now specifies a *proposed*, staged campaign for testing finite-source
+thermal storage and the WP3 wall-temperature controller against future
+facility observations. It introduces **35 candidate measurement/data tags**
+and **13 proposed** desk, steady, transient, control and sealed-holdout
+cases in `protocols/wp4/`. **No tag is confirmed installed/calibrated,
+no run is approved and no measured CARBOSOLA data were supplied.**
+
+An [experimental-readiness utility](src/sco2_braytonbench/experimental_readiness.py)
+checks SI channel schemas, run and sample identifiers, long-format DAQ
+quality flags/missing/timing gaps, unconfirmed standard uncertainties,
+proposed campaign completeness, linearized **constant-cp gas** sensible
+heat-duty uncertainty with explicitly correlated temperatures, and a
+local parameter-sensitivity *rank* diagnostic. This is a conservative
+data-quality/preparation tool, **not** sensor calibration, real-CO₂
+near-critical uncertainty propagation or an installed experiment.
+
+```bash
+python -m pytest -q tests/test_experimental_readiness.py
+python examples/wp4_readiness_audit.py
+```
+
+The audit writes machine-readable **readiness blockers** and an
+explicitly synthetic metrology arithmetic example. It cannot turn
+the document into real experiments or grant facility operating permission.
+
 ## What is implemented
 
 - SI-unit six-state recuperated Brayton **steady-state** calculation.

@@ -1,0 +1,14 @@
+{
+  "schema_version": "wp4-1",
+  "run_id": "PROPOSED-WP4-NOT-EXECUTED",
+  "data_class": "proposed",
+  "facility_id": null,
+  "p_and_id_revision": null,
+  "run_authorization_ref": null,
+  "raw_sha256": null,
+  "instrument_register_sha256": null,
+  "calibration_manifest_ref": null,
+  "time_sync_record_ref": null,
+  "approval_review_ref": null,
+  "split_role": "unassigned"
+}
