@@ -102,13 +102,22 @@ Local identifiability: build normalized output/parameter sensitivity matrix `S_i
 
 **Minimum scientific acceptance:** complete calibration provenance, stability/equilibrium of declared steady windows, synchronized inputs/outputs, independent measurement of all relevant balance terms, an explicit uncertainty budget, immutable raw files, traceable run/operating point IDs, no unrecorded imputation, run-group held-out prediction and a posterior residual/coverage report. Forecast metrics cannot be compared if facility and model topologies differ.
 
-## 7. Files, execution and release meaning
+## 7. Raw-run provenance and leak-free validation bookkeeping
+
+The **prospective (never executed)** [run manifest template](../protocols/wp4/prospective_run_manifest.json) records a run ID, data class, facility and P&ID revision references, authorization reference, raw-data SHA256, channel register SHA256, certificate/timing evidence and predeclared run split. All actual evidence fields are deliberately **null**. `validate_provenance_manifest` checks format and blocks a purported *measured* run with missing references, but **cannot authenticate** referenced certificates, actual instrument installation, facility approval, file integrity or experiment completion. Even a syntactically complete measured manifest reports that external verification remains outstanding.
+
+`audit_run_partition` requires three separate lists of **whole run or physical family IDs** for fitting, tuning and a predeclared sealed final holdout. It rejects shared/duplicate run IDs and empty groups; it cannot prove that two differently named IDs are physically independent or that a researcher never inspected the holdout. Such independent scientific controls require a steward-controlled registry and review.
+
+Once real instrumentation and authorization are secured, store immutable raw datasets with independent SHA256 files, approved P&ID and sensor maps, calibration versions, timebase and quality flags. Raw data should remain preserved when reduced/filtered data are created, with all filters logged. Do not include real sensitive plant information or access-controlled engineering records in the public repository without written permission.
+
+## 8. Files, execution and release meaning
 
 ```text
 protocols/wp4/measurement_channels.csv       35 proposed channels
 protocols/wp4/prospective_test_matrix.csv     13 prospective cases
 protocols/wp4/uncertainty_register.csv        no supplied calibration accuracies
 protocols/wp4/synthetic_format_fixture.csv   synthetic parser tests only
+protocols/wp4/prospective_run_manifest.json   unexecuted/non-authorized metadata template
 src/sco2_braytonbench/experimental_readiness.py
 tests/test_experimental_readiness.py
 examples/wp4_readiness_audit.py              produces machine report (not plant results)
