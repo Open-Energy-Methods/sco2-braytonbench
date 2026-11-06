@@ -427,3 +427,99 @@ def experimental_readiness_gate(
         "blockers":blockers,
         "required_tag_count":len(set(tags)),
     }
+
+
+def validate_provenance_manifest(manifest: dict[str, object]) -> dict[str, object]:
+    """Structural provenance audit; NEVER authenticates uploaded evidence.
+
+    Referenced calibration certificates, safety permits and file hashes
+    must be checked *externally* by the facility/data steward. Supplying
+    nonempty identifiers is necessary but not sufficient for trust.
+    """
+    required = {
+        "schema_version", "run_id", "data_class", "facility_id",
+        "p_and_id_revision", "run_authorization_ref", "raw_sha256",
+        "instrument_register_sha256", "calibration_manifest_ref",
+        "time_sync_record_ref", "approval_review_ref", "split_role",
+    }
+    if not isinstance(manifest, dict) or set(manifest) != required:
+        raise DomainError("WP4 provenance manifest field schema mismatch")
+    if manifest["schema_version"] != "wp4-1":
+        raise DomainError("unsupported WP4 provenance version")
+    if not isinstance(manifest["run_id"], str) or not manifest["run_id"]:
+        raise DomainError("missing provenance run identifier")
+    kind = manifest["data_class"]
+    if kind not in {"proposed", "synthetic", "measured"}:
+        raise DomainError("unknown data provenance class")
+    if manifest["split_role"] not in {
+        "unassigned", "training", "selection", "sealed_holdout"
+    }:
+        raise DomainError("unknown data split role")
+    missing = []
+    if kind == "measured":
+        from string import hexdigits
+        fields = (
+            "facility_id", "p_and_id_revision", "run_authorization_ref",
+            "calibration_manifest_ref", "time_sync_record_ref",
+            "approval_review_ref"
+        )
+        missing += [key for key in fields if not (
+            isinstance(manifest[key], str) and manifest[key].strip()
+        )]
+        for field in ("raw_sha256", "instrument_register_sha256"):
+            hash_value = manifest[field]
+            if (not isinstance(hash_value, str) or len(hash_value) != 64
+                    or any(char not in hexdigits for char in hash_value)):
+                missing.append(field)
+        if missing:
+            raise DomainError(
+                "measured provenance missing structural evidence refs: "
+                + ",".join(missing)
+            )
+    else:
+        # A proposed/synthetic manifest cannot masquerade as actual
+        # physical rig data with signed authorization references.
+        for field in ("raw_sha256", "run_authorization_ref",
+                      "approval_review_ref", "calibration_manifest_ref"):
+            if manifest[field] not in (None, ""):
+                raise DomainError(
+                    f"unmeasured manifest must not assert {field}"
+                )
+    return {
+        "run_id":manifest["run_id"],
+        "data_class":kind,
+        "declared_split_role":manifest["split_role"],
+        "structurally_complete_for_external_review":kind=="measured",
+        "actual_authorization_or_calibration_verified":False,
+        "scientific_validation_performed":False,
+    }
+
+
+def audit_run_partition(
+    groups: dict[str, list[str]]
+) -> dict[str, object]:
+    """Reject group leakage when separating parameter fit/tune/final holdout.
+
+    A group ID represents a complete continuous experimental run or
+    physical run family, NOT randomly chosen individual time samples.
+    """
+    if set(groups) != {"training", "selection", "sealed_holdout"}:
+        raise DomainError("run partition must declare training, selection, sealed_holdout")
+    combined: list[str] = []
+    sizes = {}
+    for name in ("training", "selection", "sealed_holdout"):
+        values = groups[name]
+        if (not isinstance(values, list) or not values
+                or any(not isinstance(v,str) or not v.strip() for v in values)):
+            raise DomainError(f"empty/malformed run group: {name}")
+        if len(values) != len(set(values)):
+            raise DomainError(f"duplicate run group in {name}")
+        combined.extend(values)
+        sizes[name]=len(values)
+    if len(combined)!=len(set(combined)):
+        raise DomainError("same run appears in training/selection/holdout")
+    return {
+        "groups":sizes, "whole_run_ids_disjoint":True,
+        "blind_holdout_not_access_verified":True,
+        "note":"Partition check only; physical run-family grouping and sealing need independent review",
+    }
