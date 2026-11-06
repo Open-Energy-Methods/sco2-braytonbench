@@ -137,6 +137,18 @@ independent scientific review**. Tagging v1.0 remains blocked pending
 the actual full-head green test results, integration of stacked PRs
 and a documented independent acceptance decision.
 
+Source dataset and redistribution rights are inventoried in the
+[release data-rights dossier](docs/DATA_RIGHTS_V1.md): Stuttgart's
+adapted experiment tables are attributed under the source CC BY 4.0
+licence, while the 49-point Mantilla NIST ThermoML transcription is
+**withheld from candidate release source distributions** pending a
+specific publisher/authorized-rights decision
+([issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27)).
+The current source checkout already contains that historical
+transcription; public Git visibility does not itself establish reuse
+permission. All software releases remain blocked on licence review and
+a separate qualified reviewer decision.
+
 ## What is implemented
 
 - SI-unit six-state recuperated Brayton **steady-state** calculation.
