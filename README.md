@@ -4,7 +4,13 @@
 
 Maintained under [Open Energy Methods](https://github.com/Open-Energy-Methods).
 
-> **Research status: 0.5.0-alpha reconstruction — not a validated sCO₂ power-cycle model.** The original v0.5 executable package reported in prior work was not available for direct import; this initial repository implementation was reconstructed from the available v0.4 specifications and the two screenshot-audited papers. The local tests use an artificial constant-property fluid unless otherwise stated.
+> **Research status: 0.5.0a0 (alpha) — numerically verified research software, not an experimentally validated sCO₂ power-cycle or CARBOSOLA plant model.** The core solver has dedicated real-CoolProp test jobs; the thermal-wall, source-bypass/PI and experimental-readiness examples remain explicitly synthetic or prospective. No complete dynamic CO₂ mass/pressure inventory or industrial controller is claimed.
+
+## Current comprehensive technical report
+
+The **[6 November 2026 comprehensive research, engineering and verification report](docs/reports/2026-11-06/sco2-braytonbench-comprehensive-research-report.md)** is the current, full-length technical record of the project. It covers the original G0–G3.5 research, Stuttgart H1a–H1d evidence, integrated WP0–WP5 models, governing equations, numerical results, optional measured-density rights cleanup, 20/20 integrated-main CI, reproducibility and the outstanding external-review gates. The [report index](docs/reports/README.md) distinguishes dated evidence from the historical 5 November snapshot.
+
+**Verified baseline:** main `8df1711a425e21da342bd3f401da61a1375bbc0a`, [Actions 42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) 20/20 green. No v1.0 tag or DOI issued. The 49-point Mantilla ThermoML transcription has been removed from current HEAD and redistributed archives while historical reuse and independent human scientific review remain unresolved ([#27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27), [#28](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/28)).
 
 ## v1.0 research release programme — work in progress
 
@@ -13,14 +19,13 @@ and [requirements/evidence matrix](docs/V1_0_VERIFICATION_MATRIX.md) document
 what **would** be required for a stable software release; **no v1.0 release
 or CARBOSOLA experimental validation currently exists**.
 
-An isolated [analytical lumped thermal-wall demonstration](docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md)
-is being developed as the **first primitive** for later transient work.
-It has real time dependence and integrated stored-energy accounting, but
-**does not model CO₂ mass inventory, transient Brayton cycle pressures,
-turbomachinery dynamics or PI/MPC control**. Run the illustrative
-`python examples/thermal_wall_step_response.py` to produce a reproducible
-synthetic step-response CSV/JSON (after installing `pip install -e .`).
-The original stable six-state steady-state calculations remain distinct.
+The [exact lumped thermal-wall model](docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md)
+is implemented and extended by the explicitly synthetic [finite-source
+thermal coupling](docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md) and [sampled
+bypass PI](docs/G5_WP3_BYPASS_PI_CONTROL.md). **None models a full dynamic
+CO₂ mass/pressure inventory, rotating-shaft dynamics, identified valve
+hydraulics or authorised plant control.** The full six-state cycle is
+solved algebraically within the transient thermal surrogate.
 
 ### WP2b — finite-source storage coupled to the steady Brayton power block
 
