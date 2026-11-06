@@ -116,6 +116,11 @@ def test_reverse_signed_heat_flow_is_allowed():
     (1000., float("nan"), 30.),
     (1000., float("inf"), 30.),
     (1000., 0., 0.),
+    (1.e308, 5.e-324, 0.),
+    (5.e-324, 1.e308, 0.),
+    ("bad", 50., 30.),
+    (1000., None, 30.),
+    (1000., True, 30.),
 ])
 def test_invalid_wall_physics_is_rejected(capacity, kh, kc):
     with pytest.raises(DomainError):
@@ -130,6 +135,8 @@ def test_invalid_wall_physics_is_rejected(capacity, kh, kc):
     (500., 280., float("nan")),
     (500., 280., float("inf")),
     (float("inf"), 280., 5.),
+    ("500", 280., 5.),
+    (500., 280., None),
 ])
 def test_invalid_boundary_inputs_are_rejected(hot, cold, duration):
     with pytest.raises(DomainError):
@@ -143,6 +150,8 @@ def test_invalid_boundary_inputs_are_rejected(hot, cold, duration):
     (300., -1.),
     (300., float("nan")),
     (300., float("inf")),
+    (300., "0"),
+    ("300", 0.),
 ])
 def test_invalid_initial_states_and_times_are_rejected(initial, start):
     with pytest.raises(DomainError):
