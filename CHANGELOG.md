@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — WP3 source-gas bypass and sampled PI (2026-11-06)
+
+- Adds finite hot-gas bypass **mass split**, uncooled branch return, constant-cp source enthalpy mixing, and wall/cycle first-law checks against the **total** source stream.
+- Adds causal sampled wall-temperature PI with negative thermal-gain sign, position/rate limits, minimum flow, tracking back-calculation and bounded integral state. Fixed-bypass and PI compare on identical source scenarios.
+- Adds independent analytical fixture tests (source mass/enthalpy, rate, anti-windup, no future-lookahead, infeasibility); matched synthetic scenario machine-readable CSV/JSON; separate real-CoolProp numerical smoke.
+- The synthetic example shows a tracking/energy-output trade-off, not universal controller optimality.
+- **No** industrial hardware/turbomachinery actuator maps, full CO₂ inventory dynamics or CARBOSOLA measurement validation. Package remains `0.5.0a0`.
+
 ## Unreleased — WP2b finite-source / storage / quasi-steady cycle (2026-11-06)
 
 - Added finite constant-cp exhaust-flow gas→wall UA, genuinely dynamic lumped wall energy state, and a separate **installed wall→CO₂ UA** solved against the existing six-state Brayton heater duty. No double-counted direct gas→CO₂ heater.
