@@ -413,3 +413,26 @@ jobs:
             evidence/generated/v1_wp3/
             evidence/generated/v1_wp4/
           if-no-files-found: warn
+
+  tes-schumann-analytic-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: Conservative packed-bed core and independent Schumann grid tests
+        run: python -m pytest -q tests/test_thermal_storage.py
+      - name: Generate N=16..128 grid and independent temporal refinement evidence
+        run: python scripts/tes_schumann_convergence.py --out evidence/generated/tes_v03
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v03-schumann-conservative-mathematical-evidence
+          path: |
+            evidence/generated/tes_v03/tes_grid_convergence.csv
+            evidence/generated/tes_v03/tes_temporal_sensitivity.csv
+            evidence/generated/tes_v03/tes_verification_manifest.json
+          if-no-files-found: error
