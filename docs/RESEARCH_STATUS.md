@@ -1,5 +1,8 @@
 # Research and verification status
 
+> **Historical status snapshot (5 November 2026).** Sections below describe the G0–G3 milestone at that date and contain older statements such as “G4/G5 not implemented” that are no longer current on the stacked v1 development branches. On 6 November, **WP2a** introduced an analytic thermal control volume, **WP2b** a finite gas→wall→quasi-steady cycle dynamic example, **WP3** a sampled synthetic bypass PI and **WP4** a prospective metrology plan; these are **not** a full dynamic CO₂ inventory, calibrated industrial controller or experimental facility result. For current integration/validation status, consult [v1 release acceptance](WP5_RELEASE_ACCEPTANCE.md), [technical audit](V1_TECHNICAL_AUDIT_2026-11-06.md) and [data-rights inventory](DATA_RIGHTS_V1.md). Do not cite this historical document as the current software implementation status.
+
+
 Updated: 2026-11-05. **Pre-alpha research software — PR #1 remains draft.**
 
 This independent repo is not an extension of HTHP-ControlBench
