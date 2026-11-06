@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — WP2b finite-source / storage / quasi-steady cycle (2026-11-06)
+
+- Added finite constant-cp exhaust-flow gas→wall UA, genuinely dynamic lumped wall energy state, and a separate **installed wall→CO₂ UA** solved against the existing six-state Brayton heater duty. No double-counted direct gas→CO₂ heater.
+- RK4 integration with corresponding gas, wall, CO₂ heater, shaft and cooler time-integral ledger, step-size gate and explicit infeasible-root/approach/stack failures.
+- Independent constant-property/zero-recuperator exact-limit checks, piecewise source temperature/mass-flow disturbance example, machine-readable CSV/JSON evidence and optional real-CoolProp numerical smoke in CI.
+- Still no CO₂ fluid inventory, pressure transients, physical actuator, PI/MPC, measured UAs or CARBOSOLA dynamic validation. Remains `0.5.0a0` until release gates pass.
+
 ## Unreleased — first v1.0 research-foundation increment (2026-11-06)
 
 - Added a scoped v1.0 release contract and evidence traceability matrix; no change to package version (`0.5.0a0`), tag, measured hardware claims, or stable industrial model status.
