@@ -9,6 +9,7 @@ from sco2_braytonbench.experimental_readiness import (
     experimental_readiness_gate, load_sensor_register, load_test_matrix,
     load_uncertainty_register, local_sensitivity_rank,
     sensible_duty_uncertainty, validate_long_series,
+    audit_run_partition, validate_provenance_manifest,
 )
 
 from pathlib import Path
@@ -259,3 +260,59 @@ def test_references_are_not_plant_estimates_and_no_confirmation_is_inferred():
     )
     assert not g["ready_for_measured_validation"]
     assert len(g["blockers"])>=35
+
+
+def test_unexecuted_provenance_manifest_cannot_certify_measured_data():
+    import json
+    manifest=json.loads((P/"prospective_run_manifest.json").read_text())
+    status=validate_provenance_manifest(manifest)
+    assert status["data_class"]=="proposed"
+    assert status["actual_authorization_or_calibration_verified"] is False
+    assert status["scientific_validation_performed"] is False
+    assert status["structurally_complete_for_external_review"] is False
+
+
+def test_measured_manifest_requires_all_named_evidence_refs_without_claiming_validation():
+    import json
+    manifest=json.loads((P/"prospective_run_manifest.json").read_text())
+    manifest.update({"data_class":"measured","run_id":"MEASURED-TEST-ONLY"})
+    with pytest.raises(DomainError,match="missing structural evidence refs"):
+        validate_provenance_manifest(manifest)
+    manifest.update({
+        "facility_id":"HYPOTHETICAL", "p_and_id_revision":"test-PID",
+        "run_authorization_ref":"test-approval", "raw_sha256":"a"*64,
+        "instrument_register_sha256":"b"*64,
+        "calibration_manifest_ref":"test-certificate",
+        "time_sync_record_ref":"test-clock","approval_review_ref":"test-review",
+        "split_role":"sealed_holdout"
+    })
+    # These fabricated strings are a *software fixture only*. Even a
+    # syntactically complete manifest MUST NOT pass scientific approval.
+    result=validate_provenance_manifest(manifest)
+    assert result["structurally_complete_for_external_review"] is True
+    assert result["actual_authorization_or_calibration_verified"] is False
+    assert result["scientific_validation_performed"] is False
+
+
+@pytest.mark.parametrize("wrong",[
+    {"training":["r1"],"selection":["r2"],"sealed_holdout":["r1"]},
+    {"training":["r1","r1"],"selection":["r2"],"sealed_holdout":["r3"]},
+    {"training":[],"selection":["r2"],"sealed_holdout":["r3"]},
+    {"training":["r1"],"selection":["r2"]},
+])
+def test_holdout_run_overlap_and_empty_partitions_fail_closed(wrong):
+    with pytest.raises(DomainError):
+        audit_run_partition(wrong)
+
+
+def test_independent_whole_run_group_partition_not_individual_time_samples():
+    result=audit_run_partition({
+        "training":["SYNTH-CASE-A","SYNTH-CASE-B"],
+        "selection":["SYNTH-CASE-C"],
+        "sealed_holdout":["SYNTH-CASE-D"]
+    })
+    assert result["whole_run_ids_disjoint"] is True
+    assert result["groups"]=={
+        "training":2,"selection":1,"sealed_holdout":1
+    }
+    assert result["blind_holdout_not_access_verified"] is True
