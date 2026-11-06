@@ -15,7 +15,10 @@ import os
 import platform
 import re
 import tarfile
-import tomllib
+try:
+    import tomllib  # Python >=3.11
+except ModuleNotFoundError:  # Python 3.10 metadata audit
+    import tomli as tomllib
 import zipfile
 from pathlib import Path
 from typing import Any
