@@ -759,3 +759,397 @@ The broader lesson applies to every research dataset: scientific credit, numeric
 
 ---
 
+# Part IV — Time-dependent thermal physics and source-side control
+
+## 18. WP0/WP1 — stable evidence boundary and numerical-domain contracts
+
+### 18.1 Why an explicit release contract came first
+
+A numerical prototype can accumulate attractive features without a defensible answer to “What is this software qualified to predict?” WP0 forced that distinction into a version-controlled [v1.0 release contract](../../V1_0_RELEASE_CONTRACT.md). It defined a **research-software reproducibility** goal and refused to treat an experimentally uncalibrated model as an industrial sCO₂ digital twin.
+
+The release scope is layered:
+
+1. A stable numerical cycle and heat-transfer research foundation.
+2. Explicit finite-source and cooler boundary assumptions.
+3. Synthetic thermal storage/control models with domain and numerical checks.
+4. Source-labelled, independently reviewable experimental-readiness protocols.
+5. Released source, tests and evidence that are legally redistributable.
+6. Strong claims beyond these boundaries stay experimental or external.
+
+**WP0 is a governance requirement**, not a physical differential equation. Its success is a consistent scientific claim that a maintainer can defend.
+
+### 18.2 WP1 numerical hardening
+
+WP1 added strict guards around finite/nonfinite inputs and physically meaningful numerical domains. Examples include positive cycle mass flow, admissible temperatures and pressures, nonnegative/existing UA inputs, integer segment counts, feasible local exchanger approaches, valid LMTD computations and expected property transformations.
+
+This matters because a near-critical real-fluid solver can return an apparently finite result on the wrong branch if exception cases are too easily converted to successful outputs. A credible engineering tool should distinguish **infeasible physics**, **insufficient data**, **numerical nonconvergence** and **software implementation error**.
+
+### 18.3 Controlled numerical test hierarchy
+
+The research suite uses:
+
+- Independent ideal-gas limiting solutions.
+- Exact first-law algebraic relations that can be derived without the implementation.
+- Positive, negative and reversed heat-flow signs.
+- Small-step and multiple-step consistency.
+- Explicit failure tests for NaN, infinite, negative, zero or noninteger input domains where forbidden.
+- Real-CoolProp separate test jobs for the actual CO₂ property path.
+- Freshly installed package smoke tests, not just editable local imports.
+
+A passing test is considered strong **software evidence for the stated formulation**. It is not direct validation of equipment metal temperatures, turbine maps, source composition or plant-control safety.
+
+## 19. WP2a — exact single-lumped-wall thermal storage kernel
+
+### 19.1 Physical control volume
+
+The first genuine dynamic state introduced on the v1 development line is an **isothermal lumped solid wall** with thermal capacitance \(C_w\) and separate hot- and cold-side thermal conductances:
+
+\[
+C_w\frac{dT_w}{dt}
+=K_h(T_h-T_w)-K_c(T_w-T_c).
+\]
+
+Dimensions: \(C_w\) in J/K; \(K_h,K_c\) in W/K; \(T\) in kelvin; signed \(Q\) in W. The wall can store energy even when incoming/outgoing heat rates differ at an instant.
+
+**Physical assumptions:** uniform wall temperature, constant capacitance, prescribed reservoir temperatures during a step, fixed conductances, no distributed axial conduction, casing losses, material phase change or fluid pressure inventory.
+
+### 19.2 Exact constant-input solution
+
+Let \(K_\Sigma=K_h+K_c\). For positive total conductance:
+
+\[
+T_{eq}=\frac{K_hT_h+K_cT_c}{K_\Sigma},\qquad
+\tau=\frac{C_w}{K_\Sigma}.
+\]
+
+At constant hot/cold inputs over a step \(\Delta t\):
+
+\[
+T_{w,1}=T_{eq}+(T_{w,0}-T_{eq})e^{-\Delta t/\tau}.
+\]
+
+The integration should use a numerically stable representation near \(\Delta t/\tau\to0\), rather than subtracting two almost equal floating-point exponentials. The implementation uses an \`expm1\`-based small-step form to preserve energy accuracy.
+
+### 19.3 Integrated heat versus wall energy
+
+The wall’s mean temperature over the interval is:
+
+\[
+\overline{T_w}
+=T_{eq}+(T_{w,0}-T_{eq})\,
+  \frac{1-e^{-\Delta t/\tau}}{\Delta t/\tau}.
+\]
+
+Then
+
+\[
+E_h=K_h(T_h-\overline{T_w})\Delta t,\qquad
+E_c=K_c(\overline{T_w}-T_c)\Delta t
+\]
+
+and
+
+\[
+E_h-E_c=C_w(T_{w,1}-T_{w,0}).
+\]
+
+This identity includes the sign convention: if heat flows backwards under a cold wall or reversed temperature order, the energy must not be artificially clipped to zero.
+
+### 19.4 Why time stepping matters
+
+An isolated exact wall kernel tests whether thermal capacitance is treated as storage rather than as a tuning constant in unrelated steady-state solves. It is analytically verifiable because the ODE is linear for constant reservoirs/conductances. The exact answer also provides a standard for assessing a more complicated coupled integrator.
+
+### 19.5 What WP2a does not contain
+
+WP2a by itself does not know the CO₂ turbine inlet state, gas stack temperature, or Brayton net power. It therefore must not be described as a “dynamic sCO₂ power plant simulation.” That system coupling is the distinct WP2b task.
+
+Source: \`src/sco2_braytonbench/thermal_dynamics.py\`, \`tests/test_thermal_dynamics.py\`, \`examples/thermal_wall_step_response.py\`, \`docs/G4_THERMAL_CONTROL_VOLUME_SCOPE.md\`.
+
+## 20. WP2b — finite gas source, thermal-wall inventory and quasi-steady Brayton cycle
+
+### 20.1 The new physical energy path
+
+WP2b introduced two separate heat-transfer interfaces rather than reusing a direct gas→CO₂ heat input:
+
+~~~text
+Waste gas, finite m_g and cp_g
+        │
+        │ UA_g,wall (gas cools to a computed T_out)
+        ▼
+Single thermally stored solid-wall state T_w, C_w
+        │
+        │ UA_wall,CO2 (isothermal wall to CO₂ path)
+        ▼
+CO₂ heater, existing state 3 → 4 enthalpy gain
+        │
+        ▼
+Algebraic six-state recuperated Brayton power block
+        │
+        ├── W_t - W_c = net modelled shaft power
+        └── Q_cooler = rejected heat
+~~~
+
+There is **no second direct gas-to-CO₂ heater duty added**. The wall-to-CO₂ transfer is exactly the cycle's state-3→4 heater input at every model evaluation.
+
+### 20.2 Constant-\(c_p\) finite source to wall
+
+For active hot gas flowing over an assumed isothermal wall:
+
+\[
+C_g=\dot m_gc_{p,g},\quad
+\epsilon_g=1-\exp(-UA_{g,w}/C_g),
+\]
+
+\[
+Q_{g,w}
+=C_g(T_{g,in}-T_w)\epsilon_g,\quad
+T_{g,out}=T_{g,in}-Q_{g,w}/C_g.
+\]
+
+This is the exact constant-property source-to-constant-wall exponential effectiveness relation, **not** a full finite-two-stream PCHE counterflow correlation. The wall and gas-side transfer coefficients remain assumed.
+
+The gas-source inlet temperature and mass flow may change between declared source intervals, creating a time-dependent load on the wall.
+
+### 20.3 Separate isothermal wall→CO₂ installed-UA equality
+
+The CO₂ heater duty is
+
+\[
+Q_{w,CO_2}=\dot m_{CO_2}(h_4-h_3).
+\]
+
+Given current wall temperature, the code finds a feasible \(T_4\) whose separately rated isothermal wall–CO₂ exchanger requires the specified installed UA:
+
+\[
+UA_{w,CO_2,required}(T_4)
+   =UA_{w,CO_2,installed}.
+\]
+
+A segmented local fluid path is evaluated from enthalpy and pressure states 3→4. Its required conductance is derived by summing segment heat-rate/LMTD terms using the wall-to-fluid temperature differences.
+
+The solver checks local approach, bracketing, unique feasible root and residual. It does not rely on an arbitrary *after-the-fact* heat factor to make first-law terms match.
+
+### 20.4 Stored energy and coupled numerical step
+
+The sole integrated differential state remains:
+
+\[
+C_w\dot T_w=Q_{g,w}(T_w,T_{g,in},\dot m_g)-Q_{w,CO_2}(T_w).
+\]
+
+At every RK4 stage, the quasi-steady Brayton equations are solved again for that stage's thermal wall temperature, producing \(T_4\), \(Q_{w,CO_2}\), cooler heat and predicted shaft power. This is a **differential–algebraic thermal-power surrogate** in practical interpretation, not a spatially distributed fluid dynamic/rotor system.
+
+The RK4 integration applies matched quadrature weights to the heat and work contributions. For each interval:
+
+\[
+E_{g,w}-E_{w,CO_2}=\Delta U_w,\qquad
+E_{w,CO_2}=E_{cooler}+E_{shaft},
+\]
+
+\[
+\boxed{E_{g,w}=\Delta U_w+E_{cooler}+E_{shaft}}.
+\]
+
+A balanced integrated residual checks implementation bookkeeping. **Time-discretisation convergence is a separate requirement**; one can write numerically consistent integrals of an inaccurate model. WP2b therefore also tests a closed-form constant-\(c_p\) limit and time-step refinement.
+
+### 20.5 Independently derived ideal-gas limit
+
+For zero recuperator heat exchange, the compressor outlet/CO₂ heater inlet \(T_3\) is fixed by an ideal-gas compression equation. With synthetic \(P_1=8\) MPa, \(P_2=24.25\) MPa, \(T_1=310\) K, \(R/c_p=0.2\), and compressor efficiency 0.89:
+
+\[
+T_3=310+
+\frac{310[(24.25/8)^{0.2}-1]}{0.89}
+=396.4919\ {\rm K}.
+\]
+
+For synthetic source 30 kg/s, \(c_{p,g}=1100\) J/(kg·K), gas-wall UA 40 kW/K; CO₂ 10 kg/s, \(c_p=1000\) J/(kg·K), wall–CO₂ UA 25 kW/K; wall capacitance 2 MJ/K:
+
+\[
+H_g=C_g(1-e^{-UA_{g,w}/C_g})=23{,}180.3415\ {\rm W/K},
+\]
+
+\[
+H_c=C_{CO_2}(1-e^{-UA_{w,CO_2}/C_{CO_2}})
+  =9{,}179.1500\ {\rm W/K}.
+\]
+
+At gas inlet 850 K, \(T_{w,0}=700\) K:
+
+\[
+T_{w,eq}
+=\frac{H_g(850)+H_cT_3}{H_g+H_c}
+=721.3571\ {\rm K},
+\quad
+\tau=\frac{2{,}000{,}000}{H_g+H_c}=61.8057\ {\rm s}.
+\]
+
+| Analytic property | Reference |
+|---|---:|
+| Initial \(T_4\) at 700 K wall | **675.0865 K** |
+| Wall equilibrium | **721.3571 K** |
+| Time constant | **61.8057 s** |
+| Wall temperature after 60 s constant source | **713.2673 K** |
+
+These values are **independently derived mathematical fixtures**, not measured CO₂ or CARBOSOLA values.
+
+### 20.6 Numerical disturbance example
+
+A 45-s hypothetical variable-source demonstration compares a constant-source baseline to cooler/hotter and flow-modified gas inputs on an identical time grid.
+
+The original CI example recorded wall end temperatures approximately **711.0451 K** (constant baseline) and **707.7506 K** (disturbed source). The combined source/wall/cycle integrated residual was on the order of \(10^{-7}\) J in these synthetic simulations. That tiny residual demonstrates consistent algebraic quadrature, not microjoule physical measurement accuracy.
+
+### 20.7 Real-fluid compatibility
+
+A separate CoolProp test constructs a feasible hypothetical CO₂ operating point and inverse-rates a wall-to-CO₂ UA against its real-fluid enthalpy path. It then solves at a nearby thermal wall state and checks the one-step first-law ledger.
+
+Passing such a test means the *algorithm* is compatible with nonideal thermophysical calls under selected domain conditions. It does not identify installed UAs, turbine maps or fluid inventories.
+
+### 20.8 Feasibility, integration and model limitations
+
+- Source stack-temperature floor and positive hot-gas/wall approach.
+- Local wall-to-CO₂ minimum temperature approach.
+- Physically feasible \(T_4\) bounds and bracketed UA inverse.
+- Finite/positive \(C_w\), \(c_p\), mass flow and installed thermal conductance.
+- Explicit step-size restriction relative to estimated thermal time scale.
+- Fail-closed behaviour on out-of-domain or nonunique roots.
+
+The real system may require source cp variation, radiation, heat leaks, axial metal gradients, gas-side flow-dependent UA, multiple wall zones, fluid phase effects and a dynamic coolant inventory. Those are **outside** the WP2b abstract model.
+
+Source: \`src/sco2_braytonbench/dynamic_whr.py\`, \`tests/test_dynamic_whr.py\`, \`tests/test_dynamic_whr_co2.py\`, \`docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md\`.
+
+## 21. WP3 — conserved waste-gas bypass and sampled wall-temperature PI
+
+### 21.1 Why a real heat/enthalpy path precedes control
+
+A controller that directly adjusts “heater power” without identifying which stream supplies that power can violate energy conservation or make physically unimplementable assumptions. WP3 instead introduced a clear mass-flow routing abstraction: a controlled fraction of the incoming hot gas **bypasses** the gas-to-wall heat-transfer branch and recombines downstream.
+
+The actual command is an idealised **mass fraction**, not a physical angle- or \(C_v\)-calibrated valve. Its distinction from hardware is explicit.
+
+### 21.2 Gas bypass mass and sensible enthalpy ledger
+
+For total source flow \(\dot m_g\) and bypass fraction \(b\):
+
+\[
+\dot m_{active}=(1-b)\dot m_g,\qquad
+\dot m_{bypass}=b\dot m_g.
+\]
+
+The source gas entering the bypass stays at \(T_{g,in}\). The active branch cools through the existing WP2b gas-to-wall UA. After recombination:
+
+\[
+T_{mix}=(1-b)T_{active,out}+bT_{g,in},
+\]
+
+for equal constant \(c_p\). Therefore:
+
+\[
+\dot m_gc_p(T_{g,in}-T_{mix})
+=\dot m_{active}c_p(T_{g,in}-T_{active,out})
+=Q_{g,w}.
+\]
+
+This independent identity guards against accidentally generating two source contributions when a bypass is opened.
+
+A real design must additionally model branch pressure drops, actuator authority, true source compositions, heat losses and variable cp; WP3 does none of those.
+
+### 21.3 Command sign and actuation constraints
+
+For wall setpoint \(T_{set}\) and wall temperature \(T_w\):
+
+\[
+e_k=T_{w,k}-T_{set}.
+\]
+
+A **positive** error means the wall is too hot, so the controller should **increase bypass** and reduce \(Q_{g,w}\). That sign is physically opposite to a controller that directly increases heater duty.
+
+The PI raw command is
+
+\[
+u^{raw}_k=b_{bias}+K_p e_k+I_k,
+\]
+
+then is clamped to \(0\le b\le b_{max}<1\). The next held position is also clamped against
+
+\[
+|b_k-b_{k-1}|\le r_{max}\Delta t.
+\]
+
+A minimum active-gas flow prevents total starvation of the gas-to-wall branch under the stated model.
+
+**Critical interpretation:** this is a **sample-to-sample movement bound** on the mass-fraction command. The simulation applies the next position for the entire source interval; it is **not** a differential model of a real valve continuously travelling at finite speed, nor a measured hydraulic actuator characteristic.
+
+### 21.4 Back-calculation anti-windup
+
+The PI integral state follows:
+
+\[
+I_{k+1}=\mathrm{clip}\left[
+I_k+K_i e_k\Delta t
++K_{aw}\Delta t(b_{actual,k}-u^{raw}_k),
+-I_{lim},I_{lim}\right].
+\]
+
+The tracking correction uses **achieved rate- and position-limited bypass**, not an impossible raw command. That helps avoid wind-up when the valve is saturated or cannot move as quickly as requested. The code also bounds the integral state and rejects an excessive \(K_{aw}\Delta t\) sample condition.
+
+No analytical global closed-loop stability proof is claimed. Controller gains are chosen for a synthetic demonstration, not identified from plant dynamics.
+
+### 21.5 Causality and legitimate open-loop comparison
+
+At each interval start, the controller may use the current wall temperature and its previous state. It does **not** receive future source-temperature/flow inputs. Tests modify future load profiles and assert that earlier PI commands remain unchanged.
+
+The open-loop and PI comparisons use the same initial wall state, source sequence, thermal hardware parameters and elapsed time. The only difference is the presence or absence of feedback. This preserves a fair within-model causal comparison, although it is not a blinded experimental trial.
+
+### 21.6 Physical limits
+
+Real plant bypass hardware may have significant pressure loss, hysteresis, temperature-dependent density, actuator lag, nonlinear position-to-flow calibration, sonic conditions and safety shutdown states. None is identified in the toy flow-fraction model. A true closed-loop operation design would require control-authority measurements and facility-specific protection logic.
+
+Source: \`src/sco2_braytonbench/control_whr.py\`, \`tests/test_control_whr.py\`, \`tests/test_control_whr_co2.py\`, and \`docs/G5_WP3_BYPASS_PI_CONTROL.md\`.
+
+## 22. WP3 numerical control outcome and its important trade-off
+
+### 22.1 The executed synthetic scenario
+
+An **artificial ideal-gas** model with zero installed recuperator UA, wall capacitance **2 MJ/K**, gas-wall UA **40 kW/K**, wall-CO₂ UA **25 kW/K**, total exhaust flow 30 kg/s and source gas cp 1100 J/(kg·K) was used. The prescribed source was 850 K in the first nine steps, then 880 K in the next nine steps—**18 steps × 5 s = 90 s**.
+
+Both baseline and PI start at wall **700 K**, setpoint 700 K and bypass fraction **0.15**.
+
+Representative PI coefficients: \(K_p=0.04\) fraction/K, \(K_i=0.0025\) fraction/(K·s), \(K_{aw}=0.20\) 1/s, with illustrative bias and integral limit. Position limit \(b_{max}=0.85\), per-step rate bound 0.025 fraction/s, minimum active branch flow 1 kg/s.
+
+### 22.2 Accuracy and recovered-shaft-energy metrics
+
+| Metric | Fixed bypass | Sampled wall PI | PI consequence |
+|---|---:|---:|---|
+| Interval count and duration | 18 / 90 s | 18 / 90 s | Matched scenario |
+| Duration-weighted **end-sample** wall RMSE | **11.4627966 K** | **1.7170154 K** | **85.02% lower** |
+| Trapezoid approximation to \(\int|e|dt\) | **812.851959 K·s** | **140.641923 K·s** | **82.70% lower** |
+| Time-integrated **net shaft** energy | **29.6939315 MJ** | **28.6139387 MJ** | **1.079993 MJ lower, 3.64% decrease** |
+| Integrated combined first-law residual | +8.20×10⁻⁸ J | −1.45×10⁻⁷ J | Consistent numerical bookkeeping |
+
+The RMSE is computed at interval endpoints, with each squared error duration-weighted. The absolute-error integral is only an endpoint trapezoid approximation. Neither metric is a continuous-time optimum guaranteed by the code.
+
+Net shaft energy represents integrated quasi-steady *turbine minus compressor* thermodynamic power, **not measured generator output**. There is no included motor/fan/coolant-pump parasitic energy penalty or physical valve actuator consumption.
+
+### 22.3 Trade-off: why better control gave less net work
+
+The PI achieves tighter wall-temperature tracking by diverting source gas rather than allowing the wall to absorb all incoming thermal energy. Some heat that could contribute to cycle power remains in the mixed exhaust. The lower recovered shaft energy is therefore **a physically expected cost**, not a hidden numerical failure.
+
+One can define an objective combining tracking error, net work, actuator motion, temperature safety margin, equipment wear and emissions. WP3 did **not** perform a validated multi-objective techno-economic optimisation. It only recorded one constrained controller scenario.
+
+### 22.4 First-law result is not independent plant performance
+
+The ~10⁻⁷ J numerical residual is small compared with multi-megajoule model energy terms because source, wall, cooler and shaft are evaluated from the same conservation-consistent stage model. It is a useful regression test for missing/doubled terms. It is not a measured first-law uncertainty or evidence that the assumed UA and controller gains have physical accuracy.
+
+### 22.5 What the WP3 study establishes
+
+- The source bypass has a defined physically traceable mass/enthalpy path.
+- The control sign and sample causality are testable.
+- Position/slew/integral constraints can be enforced and stress tested.
+- A matched synthetic scenario shows explicit temperature control versus heat-recovery trade-off.
+- Separate real-CoolProp smoke checks support numerical use of the bypass/cycle coupling.
+
+**It does not establish** universal PI superiority, field-tuned stability, safety, or a CARBOSOLA supervisory control implementation.
+
+Detailed source: \`docs/G5_WP3_RESULTS.md\` and the machine CSV/JSON from the dedicated WP3 CI artifact.
+
+---
+
