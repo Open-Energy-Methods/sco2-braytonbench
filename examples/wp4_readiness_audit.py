@@ -12,7 +12,8 @@ from sco2_braytonbench.experimental_readiness import (
     experimental_readiness_gate,
     load_sensor_register, load_test_matrix, load_uncertainty_register,
     validate_long_series, sensible_duty_uncertainty,
-    local_sensitivity_rank,
+    local_sensitivity_rank, validate_provenance_manifest,
+    audit_run_partition,
 )
 
 BASE=Path("protocols/wp4")
@@ -25,6 +26,15 @@ qc=validate_long_series(
     BASE/"synthetic_format_fixture.csv",
     channels,expected_run_id="SYNTH-WP4-001",max_gap_s=1.5
 )
+manifest_status=validate_provenance_manifest(json.loads(
+    (BASE/"prospective_run_manifest.json").read_text(encoding="utf-8")
+))
+holdout_fixture=audit_run_partition({
+    "training":["SYNTH-ONE","SYNTH-TWO"],
+    "selection":["SYNTH-THREE"],
+    "sealed_holdout":["SYNTH-FOUR"],
+})
+assert not manifest_status["actual_authorization_or_calibration_verified"]
 case_results=[]
 for case in matrix:
     required=case["required_tags"].split(";")
@@ -79,6 +89,8 @@ report={
         1 for u in uncertainties.values() if u.status=="confirmed"
     ),
     "synthetic_sample_format_qc":qc,
+    "prospective_manifest_status":manifest_status,
+    "toy_disjoint_run_partition":holdout_fixture,
     "synthetic_constant_cp_uncertainty_example":{
         "mass_flow_kg_s":2.,
         "cp_j_kg_k":1000.,
