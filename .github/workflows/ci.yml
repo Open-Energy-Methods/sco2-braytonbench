@@ -350,3 +350,66 @@ jobs:
             evidence/generated/v1_wp4/readiness_audit.json
             evidence/generated/v1_wp4/campaign_gate_summary.csv
           if-no-files-found: error
+
+  v1-wp5-release-candidate-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test release gate and install source-build dependencies
+        run: |
+          python -m pip install 'build>=1,<2' 'pytest>=8,<10'
+          python -m pytest -q tests/test_v1_release_gate.py
+      - name: Build wheel and sdist from identical source revision
+        run: python -m build --sdist --wheel
+      - name: Fresh install wheel and sdist separately
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/wp5-wheel-venv"
+          python -m venv "$RUNNER_TEMP/wp5-sdist-venv"
+          "$RUNNER_TEMP/wp5-wheel-venv/bin/python" -m pip install --no-deps dist/*.whl
+          "$RUNNER_TEMP/wp5-sdist-venv/bin/python" -m pip install dist/*.tar.gz
+          for kind in wheel sdist; do
+            workspace="$RUNNER_TEMP/wp5-$kind-workspace"
+            mkdir -p "$workspace"
+            cp -R examples protocols "$workspace/"
+            interpreter="$RUNNER_TEMP/wp5-$kind-venv/bin/python"
+            (
+              cd "$workspace"
+              env -u PYTHONPATH "$interpreter" -c "import importlib.metadata as md, sco2_braytonbench as x; from pathlib import Path; assert md.version('sco2-braytonbench') == '0.5.0a0'; assert Path(x.__file__).resolve().is_relative_to(Path('$RUNNER_TEMP/wp5-$kind-venv').resolve())"
+              env -u PYTHONPATH "$interpreter" examples/thermal_wall_step_response.py
+              env -u PYTHONPATH "$interpreter" examples/waste_heat_wall_coupled_cycle.py
+              env -u PYTHONPATH "$interpreter" examples/waste_heat_bypass_pi_comparison.py
+              env -u PYTHONPATH "$interpreter" examples/wp4_readiness_audit.py
+            )
+          done
+      - name: Compare numerical scenarios and produce immutable-input SHA256 manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/generated/v1_wp5
+          python scripts/v1_release_gate.py compare \
+            --reference "$RUNNER_TEMP/wp5-wheel-workspace" \
+            --candidate "$RUNNER_TEMP/wp5-sdist-workspace" \
+            --out evidence/generated/v1_wp5/wheel_sdist_numerical_comparison.json
+          cp -a "$RUNNER_TEMP/wp5-wheel-workspace/evidence/generated/." evidence/generated/
+          python scripts/v1_release_gate.py audit \
+            --root . --dist dist \
+            --out evidence/generated/v1_wp5/release_gate_report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v1-wp5-wheel-sdist-release-audit
+          path: |
+            dist/
+            evidence/generated/v1_wp5/release_gate_report.json
+            evidence/generated/v1_wp5/wheel_sdist_numerical_comparison.json
+            evidence/generated/v1_thermal_wall/
+            evidence/generated/v1_wp2b/
+            evidence/generated/v1_wp3/
+            evidence/generated/v1_wp4/
+          if-no-files-found: warn
