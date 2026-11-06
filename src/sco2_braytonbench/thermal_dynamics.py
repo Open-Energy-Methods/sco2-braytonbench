@@ -14,7 +14,8 @@ from .properties import DomainError
 
 
 def _finite_positive(label: str, value: float) -> None:
-    if not isfinite(value) or value <= 0:
+    if (isinstance(value, bool) or not isinstance(value, (int, float))
+            or not isfinite(value) or value <= 0):
         raise DomainError(f"{label} must be positive and finite")
 
 
@@ -39,12 +40,17 @@ class ThermalWall:
             ("hot conductance", self.hot_conductance_w_k),
             ("cold conductance", self.cold_conductance_w_k),
         ):
-            if not isfinite(value) or value < 0:
+            if (isinstance(value, bool) or not isinstance(value, (int, float))
+                    or not isfinite(value) or value < 0):
                 raise DomainError(f"{name} must be finite and nonnegative")
         if self.hot_conductance_w_k + self.cold_conductance_w_k <= 0:
             raise DomainError("at least one wall conductance must be positive")
-        if not isfinite(self.hot_conductance_w_k + self.cold_conductance_w_k):
+        total = self.hot_conductance_w_k + self.cold_conductance_w_k
+        if not isfinite(total):
             raise DomainError("combined wall conductance must be finite")
+        tau = self.capacity_j_k / total
+        if not isfinite(tau) or tau <= 0:
+            raise DomainError("thermal wall time constant is unrepresentable")
 
     @property
     def time_constant_s(self) -> float:
@@ -98,7 +104,9 @@ def thermal_wall_step(
     than substituting an endpoint temperature into the first law.
     """
     _finite_kelvin("initial wall temperature", initial_wall_temperature_k)
-    if not isfinite(time_start_s) or time_start_s < 0:
+    if (isinstance(time_start_s, bool)
+            or not isinstance(time_start_s, (int, float))
+            or not isfinite(time_start_s) or time_start_s < 0):
         raise DomainError("time_start_s must be finite and nonnegative")
     kh, kc = wall.hot_conductance_w_k, wall.cold_conductance_w_k
     kt = kh + kc
