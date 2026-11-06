@@ -178,3 +178,26 @@ def test_wrong_project_license_fails_closed(tmp_path):
     )
     with pytest.raises(ValueError,match="SPDX license"):
         gate._metadata(fake)
+
+
+def test_embargoed_thermoml_data_is_not_in_current_source_snapshot():
+    """An auto-generated GitHub source archive must not contain these rows."""
+    embargoed = ROOT / "data/reference/mantilla2010_thermoml_density.csv"
+    assert not embargoed.is_file(), (
+        "The release branch contains an unlicensed third-party complete table"
+    )
+    assert (ROOT/"data/reference/mantilla2010_provenance.yaml").is_file()
+    assert (ROOT/"data/reference/README_MANTILLA_OPT_IN.md").is_file()
+
+
+def test_embargoed_thermoml_data_in_source_fails_release_metadata(tmp_path):
+    """Simulate a user accidentally re-introducing the third-party CSV."""
+    fake=tmp_path/"repo"
+    fake.mkdir()
+    for name in ("pyproject.toml","LICENSE","CITATION.cff"):
+        (fake/name).write_text((ROOT/name).read_text("utf-8"),encoding="utf-8")
+    p=fake/"data/reference/mantilla2010_thermoml_density.csv"
+    p.parent.mkdir(parents=True)
+    p.write_text("not permitted in release tree",encoding="utf-8")
+    with pytest.raises(ValueError,match="must not be present"):
+        gate._metadata(fake)
