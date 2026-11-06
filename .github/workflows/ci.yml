@@ -259,3 +259,37 @@ jobs:
           name: v1-wheel-sdist-build-smoke
           path: dist/
           if-no-files-found: error
+
+  v1-wp2b-finite-source-wall-cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: WP2b independent closed-form wall and cycle conservation
+        run: python -m pytest -q tests/test_dynamic_whr.py
+      - name: Generate synthetic finite-source disturbance and wall/cycle energy trace
+        run: python examples/waste_heat_wall_coupled_cycle.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v1-wp2b-finite-source-synthetic-evidence
+          path: |
+            evidence/generated/v1_wp2b/scenario_trace.csv
+            evidence/generated/v1_wp2b/scenario_summary.json
+          if-no-files-found: error
+
+  v1-wp2b-real-co2-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: One real-CO2 fixed-wall UA and thermal transient step (synthetic)
+        run: python -m pytest -q tests/test_dynamic_whr_co2.py
