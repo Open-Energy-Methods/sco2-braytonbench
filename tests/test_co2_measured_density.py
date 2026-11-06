@@ -7,21 +7,29 @@ Thresholds are initial engineering screening limits, NOT measured uncertainties.
 from pathlib import Path
 import csv
 import math
+import os
 import pytest
 pytest.importorskip("CoolProp", reason="requires real-fluid CI extras")
 from CoolProp.CoolProp import PropsSI
 
-CSV = Path(__file__).resolve().parents[1] / "data/reference/mantilla2010_thermoml_density.csv"
-# The full 49-point journal-publisher sourced ThermoML transcription is
-# intentionally excluded from redistributable candidate sdists until
-# specific downstream rights are cleared (see issue #27). The original
-# source Git checkout still runs this real-measurement test. An installed
-# source archive without that third-party dataset skips explicitly rather
-# than silently substituting synthetic density data.
-if not CSV.is_file():
+# External experimental data are no longer bundled in the current source
+# checkout or any wheel/source release. Obtain the NIST ThermoML record
+# independently, verify its terms, and supply a normalized CSV explicitly:
+# SCO2_MANTILLA_DENSITY_CSV=/absolute/path/thermoml_density.csv pytest ...
+# See data/reference/mantilla2010_provenance.yaml and GitHub issue #27.
+_user_csv = os.environ.get("SCO2_MANTILLA_DENSITY_CSV")
+if _user_csv:
+    CSV = Path(_user_csv).expanduser().resolve()
+    if not CSV.is_file():
+        raise RuntimeError(
+            "SCO2_MANTILLA_DENSITY_CSV was set but source dataset is missing"
+        )
+else:
     pytest.skip(
-        "Mantilla NIST ThermoML observations not distributed in this source "
-        "archive pending publisher reuse rights (issue #27)",
+        "Opt-in measured-density dataset not supplied; original publisher/"
+        "NIST ThermoML table is deliberately excluded from this repository. "
+        "Set SCO2_MANTILLA_DENSITY_CSV to a user-obtained normalized CSV. "
+        "See source-rights issue #27.",
         allow_module_level=True,
     )
 

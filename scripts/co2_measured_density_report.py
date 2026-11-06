@@ -1,11 +1,26 @@
 """Machine-readable measured-density validation report (not full EOS certification)."""
-import csv, json, hashlib, statistics, platform
+import csv, json, hashlib, statistics, platform, os, sys
 from pathlib import Path
 from CoolProp.CoolProp import PropsSI
 from CoolProp import __version__ as coolprop_version
 
-path=Path("data/reference/mantilla2010_thermoml_density.csv")
-rows=list(csv.DictReader(path.open(newline="")))
+# A publisher-sourced NIST ThermoML transcription is NOT distributed.
+# This script is opt-in and cannot generate misleading empty validation
+# evidence in CI when the externally obtained input is absent.
+external_csv = os.environ.get("SCO2_MANTILLA_DENSITY_CSV")
+if not external_csv:
+    print("SKIP: measured-density report not generated; external NIST ThermoML "
+          "dataset not supplied. See data/reference/README_MANTILLA_OPT_IN.md")
+    sys.exit(0)
+path = Path(external_csv).expanduser().resolve()
+if not path.is_file():
+    raise FileNotFoundError(
+        f"SCO2_MANTILLA_DENSITY_CSV explicitly set but unreadable: {path}"
+    )
+with path.open(newline="",encoding="utf-8") as source:
+    rows=list(csv.DictReader(source))
+if not rows:
+    raise ValueError("empty measured-density dataset; no report generated")
 results=[]
 for row in rows:
     T=float(row["T_K"])

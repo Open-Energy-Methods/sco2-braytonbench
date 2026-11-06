@@ -96,6 +96,10 @@ def _metadata(root: Path) -> dict[str, Any]:
     py = tomllib.loads((root / "pyproject.toml").read_text("utf-8"))
     project = py["project"]
     version = str(project["version"])
+    embargoed = root / "data/reference/mantilla2010_thermoml_density.csv"
+    _check(not embargoed.exists(),
+           "Uncleared Mantilla NIST ThermoML table must not be present in "
+           "candidate source checkout or GitHub tag snapshot; see issue #27")
     _check(project["name"] == "sco2-braytonbench", "unexpected package name")
     _check(project["license"] == "BSD-3-Clause", "wrong project SPDX license")
     _check((root / "LICENSE").read_text("utf-8").startswith(

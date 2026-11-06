@@ -141,12 +141,13 @@ Source dataset and redistribution rights are inventoried in the
 [release data-rights dossier](docs/DATA_RIGHTS_V1.md): Stuttgart's
 adapted experiment tables are attributed under the source CC BY 4.0
 licence, while the 49-point Mantilla NIST ThermoML transcription is
-**withheld from candidate release source distributions** pending a
+**removed from current source HEAD and withheld from release source distributions** pending a
 specific publisher/authorized-rights decision
 ([issue #27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27)).
-The current source checkout already contains that historical
-transcription; public Git visibility does not itself establish reuse
-permission. All software releases remain blocked on licence review and
+The earlier public Git history still contains the historical
+transcription, but current HEAD does not. The optional measured-density
+suite requires a user-supplied external CSV. Public Git visibility does
+not itself establish reuse permission. All software releases remain blocked on licence review and
 a separate qualified reviewer decision.
 
 ## What is implemented

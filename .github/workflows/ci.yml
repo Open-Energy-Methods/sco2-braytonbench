@@ -32,7 +32,7 @@ jobs:
         run: python scripts/fr2016_diagnostic.py
       - name: Report numerical discretization and low-side input sensitivity
         run: python scripts/fr2016_sensitivity.py
-      - name: Quantify residuals to 49 measured pure-CO2 densities
+      - name: Optional 49-point density report (external data only; explicit SKIP in CI)
         run: python scripts/co2_measured_density_report.py
       - name: Scan FR2016 boundary-state interpretation sensitivity
         run: python scripts/fr2016_identifiability.py
