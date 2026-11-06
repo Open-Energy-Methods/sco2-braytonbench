@@ -398,12 +398,15 @@ def experimental_readiness_gate(
     verified_data_provenance: bool = False,
 ) -> dict[str, object]:
     """A strict checklist, not legal/safety approval or test-rig authorization."""
+    tags = tuple(required_tags)
+    if not tags:
+        raise DomainError("readiness assessment requires at least one channel")
     blockers: list[str] = []
     if not approved_run_authorization:
         blockers.append("formal facility run authorization not verified")
     if not verified_data_provenance:
         blockers.append("measured data provenance not independently verified")
-    for tag in required_tags:
+    for tag in tags:
         if tag not in sensors:
             blockers.append(f"{tag}: absent from sensor register")
             continue
@@ -416,11 +419,11 @@ def experimental_readiness_gate(
             blockers.append(f"{tag}: time synchronization not verified")
         u=uncertainties.get(tag)
         if (u is None or (
-            channel.measurement_basis=="direct"
+            channel.measurement_basis in {"direct", "derived"}
             and (u.status!="confirmed" or u.u_standard is None))):
             blockers.append(f"{tag}: standard uncertainty not confirmed")
     return {
         "ready_for_measured_validation":not bool(blockers),
         "blockers":blockers,
-        "required_tag_count":len(set(required_tags)),
+        "required_tag_count":len(set(tags)),
     }
