@@ -16,7 +16,7 @@ dependencies = []
 
 [project.optional-dependencies]
 co2 = ["CoolProp>=6.6,<9"]
-test = ["pytest>=8,<10"]
+test = ["pytest>=8,<10", "tomli>=2,<3; python_version<'3.11'"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
