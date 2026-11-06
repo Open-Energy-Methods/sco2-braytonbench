@@ -50,6 +50,36 @@ algebraic/prescribed, cooler medium is not an inventory, and all wall
 capacity/UAs, loads and properties in the example are synthetic. There
 is no CARBOSOLA facility calibration, valve, PI or MPC controller.
 
+### WP3 — finite hot-gas bypass and sampled thermal-wall PI
+
+The experimental [WP3 source-bypass and PI control protocol](docs/G5_WP3_BYPASS_PI_CONTROL.md)
+models a physical **mass split** of the total hot-gas source into (1) a
+branch crossing the finite-source wall exchanger and (2) an untouched
+bypass. The two branches are rejoined **after** heat transfer through an
+enthalpy-conserving mixing junction. Bypass control never adds fictitious
+heat to the Brayton cycle.
+
+The [WP2b thermal wall](docs/G4_WP2B_FINITE_SOURCE_WALL_CYCLE.md)
+remains the only time-integrated storage state; the Brayton states and
+turbo-machine efficiencies are quasi-steady. A sampled wall-temperature PI
+commands the **diverted gas mass fraction** using position and slew
+constraints, a minimum active-stream flow, and back-calculation anti-windup.
+The control law uses only present sampled wall temperature (no future
+load information).
+
+```bash
+python -m pip install -e '.[test]'
+python -m pytest -q tests/test_control_whr.py
+python examples/waste_heat_bypass_pi_comparison.py
+```
+
+The output CSV and JSON compare fixed-bypass and PI response on exactly
+the same hypothetical gas temperature/flow inputs, including **net shaft
+energy cost** and a source+wall+cycle conservation ledger. The fixture is
+an *artificial ideal gas*, not experimentally validated CO₂ or CARBOSOLA.
+There are no CO₂ mass/pressure inventories, calibrated valve flow maps,
+safety interlocks, plant-identified controller gains, or MPC.
+
 ## What is implemented
 
 - SI-unit six-state recuperated Brayton **steady-state** calculation.
