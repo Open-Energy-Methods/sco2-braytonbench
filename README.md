@@ -108,6 +108,35 @@ The audit writes machine-readable **readiness blockers** and an
 explicitly synthetic metrology arithmetic example. It cannot turn
 the document into real experiments or grant facility operating permission.
 
+### WP5 — reproducible source and wheel release-candidate gate
+
+The [WP5 v1.0 acceptance and independent-review dossier](docs/WP5_RELEASE_ACCEPTANCE.md)
+defines the future **software** release gates separately from experimental
+plant validation. The project remains **`0.5.0a0`, not v1.0**. The WP5
+tool `scripts/v1_release_gate.py` audits consistent package/citation/SPDX
+licence metadata, verifies installed wheel and research-complete source
+archive contents, fingerprints source files and numerical outputs, and
+compares **four deterministic, explicitly synthetic examples** reproduced
+from clean wheel and sdist installations.
+
+CI builds both distributions, installs each independently in a fresh
+environment, executes the WP2a thermal-wall, WP2b finite-source/cycle,
+WP3 source-bypass/PI and WP4 prospective-readiness examples, compares
+their CSV/JSON evidence with disclosed numerical tolerances, and retains
+machine-readable release artifacts. All real-CoolProp and reference
+jobs remain separate and mandatory for a release-candidate decision.
+
+```bash
+python -m pytest -q tests/test_v1_release_gate.py
+# See docs/WP5_RELEASE_ACCEPTANCE.md for the complete wheel/sdist replay.
+```
+
+This code **cannot tag the repository, approve an experiment, issue
+a DOI, resolve third-party data redistribution rights or perform
+independent scientific review**. Tagging v1.0 remains blocked pending
+the actual full-head green test results, integration of stacked PRs
+and a documented independent acceptance decision.
+
 ## What is implemented
 
 - SI-unit six-state recuperated Brayton **steady-state** calculation.
