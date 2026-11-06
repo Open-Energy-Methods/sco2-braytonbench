@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — WP5 software-release reproducibility gate (2026-11-06)
+
+- Added explicit source-distribution manifest for method docs, synthetic examples, prospective test inputs, research fixtures and tests; no auto-publishing of binary artifacts or sensitive experiment data.
+- Added offline wheel/sdist version, citation/SPDX licence, installed modules and source-content checks; SHA256 source, scenario and build-artifact evidence manifest.
+- Added cross-distribution numerical comparison for WP2a, WP2b, WP3 and WP4 synthetic CSV/JSON, with explicit finite numeric tolerances and forensic mismatch failures.
+- Added a dedicated CI job rebuilding and separately fresh-installing wheel + source distribution; no editable install shortcut. Release gate unit tests cover corrupt metadata, missing/mismatched evidence and altered numerical outputs.
+- Documented manual source-rights/independent physics review, scope boundaries, immutable RC freeze procedure and **no v1.0 tag/DOI** until signed acceptance. Version remains `0.5.0a0`.
+
 ## Unreleased — WP4 prospective metrology and experimental design (2026-11-06)
 
 - Added 35 *candidate*, unconfirmed sensor/metadata channels; 13 proposed and **unapproved** steady/transient/control/holdout cases; blank traceable standard-uncertainty register.
