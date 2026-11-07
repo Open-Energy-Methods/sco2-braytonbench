@@ -73,12 +73,12 @@ def coupling(real):
     if real:
         props = CoolPropCO2()
         cycle = CycleInputs(8.5e6,24e6,310.,600.,20.,.89,.90,
-                            PressureLosses(100e3,150e3,100e3,50e3),500e3,12)
+                            PressureLosses(100e3,150e3,100e3,50e3),recuperator_ua_w_k=500e3,segments=12)
         initial,inlet,flow,dt,stack,ua,seg = 800.,750.,100.,.1,350.,1e6,12
     else:
         props = IdealGasFixture(cp=1000.,gas_constant=200.)
         cycle = CycleInputs(8e6,24e6,310.,670.,10.,.89,.90,
-                            PressureLosses(100e3,150e3,100e3,50e3),0.,6)
+                            PressureLosses(100e3,150e3,100e3,50e3),recuperator_ua_w_k=0.,segments=6)
         initial,inlet,flow,dt,stack,ua,seg = 850.,650.,30.,.5,600.,200000.,6
     x=advance_storage_to_cycle_snapshot(
         props,cycle,spec,core.PackedBedState.uniform(spec,initial,initial),
