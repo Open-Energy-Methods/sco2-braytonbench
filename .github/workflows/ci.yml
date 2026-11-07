@@ -436,3 +436,25 @@ jobs:
             evidence/generated/tes_v03/tes_temporal_sensitivity.csv
             evidence/generated/tes_v03/tes_verification_manifest.json
           if-no-files-found: error
+
+  tes-charge-discharge-physics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: Verified charge, hold, reverse discharge and cycle integrity
+        run: python -m pytest -q tests/test_tes_cycles.py tests/test_thermal_storage.py
+      - name: Generate synthetic staged operation and honest incomplete-cycle metrics
+        run: python examples/tes_charge_discharge.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v04-synthetic-charge-discharge-energy
+          path: |
+            evidence/generated/tes_v04/synthetic_storage_stage_trace.csv
+            evidence/generated/tes_v04/synthetic_storage_summary.json
+          if-no-files-found: error
