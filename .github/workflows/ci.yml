@@ -534,3 +534,51 @@ jobs:
           name: tes-v06-synthetic-512-trajectories-and-source-hashes
           path: evidence/generated/tes_v06/
           if-no-files-found: error
+
+  tes-v07-frozen-holdout-surrogate:
+    needs: tes-v06-synthetic-trajectory-dataset
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,ml]'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tes-v06-synthetic-512-trajectories-and-source-hashes
+          path: evidence/generated/tes_v06
+      - name: Verify physical features and frozen-split dataset anti-leakage unit tests
+        run: python -m pytest -q tests/test_tes_surrogate.py
+      - name: "TRAIN phase: 256 train + 64 validation only, freeze model before opening test"
+        run: python scripts/tes_surrogate_pipeline.py train --data evidence/generated/tes_v06 --model-dir evidence/generated/tes_v07/frozen
+      - name: "EVALUATE phase: read frozen 128 test and 64 OOD; no model selection permitted"
+        run: python scripts/tes_surrogate_pipeline.py evaluate --data evidence/generated/tes_v06 --model-dir evidence/generated/tes_v07/frozen --out evidence/generated/tes_v07/evaluation
+      - name: Assert holdout report is complete without interpreting negative results as passes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("evidence/generated/tes_v07/evaluation/tes_rom_holdout_report.json")
+          x=json.loads(p.read_text(encoding="utf8"))
+          assert x["test_and_ood_run_counts"]=={"test":128,"ood":64}
+          assert x["training_performed_during_evaluate"] is False
+          assert x["selection_changed_after_test_access"] is False
+          assert x["partitions"]["test"]["surrogate"]["samples"]==2048
+          assert x["partitions"]["ood"]["surrogate"]["samples"]==1024
+          assert len(x["test_acceptance_criteria"])==6
+          assert x["test_acceptance_all_met"]==all(x["test_acceptance_criteria"].values())
+          print("Frozen test and OOD report complete; accuracy gates recorded, NOT presumed")
+          print("Test quality gate:",x["test_acceptance_criteria"])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v07-frozen-model-sealed-holdout-ood-benchmarks
+          path: |
+            evidence/generated/tes_v07/frozen/tes_rom_model.joblib
+            evidence/generated/tes_v07/frozen/tes_rom_frozen_selection.json
+            evidence/generated/tes_v07/evaluation/tes_rom_sealed_predictions.csv
+            evidence/generated/tes_v07/evaluation/tes_rom_holdout_report.json
+          if-no-files-found: warn
