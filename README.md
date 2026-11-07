@@ -12,6 +12,19 @@ The **[6 November 2026 comprehensive research, engineering and verification repo
 
 **Verified baseline:** main `8df1711a425e21da342bd3f401da61a1375bbc0a`, [Actions 42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) 20/20 green. No v1.0 tag or DOI issued. The 49-point Mantilla ThermoML transcription has been removed from current HEAD and redistributed archives while historical reuse and independent human scientific review remain unresolved ([#27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27), [#28](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/28)).
 
+## Thermal energy storage (TES) — separate experimental research extension
+
+A **separate, 1-D two-temperature sensible packed-bed TES extension** is being developed on [TES PR #31](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/31). It is **not** a plant CFD model, PCM implementation, CIC energiGUNE/COMPETENT facility model, mechanical liquid-piston model, or a physical validation campaign. It does not imply any parent v1.0 software release.
+
+- Governing equations and constraints: [TES physics contract](docs/tes/01_LITERATURE_AND_MODEL_CONTRACT.md).
+- Independent Laplace/Poisson-series equivalent of the Schumann step benchmark: [benchmark specification](docs/tes/02_BENCHMARK_SPECIFICATION.md).
+- Upwind finite-volume fluid/solid holdup and SSPRK3 first-law ledger: [conservation verification](docs/tes/03_CONSERVATION_AND_LIMITS.md).
+- Grid and time refinement with N=16/32/64/128: [verification protocol](docs/tes/04_SCHUMANN_GRID_VERIFICATION.md).
+- Evidence-producing test: `python scripts/tes_schumann_convergence.py --out evidence/generated/tes_v03`.
+- The TES feature milestones are **independent** of the parent package's 0.5.0a0 version and parent rights/reviewer publication gates.
+
+Run with `python -m pip install -e '.[test]'`, then `python -m pytest -q tests/test_thermal_storage.py`.
+
 ## v1.0 research release programme — work in progress
 
 The [v1.0 scope and scientific release contract](docs/V1_0_RELEASE_CONTRACT.md)
