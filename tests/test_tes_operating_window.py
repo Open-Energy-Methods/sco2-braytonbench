@@ -8,7 +8,9 @@ import pytest
 from sco2_braytonbench.tes_operating_window import (
     OperatingInputs, _qualified_segment, run_operating_case,
 )
-from sco2_braytonbench.thermal_storage import PackedBedSpec
+from sco2_braytonbench.thermal_storage import (
+    PackedBedSpec, PackedBedState, step_packed_bed,
+)
 from scripts.tes_operating_window_study import (
     BASE_INPUTS, BASE_SPEC, generate_study, verify_study,
 )
@@ -85,6 +87,8 @@ def test_geometry_capacity_and_flow_turnover_semantics():
     {"hot_inlet_k": 349},
     {"observations_per_stage": 1},
     {"observations_per_stage": 2.5},
+    {"grade_trace_stride": 0},
+    {"grade_trace_stride": 1.5},
     {"max_solver_step_s": -1},
     {"state_return_tolerance_k": -1},
 ])
@@ -129,7 +133,7 @@ def test_numerical_mesh_and_outlet_sampling_provide_distinct_comparisons():
         replace(BASE_SPEC, n_cells=24), BASE_INPUTS
     )
     sampled = run_operating_case(
-        BASE_SPEC, replace(BASE_INPUTS, observations_per_stage=48)
+        BASE_SPEC, replace(BASE_INPUTS, grade_trace_stride=4)
     )
     assert all(math.isfinite(x.first_law_residual_j) for x in (
         coarse, fine, sampled
@@ -147,3 +151,24 @@ def test_numerical_mesh_and_outlet_sampling_provide_distinct_comparisons():
     assert sampled.thermal_turnover_s == pytest.approx(
         coarse.thermal_turnover_s
     )
+
+
+def test_internal_substep_trace_does_not_modify_conservative_solution():
+    spec = BASE_SPEC
+    state = PackedBedState.uniform(spec, 350, 350)
+    kwargs = {"inlet_k": 650, "mdot_kg_s": 0.05, "duration_s": 16.0}
+    ordinary = step_packed_bed(spec, state, **kwargs)
+    traced = step_packed_bed(
+        spec, state, **kwargs, record_outlet_trace=True,
+    )
+    assert ordinary.outlet_trace is None
+    assert traced.outlet_trace is not None
+    assert len(traced.outlet_trace) == traced.n_substeps + 1
+    assert traced.outlet_trace[0] == (0.0, 350.0)
+    assert traced.outlet_trace[-1][0] == pytest.approx(16.0)
+    assert traced.outlet_trace[-1][1] == pytest.approx(traced.outlet_k)
+    assert traced.state == ordinary.state
+    assert traced.energy_boundary_j == ordinary.energy_boundary_j
+    assert traced.conservation_residual_j == ordinary.conservation_residual_j
+    for (t0, _), (t1, _) in zip(traced.outlet_trace, traced.outlet_trace[1:]):
+        assert 0 <= t0 < t1 <= 16.0
