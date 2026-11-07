@@ -17,7 +17,8 @@ import re
 SCHEMA="tes-v10-research-baseline-candidate-1"
 PARENT_VERSION="0.5.0a0"
 REQUIRED = (
-    "pyproject.toml", "CITATION.cff", "LICENSE", "MANIFEST.in", "README.md",
+    "pyproject.toml", "CITATION.cff", "LICENSE", "MANIFEST.in", "README.md", "CHANGELOG.md",
+    ".github/workflows/tes-v10-candidate-audit.yml",
     "src/sco2_braytonbench/thermal_storage.py",
     "src/sco2_braytonbench/tes_schumann.py",
     "src/sco2_braytonbench/tes_cycles.py",
