@@ -29,6 +29,7 @@ class OperatingInputs:
     useful_outlet_threshold_k: float = 500.0
     ambient_k: float = 300.0
     observations_per_stage: int = 24
+    grade_trace_stride: int = 1
     max_solver_step_s: float | None = None
     state_return_tolerance_k: float = 0.5
 
@@ -52,6 +53,8 @@ class OperatingInputs:
         if (type(self.observations_per_stage) is not int
                 or self.observations_per_stage < 2):
             raise ValueError("observations_per_stage must be integer >= 2")
+        if type(self.grade_trace_stride) is not int or self.grade_trace_stride < 1:
+            raise ValueError("grade_trace_stride must be positive integer")
         if self.max_solver_step_s is not None:
             _finite("max_solver_step_s", self.max_solver_step_s, positive=True)
 
@@ -67,6 +70,7 @@ class OperatingResult:
     useful_discharge_energy_j: float
     reconstructed_discharge_energy_j: float
     observation_quadrature_error_j: float
+    grade_trace_intervals: int
     useful_discharge_duration_s: float
     first_qualified_time_s: float | None
     first_downcrossing_time_s: float | None
@@ -157,14 +161,17 @@ def run_operating_case(spec: PackedBedSpec,
     total_substeps = 0
     max_courant = 0.0
     max_discharge_outlet = -math.inf
+    grade_trace_intervals = 0
     flow_cp = inputs.flow_kg_s * spec.fluid_cp_j_kg_k
 
-    def advance(duration: float, inlet: float, mdot: float):
+    def advance(duration: float, inlet: float, mdot: float,
+                trace: bool = False):
         nonlocal state, total_substeps, max_courant
         before = state
         step = step_packed_bed(
             spec, before, inlet_k=inlet, mdot_kg_s=mdot,
             duration_s=duration, max_step_s=inputs.max_solver_step_s,
+            record_outlet_trace=trace,
         )
         state = step.state
         total_substeps += step.n_substeps
@@ -191,26 +198,39 @@ def run_operating_case(spec: PackedBedSpec,
 
     h = discharge_s / inputs.observations_per_stage
     for i in range(inputs.observations_per_stage):
-        before, step = advance(h, inputs.cold_k, -inputs.flow_kg_s)
+        _, step = advance(h, inputs.cold_k, -inputs.flow_kg_s, trace=True)
         recovered_terms.append(-step.energy_boundary_j)
-        outlet_before = before.fluid_k[0]
-        outlet_after = step.outlet_k
+        full_trace = step.outlet_trace
+        if full_trace is None:
+            raise AssertionError("trace requested but not generated")
+        # Downsample the *actual solver substep* trace for an independent
+        # outlet-observation sensitivity, retaining the exact final point.
+        trace = list(full_trace[::inputs.grade_trace_stride])
+        if trace[-1] != full_trace[-1]:
+            trace.append(full_trace[-1])
+        grade_trace_intervals += len(trace) - 1
         max_discharge_outlet = max(
-            max_discharge_outlet, outlet_before, outlet_after,
+            max_discharge_outlet, *(temperature for _, temperature in trace)
         )
-        energy, seconds, enter, exit_ = _qualified_segment(
-            outlet_before, outlet_after,
-            inputs.useful_outlet_threshold_k, inputs.cold_k, flow_cp, h,
-        )
-        quality_terms.append(energy)
-        full_linear_terms.append(
-            flow_cp * h * (0.5*(outlet_before+outlet_after) - inputs.cold_k)
-        )
-        seconds_terms.append(seconds)
-        if enter is not None and first_qualified is None:
-            first_qualified = i * h + enter
-        if exit_ is not None and first_downcrossing is None:
-            first_downcrossing = i * h + exit_
+        for (start_t, outlet_before), (end_t, outlet_after) in zip(
+            trace, trace[1:]
+        ):
+            segment_s = end_t - start_t
+            energy, seconds, enter, exit_ = _qualified_segment(
+                outlet_before, outlet_after,
+                inputs.useful_outlet_threshold_k, inputs.cold_k,
+                flow_cp, segment_s,
+            )
+            quality_terms.append(energy)
+            full_linear_terms.append(
+                flow_cp * segment_s *
+                (0.5*(outlet_before+outlet_after) - inputs.cold_k)
+            )
+            seconds_terms.append(seconds)
+            if enter is not None and first_qualified is None:
+                first_qualified = i * h + start_t + enter
+            if exit_ is not None and first_downcrossing is None:
+                first_downcrossing = i * h + start_t + exit_
 
     charged_energy = math.fsum(charged_terms)
     recovered_energy = math.fsum(recovered_terms)
@@ -254,6 +274,7 @@ def run_operating_case(spec: PackedBedSpec,
         useful_discharge_energy_j=useful_energy,
         reconstructed_discharge_energy_j=linear_recovered,
         observation_quadrature_error_j=linear_recovered-recovered_energy,
+        grade_trace_intervals=grade_trace_intervals,
         useful_discharge_duration_s=useful_seconds,
         first_qualified_time_s=first_qualified,
         first_downcrossing_time_s=first_downcrossing,
