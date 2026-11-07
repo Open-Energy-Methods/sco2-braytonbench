@@ -25,7 +25,7 @@ Synthetic model base:
 | Gas density / cp | 5 / 1000 | kg/m³; J/(kg K) |
 | Solid density / cp | 1000 / 700 | kg/m³; J/(kg K) |
 | Volumetric interphase heat-transfer coefficient | 500 | W/(m³ K) |
-| Finite-volume cells | 12 | – |
+| Finite-volume cells for physical OAT | 96 | – |
 | Initial / charge inlet temperature | 350 / 650 | K |
 | Signed flow during charge / reverse discharge | +0.05 / -0.05 | kg/s |
 | Charge / zero-flow hold / discharge durations | 0.8 / 0.1 / 1.0 | thermal turnovers |
@@ -98,7 +98,7 @@ The design is **not** a probabilistic Monte Carlo study, a complete factorial in
 
 ## 6. Uncertainty and convergence are explicitly separated
 
-**Numerical:** use mesh N, SSPRK3 timestep limit and independently decimated solver-substep outlet traces, plus known Schumann verification from TES-v0.3. The finest point here is not automatically an exact continuum truth. Results should be compared against the finest available reference and a plateau judged on relevant outputs; first-law closure alone cannot establish convergence.
+**Numerical:** use mesh N, SSPRK3 timestep limit and independently decimated solver-substep outlet traces, plus known Schumann verification from TES-v0.3. The physical OAT baseline is N=96 because the initial N=12 screening run materially underresolved the 500 K temperature-grade service metric. N=192 is a numerical comparison point, not an exact continuum truth. Results should be compared against the finest available reference and a plateau judged on relevant outputs; first-law closure alone cannot establish convergence.
 
 **Parametric:** report signed physical OAT deltas under the declared scaled-turnover protocol. No distribution, standard error or confidence interval is inferred without justified input distributions.
 
