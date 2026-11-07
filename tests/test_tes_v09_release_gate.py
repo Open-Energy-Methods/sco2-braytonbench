@@ -51,7 +51,7 @@ def test_duplicate_and_missing_files_fail_closed():
     with pytest.raises(ValueError,match="duplicate"):
         gate._paths_checked(wheel_members()+[wheel_members()[0]],"wheel")
     with pytest.raises(ValueError,match="missing"):
-        gate._paths_checked(wheel_members()[:-2],"wheel")
+        gate._paths_checked(wheel_members()[1:],"wheel")
     with pytest.raises(ValueError,match="source-root"):
         gate._paths_checked(source_members()+["second-root/more.py"],"sdist")
 
