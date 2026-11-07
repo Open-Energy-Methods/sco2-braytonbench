@@ -12,18 +12,17 @@ The **[6 November 2026 comprehensive research, engineering and verification repo
 
 **Verified baseline:** main `8df1711a425e21da342bd3f401da61a1375bbc0a`, [Actions 42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) 20/20 green. No v1.0 tag or DOI issued. The 49-point Mantilla ThermoML transcription has been removed from current HEAD and redistributed archives while historical reuse and independent human scientific review remain unresolved ([#27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27), [#28](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/28)).
 
-## Thermal energy storage (TES) — separate experimental research extension
+## Thermal energy storage (TES) — synthetic research extension
 
-A **separate, 1-D two-temperature sensible packed-bed TES extension** is being developed on [TES PR #31](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/31). It is **not** a plant CFD model, PCM implementation, CIC energiGUNE/COMPETENT facility model, mechanical liquid-piston model, or a physical validation campaign. It does not imply any parent v1.0 software release.
+The 1-D, **two-temperature sensible packed-bed TES** extension is intentionally separate from the existing sCO₂ plant model. Completed and merged core milestones are [Schumann verification #31](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/31), [charge/discharge #32](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/32), [single-pass Brayton coupling #33](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/33), [exergy/capacity metrics #34](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/34), and the verified [512-run synthetic dataset #38](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/38).
 
-- Governing equations and constraints: [TES physics contract](docs/tes/01_LITERATURE_AND_MODEL_CONTRACT.md).
-- Independent Laplace/Poisson-series equivalent of the Schumann step benchmark: [benchmark specification](docs/tes/02_BENCHMARK_SPECIFICATION.md).
-- Upwind finite-volume fluid/solid holdup and SSPRK3 first-law ledger: [conservation verification](docs/tes/03_CONSERVATION_AND_LIMITS.md).
-- Grid and time refinement with N=16/32/64/128: [verification protocol](docs/tes/04_SCHUMANN_GRID_VERIFICATION.md).
-- Evidence-producing test: `python scripts/tes_schumann_convergence.py --out evidence/generated/tes_v03`.
-- The TES feature milestones are **independent** of the parent package's 0.5.0a0 version and parent rights/reviewer publication gates.
+The **[frozen-split surrogate PR #39](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/39)** develops a supervised reduced-order **input/output emulator** of the eight-cell synthetic bed, not a dynamic CO₂ inventory model or a physical facility controller. The [methods](docs/tes/08_FROZEN_SPLIT_SURROGATE.md) and [executed heldout report](docs/tes/09_FROZEN_ROM_RESULTS_2026-11-07.md) document an in-domain test outlet RMSE of **6.20 K**, solid SOC RMSE **0.0116**, and comparison against a two-cell physically conservative baseline. The **out-of-domain test is a negative transfer result**: the ROM has **14.25 K** outlet RMSE versus **6.60 K** for two-cell physics. Results are *synthetic* and subject to the exact-head PR gate.
 
-Run with `python -m pip install -e '.[test]'`, then `python -m pytest -q tests/test_thermal_storage.py`.
+- [Mathematical model and units](docs/tes/01_LITERATURE_AND_MODEL_CONTRACT.md); [independent Schumann analytic reference](docs/tes/02_BENCHMARK_SPECIFICATION.md); [conservation](docs/tes/03_CONSERVATION_AND_LIMITS.md) and [grid refinement](docs/tes/04_SCHUMANN_GRID_VERIFICATION.md).
+- [Full-state charge/hold/discharge semantics](docs/tes/05_CYCLES_AND_METRICS.md), [open single-pass TES→Brayton power balance](docs/tes/06_SINGLE_PASS_CO2_COUPLING.md) and [constant-property capacity/exergy/thermocline metrics](docs/tes/07_PERFORMANCE_METRICS.md).
+- Generate source data: `python scripts/tes_generate_synthetic_dataset.py --out evidence/generated/tes_v06`.
+- Fit and freeze the surrogate with optional `.[ml]` dependencies: `python scripts/tes_surrogate_pipeline.py train --data evidence/generated/tes_v06 --model-dir evidence/generated/tes_v07/frozen`, then invoke `evaluate` separately.
+- This code does **not** represent measured CIC energiGUNE or CARBOSOLA hardware, CFD, phase-change TES, PCM, a mechanical liquid piston, a calibrated thermal-storage plant, or a validated full dynamic CO₂ power cycle. TES research milestones **do not change the parent package's 0.5.0a0 release status**.
 
 ## v1.0 research release programme — work in progress
 
