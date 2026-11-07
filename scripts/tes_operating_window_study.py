@@ -40,7 +40,7 @@ PHYSICAL_AXES = {
     "useful_outlet_threshold_k": (450.0, 500.0, 550.0, 700.0),
 }
 NUMERICAL_AXES = {
-    "n_cells": (6, 12, 24, 48),
+    "n_cells": (6, 12, 24, 48, 96, 192),
     "grade_trace_stride": (4, 2, 1),
     "solver_timestep_factor_of_nominal_limit": (1.0, 0.5, 0.25),
 }
@@ -244,6 +244,16 @@ def generate_study(outdir: Path) -> dict:
             }
             for r in numerical
         ],
+        "physical_panel": [
+            {
+                "axis": r["axis"], "level": r["level"],
+                "recovered_energy_j": r["recovered_energy_j"],
+                "useful_discharge_energy_j": r["useful_discharge_energy_j"],
+                "charged_total_exergy_j": r["charged_total_exergy_j"],
+                "charged_solid_soc": r["charged_solid_soc"],
+            }
+            for r in physical
+        ],
         "physical_grade_panel": [
             {
                 "grade_k": r["level"],
@@ -317,6 +327,7 @@ def main() -> None:
         "sha256": manifest["sha256"],
         "numerical_panel": manifest["numerical_panel"],
         "physical_grade_panel": manifest["physical_grade_panel"],
+        "physical_panel": manifest["physical_panel"],
         "baseline": {
             "recovered_energy_j": manifest["baseline"]["recovered_energy_j"],
             "useful_discharge_energy_j": manifest["baseline"][
