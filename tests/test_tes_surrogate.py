@@ -2,6 +2,9 @@
 from copy import deepcopy
 import json
 import math
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
@@ -149,3 +152,20 @@ def test_validation_metric_has_known_independent_result():
     assert m["soc_rmse_fraction"]==pytest.approx(math.sqrt(.02/3))
     assert m["complete_run_outlet_rmse_p95_k"]==pytest.approx(math.sqrt(25/2))
     assert m["runs"]==2 and m["samples"]==3
+
+
+def test_evaluation_direct_cli_not_only_pytest_import_context(smoke_dataset):
+    """Exercise the actual documented script invocation in an isolated process."""
+    source,tmp_path=smoke_dataset
+    frozen_dir=tmp_path/"model"
+    pipeline.train(source,frozen_dir)
+    script=Path(pipeline.__file__).resolve()
+    completed=subprocess.run([
+        sys.executable,str(script),"evaluate",
+        "--data",str(source),
+        "--model-dir",str(frozen_dir),
+        "--out",str(tmp_path/"direct_cli")
+    ],cwd=str(script.parents[1]),capture_output=True,text=True)
+    assert completed.returncode==0,completed.stderr
+    report=json.loads((tmp_path/"direct_cli"/"tes_rom_holdout_report.json").read_text("utf8"))
+    assert report["test_and_ood_run_counts"]=={"test":2,"ood":2}
