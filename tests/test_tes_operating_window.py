@@ -103,7 +103,7 @@ def test_operating_study_is_deterministic_and_hash_tamper_detected(tmp_path):
     assert manifest["counts"]["physical_rows"] == 1 + sum(
         len(x) for x in manifest["study_design_predeclared"]["physical_axes"].values()
     )
-    assert manifest["counts"]["numerical_rows"] == 10
+    assert manifest["counts"]["numerical_rows"] == 12
     assert verify_study(tmp_path)["sha256"] == manifest["sha256"]
     with (tmp_path / "tes_v08_physical_sensitivity.csv").open(
         newline="", encoding="utf-8"
