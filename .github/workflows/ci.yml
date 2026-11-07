@@ -490,3 +490,15 @@ jobs:
       - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
       - name: TES one-pass source/heater real-CO2 compatibility and conservation
         run: python -m pytest -q tests/test_tes_coupling.py
+
+  tes-performance-metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: Test sensible thermal capacity, exergy and undefined thermocline width
+        run: python -m pytest -q tests/test_tes_metrics.py
