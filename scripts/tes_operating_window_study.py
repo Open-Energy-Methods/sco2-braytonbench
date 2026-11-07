@@ -225,6 +225,33 @@ def generate_study(outdir: Path) -> dict:
             "numerical_rows": len(numerical),
         },
         "baseline": asdict(base),
+        "numerical_panel": [
+            {
+                "group": r["group"], "level": r["level"],
+                "useful_discharge_energy_j": r["useful_discharge_energy_j"],
+                "recovered_energy_j": r["recovered_energy_j"],
+                "observation_quadrature_error_j": r[
+                    "observation_quadrature_error_j"
+                ],
+                "first_law_relative_residual": r[
+                    "first_law_relative_residual"
+                ],
+                "charged_solid_soc": r["charged_solid_soc"],
+                "charged_thermocline_width_m": r[
+                    "charged_thermocline_width_m"
+                ],
+            }
+            for r in numerical
+        ],
+        "physical_grade_panel": [
+            {
+                "grade_k": r["level"],
+                "useful_energy_j": r["useful_discharge_energy_j"],
+                "qualification_s": r["useful_discharge_duration_s"],
+                "first_downcrossing_s": r["first_downcrossing_time_s"],
+            }
+            for r in physical if r["axis"] == "useful_outlet_threshold_k"
+        ],
         "null_threshold_case": {
             "grade_k": 700.0,
             "qualified_energy_j": missing_grade[0]["useful_discharge_energy_j"],
@@ -287,6 +314,8 @@ def main() -> None:
         "schema": manifest["schema"],
         "counts": manifest["counts"],
         "sha256": manifest["sha256"],
+        "numerical_panel": manifest["numerical_panel"],
+        "physical_grade_panel": manifest["physical_grade_panel"],
         "baseline": {
             "recovered_energy_j": manifest["baseline"]["recovered_energy_j"],
             "useful_discharge_energy_j": manifest["baseline"][
