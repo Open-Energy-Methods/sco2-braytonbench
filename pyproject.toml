@@ -17,6 +17,7 @@ dependencies = []
 [project.optional-dependencies]
 co2 = ["CoolProp>=6.6,<9"]
 test = ["pytest>=8,<10", "tomli>=2,<3; python_version<'3.11'"]
+ml = ["numpy>=1.26,<3", "scikit-learn>=1.4,<2", "joblib>=1.3,<2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
