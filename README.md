@@ -34,6 +34,12 @@ heat **without removing lower-grade heat from the first-law balance**, null
 crossings where no threshold is reached, independent solid/fluid capacity and
 exergy, and null gross efficiency unless **all cell temperatures return**.
 
+The [7 November executed numerical and factorial results](docs/tes/11_OPERATING_WINDOW_RESULTS_2026-11-07.md)
+document the N=96 operating-window baseline, mesh refinement to N=192,
+eight crossed flow/porosity/Hv scenarios, their large temperature-grade
+interactions, and model-specific identifiability limitations. The dated
+results remain synthetic and tied to their cited Actions evidence commit.
+
 Run with python scripts/tes_operating_window_study.py --out evidence/generated/tes_v08
 and verify its CSV hashes with --verify. GitHub Actions runs and archives
 the full evidence; results are **synthetic** and do not establish model-form
