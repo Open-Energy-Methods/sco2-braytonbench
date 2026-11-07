@@ -16,13 +16,29 @@ The **[6 November 2026 comprehensive research, engineering and verification repo
 
 The 1-D, **two-temperature sensible packed-bed TES** extension is intentionally separate from the existing sCO₂ plant model. Completed and merged core milestones are [Schumann verification #31](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/31), [charge/discharge #32](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/32), [single-pass Brayton coupling #33](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/33), [exergy/capacity metrics #34](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/34), and the verified [512-run synthetic dataset #38](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/38).
 
-The **[frozen-split surrogate PR #39](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/39)** develops a supervised reduced-order **input/output emulator** of the eight-cell synthetic bed, not a dynamic CO₂ inventory model or a physical facility controller. The [methods](docs/tes/08_FROZEN_SPLIT_SURROGATE.md) and [executed heldout report](docs/tes/09_FROZEN_ROM_RESULTS_2026-11-07.md) document an in-domain test outlet RMSE of **6.20 K**, solid SOC RMSE **0.0116**, and comparison against a two-cell physically conservative baseline. The **out-of-domain test is a negative transfer result**: the ROM has **14.25 K** outlet RMSE versus **6.60 K** for two-cell physics. Results are *synthetic* and subject to the exact-head PR gate.
+The merged **[frozen-split surrogate PR #39](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/39)** implements a supervised reduced-order **input/output emulator** of the eight-cell synthetic bed, not a dynamic CO₂ inventory model or a physical facility controller. The [methods](docs/tes/08_FROZEN_SPLIT_SURROGATE.md) and [executed heldout report](docs/tes/09_FROZEN_ROM_RESULTS_2026-11-07.md) document an in-domain test outlet RMSE of **6.20 K**, solid SOC RMSE **0.0116**, and comparison against a two-cell physically conservative baseline. The **out-of-domain test is a negative transfer result**: the ROM has **14.25 K** outlet RMSE versus **6.60 K** for two-cell physics. Results are *synthetic*; the exact-head PR gate passed 27/27 tests before merge.
 
 - [Mathematical model and units](docs/tes/01_LITERATURE_AND_MODEL_CONTRACT.md); [independent Schumann analytic reference](docs/tes/02_BENCHMARK_SPECIFICATION.md); [conservation](docs/tes/03_CONSERVATION_AND_LIMITS.md) and [grid refinement](docs/tes/04_SCHUMANN_GRID_VERIFICATION.md).
 - [Full-state charge/hold/discharge semantics](docs/tes/05_CYCLES_AND_METRICS.md), [open single-pass TES→Brayton power balance](docs/tes/06_SINGLE_PASS_CO2_COUPLING.md) and [constant-property capacity/exergy/thermocline metrics](docs/tes/07_PERFORMANCE_METRICS.md).
 - Generate source data: `python scripts/tes_generate_synthetic_dataset.py --out evidence/generated/tes_v06`.
 - Fit and freeze the surrogate with optional `.[ml]` dependencies: `python scripts/tes_surrogate_pipeline.py train --data evidence/generated/tes_v06 --model-dir evidence/generated/tes_v07/frozen`, then invoke `evaluate` separately.
 - This code does **not** represent measured CIC energiGUNE or CARBOSOLA hardware, CFD, phase-change TES, PCM, a mechanical liquid piston, a calibrated thermal-storage plant, or a validated full dynamic CO₂ power cycle. TES research milestones **do not change the parent package's 0.5.0a0 release status**.
+
+### TES-v0.8 — temperature-grade operating window and sensitivity
+
+The [TES-v0.8 methodology and acceptance contract](docs/tes/10_OPERATING_WINDOW_SENSITIVITY.md)
+defines a reproducible synthetic two-temperature packed-bed operating-window study,
+with separate physical one-at-a-time sensitivity and numerical mesh/timestep/
+outlet-observation refinement. It reports outlet-temperature-qualified recovered
+heat **without removing lower-grade heat from the first-law balance**, null
+crossings where no threshold is reached, independent solid/fluid capacity and
+exergy, and null gross efficiency unless **all cell temperatures return**.
+
+Run with python scripts/tes_operating_window_study.py --out evidence/generated/tes_v08
+and verify its CSV hashes with --verify. GitHub Actions runs and archives
+the full evidence; results are **synthetic** and do not establish model-form
+uncertainty, experimental validation, real-pressure losses, or industrial TES
+round-trip efficiency. TES-v0.9 packaging and independent v1.0 review remain open.
 
 ## v1.0 research release programme — work in progress
 
