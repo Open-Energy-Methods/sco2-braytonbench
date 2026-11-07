@@ -1,0 +1,38 @@
+name: TES-v0.8 operating-window reproducibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tes-operating-window:
+    name: TES-v0.8 grade, OAT, space/time and evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      TES_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install isolated base plus test dependencies
+        run: python -m pip install -e '.[test]'
+      - name: Grade/energy/manifest integrity tests
+        run: python -m pytest -q tests/test_tes_operating_window.py
+      - name: Execute full physical and numerical ensemble
+        run: python scripts/tes_operating_window_study.py --out evidence/generated/tes_v08
+      - name: Verify generated manifest and CSV hashes
+        run: python scripts/tes_operating_window_study.py --verify --out evidence/generated/tes_v08
+      - name: Archive numerical evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v08-synthetic-operating-window
+          path: evidence/generated/tes_v08/
+          if-no-files-found: warn
