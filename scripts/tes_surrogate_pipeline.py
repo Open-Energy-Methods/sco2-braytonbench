@@ -250,9 +250,18 @@ def _coarse_physics(rows: list[dict], *, n_cells: int=2) -> list[tuple[float,flo
     Operates only after freeze; no coarse model outputs are fitting labels.
     """
     from sco2_braytonbench.thermal_storage import (
-        PackedBedState,solid_soc,step_packed_bed
+        PackedBedSpec,PackedBedState,solid_soc,step_packed_bed
     )
-    from scripts.tes_generate_synthetic_dataset import spec
+    # Geometry is a frozen v0.6 dataset contract, independently checked
+    # by the manifest. Avoid importing a sibling script when executed via
+    # `python scripts/tes_surrogate_pipeline.py` outside pytest.
+    def spec(hv_w_m3_k, *, n_cells):
+        return PackedBedSpec(
+            length_m=1.0, area_m2=0.1, porosity=0.5,
+            fluid_density_kg_m3=5.0, fluid_cp_j_kg_k=1000.0,
+            solid_density_kg_m3=1000.0, solid_cp_j_kg_k=700.0,
+            interphase_hv_w_m3_k=hv_w_m3_k, n_cells=n_cells,
+        )
     preds=[]
     current_run=None
     for row in rows:
