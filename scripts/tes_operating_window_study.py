@@ -41,7 +41,7 @@ PHYSICAL_AXES = {
 }
 NUMERICAL_AXES = {
     "n_cells": (6, 12, 24, 48),
-    "observations_per_stage": (12, 24, 48),
+    "grade_trace_stride": (4, 2, 1),
     "solver_timestep_factor_of_nominal_limit": (1.0, 0.5, 0.25),
 }
 OUTPUTS = (
@@ -79,6 +79,7 @@ def _row(group: str, axis: str, level: float,
         "discharge_turnovers": inputs.discharge_turnovers,
         "useful_outlet_threshold_k": inputs.useful_outlet_threshold_k,
         "observations_per_stage": inputs.observations_per_stage,
+        "grade_trace_stride": inputs.grade_trace_stride,
         "max_solver_step_s": inputs.max_solver_step_s,
     }
     row.update(data)
@@ -146,11 +147,11 @@ def generate_study(outdir: Path) -> dict:
             "spatial_refinement", "n_cells", n,
             replace(BASE_SPEC, n_cells=n), BASE_INPUTS, base,
         ))
-    for count in NUMERICAL_AXES["observations_per_stage"]:
+    for stride in NUMERICAL_AXES["grade_trace_stride"]:
         numerical.append(_row(
             "observation_quadrature_refinement",
-            "observations_per_stage", count,
-            BASE_SPEC, replace(BASE_INPUTS, observations_per_stage=count), base,
+            "grade_trace_stride", stride,
+            BASE_SPEC, replace(BASE_INPUTS, grade_trace_stride=stride), base,
         ))
     bound = _nominal_stability_step(BASE_SPEC, BASE_INPUTS)
     for fraction in NUMERICAL_AXES["solver_timestep_factor_of_nominal_limit"]:
@@ -201,7 +202,7 @@ def generate_study(outdir: Path) -> dict:
         },
         "uncertainty_partition": {
             "numerical_discretization": (
-                "N/SSPRK3 step and outlet-observation resolution panels"
+                "N/SSPRK3 step and substep-trace decimation panels"
             ),
             "parameter_sensitivity": (
                 "Declared OAT contrasts; not probability/uncertainty intervals"
