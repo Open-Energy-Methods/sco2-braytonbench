@@ -124,8 +124,15 @@ def _validate_rows(rows: list[dict]) -> None:
             raise ArithmeticError("qualified energy without qualified time")
 
 
-def _write_csv(path: Path, rows: list[dict]) -> str:
-    _validate_rows(rows)
+def _write_csv(path: Path, rows: list[dict], *, scenarios: bool = True) -> str:
+    if scenarios:
+        _validate_rows(rows)
+    elif not rows or any(not r.get("term") for r in rows):
+        raise ValueError("factorial contrasts are incomplete")
+    else:
+        for r in rows:
+            if any(isinstance(v, float) and not math.isfinite(v) for v in r.values()):
+                raise ArithmeticError("nonfinite factorial effect")
     with path.open("w", newline="", encoding="utf-8") as fp:
         w = csv.DictWriter(fp, fieldnames=list(rows[0]))
         w.writeheader()
@@ -234,7 +241,7 @@ def generate_study(outdir: Path) -> dict:
     files[physical_file] = _write_csv(outdir / physical_file, physical)
     files[numerical_file] = _write_csv(outdir / numerical_file, numerical)
     files[factorial_file] = _write_csv(outdir / factorial_file, factorial)
-    files[effects_file] = _write_csv(outdir / effects_file, effects)
+    files[effects_file] = _write_csv(outdir / effects_file, effects, scenarios=False)
     manifest = {
         "schema": SCHEMA,
         "evidence_class": "synthetic_constant_property_1d_two_temperature",
