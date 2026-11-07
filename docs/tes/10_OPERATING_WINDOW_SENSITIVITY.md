@@ -90,7 +90,21 @@ The physical one-at-a-time (OAT) panel varies one independent coordinate from th
 | Discharge turnovers | 0.8, 1.0, 1.2 |
 | Useful outlet temperature threshold, K | 450, 500, 550, 700 |
 
-These produce **29 CSV rows** (1 nominal plus 28 perturbations). The independent numerical-discretization panels contain **12 rows**: N = 6/12/24/48/96/192, grade-trace decimation stride 4/2/1, and SSPRK3 maximum substep limited to 1/0.5/0.25 of the nominal stability timestep. Varying trace stride is *not* varying SSPRK3 timestep; the nominal grade observation uses every internal solver substep. Macro stage count stays at 24. Varying N is *not* changing the physical bed size.
+These produce **29 OAT CSV rows** (1 nominal plus 28 perturbations). A separate
+**fully crossed 2³ factorial panel** evaluates all eight low/high corners of
+flow (0.025/0.10 kg/s), porosity (0.35/0.65) and volumetric Hv
+(250/1000 W/(m³ K)) at the same N=96 base geometry and turnover-count
+schedule. Seven orthogonal signed factorial contrasts are reported:
+three main effects, three two-way interactions and one three-way interaction.
+For sign-coded levels -1/+1, the effect for a factor set S is
+\(4^{-1}\sum_{\mathrm{eight\ corners}} y\prod_{j\in S}x_j\), i.e. the
+mean high-minus-low response of the coded factor/interaction. These are
+descriptive **finite-window interaction contrasts**, not general derivatives,
+statistical confidence intervals or proof of causal mechanism. Especially for
+temperature-grade qualification, zeros and abrupt threshold changes can
+create large interaction effects. Model structure remains unchanged.
+
+The independent numerical-discretization panels contain **12 rows**: N = 6/12/24/48/96/192, grade-trace decimation stride 4/2/1, and SSPRK3 maximum substep limited to 1/0.5/0.25 of the nominal stability timestep. Varying trace stride is *not* varying SSPRK3 timestep; the nominal grade observation uses every internal solver substep. Macro stage count stays at 24. Varying N is *not* changing the physical bed size.
 
 Each row reports charge, recovered and threshold-qualified energy, qualified duration, first-qualified/first-downcrossing time where defined, residuals, capacity, SOC, exergy, thermocline width when defined, full-state return and solver diagnostics, alongside absolute OAT deltas from nominal. Nonmonotone responses are legitimate; do not silently fit a derivative across a threshold event.
 
@@ -115,7 +129,7 @@ python scripts/tes_operating_window_study.py --out evidence/generated/tes_v08
 python scripts/tes_operating_window_study.py --verify --out evidence/generated/tes_v08
 ~~~
 
-Outputs: tes_v08_physical_sensitivity.csv, tes_v08_numerical_refinement.csv and tes_v08_manifest.json, with SHA256 hashes and a source revision supplied by CI. The manifest freezes the input contract, baseline outputs, nominal parameters, excluded claims, and three noninterchangeable uncertainty classes. Direct artifact manipulation is rejected on re-verification.
+Outputs: tes_v08_physical_sensitivity.csv, tes_v08_factorial_cases.csv, tes_v08_factorial_effects.csv, tes_v08_numerical_refinement.csv and tes_v08_manifest.json, with SHA256 hashes and a source revision supplied by CI. The manifest freezes the input contract, baseline outputs, nominal parameters, excluded claims, and three noninterchangeable uncertainty classes. Direct artifact manipulation is rejected on re-verification.
 
 Dedicated workflow: .github/workflows/tes-v08-operating-window.yml. The repository's inherited test matrix also exercises the new unit tests on Python 3.10/3.11/3.12.
 
