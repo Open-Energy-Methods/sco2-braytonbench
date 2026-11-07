@@ -44,7 +44,25 @@ Run with python scripts/tes_operating_window_study.py --out evidence/generated/t
 and verify its CSV hashes with --verify. GitHub Actions runs and archives
 the full evidence; results are **synthetic** and do not establish model-form
 uncertainty, experimental validation, real-pressure losses, or industrial TES
-round-trip efficiency. TES-v0.9 packaging and independent v1.0 review remain open.
+round-trip efficiency. Independent v1.0 scientific review remains open.
+
+### TES-v0.9 — isolated distributions and deterministic replay (under review)
+
+The [TES-v0.9 software release gate](docs/tes/12_DISTRIBUTION_AND_REPLAY_GATE.md)
+builds a wheel and sdist from the same exact commit and exercises each through
+separate non-editable installs on Python 3.10/3.11/3.12. It checks installed
+module origin, analytically verified grid, charge/discharge, ideal and real-CO2
+one-pass coupling, temperature-grade accounting and a locally generated *toy*
+surrogate ABI smoke (not frozen v0.7 holdout retraining). It compares replay
+results with strict categorical and finite numeric tolerances and archives
+SHA256 manifests for both distributions and numerical evidence.
+
+The archive audit excludes the uncleared Mantilla 2010 extracted density CSV
+and disallowed packaged model pickles/PDFs while retaining source provenance.
+**Passing software distribution checks does not establish redistribution rights,
+experimental verification or scientific reviewer approval.** The TES-v0.9
+milestone PR must pass exact-head CI before merge; parent version stays
+0.5.0a0, with #27/#28 remaining release blockers.
 
 ## v1.0 research release programme — work in progress
 

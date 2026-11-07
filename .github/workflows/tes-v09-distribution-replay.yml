@@ -1,0 +1,107 @@
+name: TES-v0.9 distribution and isolated numerical replay
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tes-v09-wheel-sdist-replay:
+    name: Python ${{ matrix.python-version }} wheel/sdist TES replay
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    env:
+      TES_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Checkout exact source revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install packaging and source-gate test tools
+        run: python -m pip install 'build==1.2.2' 'pytest>=8,<10'
+      - name: Audit fault-injection and archive path/rights tests
+        run: python -m pytest -q tests/test_tes_v09_release_gate.py
+      - name: Build one wheel and one sdist from same source
+        run: python -m build --wheel --sdist
+      - name: Inspect archive members, metadata and restricted-source exclusions
+        run: python scripts/tes_v09_release_gate.py audit --dist dist
+      - name: Independently install wheel and sdist with matching pinned dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          wheel="$(find dist -maxdepth 1 -name '*.whl' -print -quit)"
+          sdist="$(find dist -maxdepth 1 -name '*.tar.gz' -print -quit)"
+          test -n "$wheel" && test -n "$sdist"
+          mkdir -p "$RUNNER_TEMP/tes-v09-sdist-extracted"
+          tar -xzf "$sdist" -C "$RUNNER_TEMP/tes-v09-sdist-extracted"
+          extracted="$(find "$RUNNER_TEMP/tes-v09-sdist-extracted" -mindepth 1 -maxdepth 1 -type d -print -quit)"
+          test -d "$extracted/scripts" && test -d "$extracted/examples"
+          for kind in wheel sdist; do
+            venv="$RUNNER_TEMP/tes-v09-$kind-venv"
+            workspace="$RUNNER_TEMP/tes-v09-$kind-workspace"
+            python -m venv "$venv"
+            "$venv/bin/python" -m pip install --only-binary=:all: \
+              'CoolProp==8.0.0' 'numpy==1.26.4' \
+              'scikit-learn==1.5.2' 'joblib==1.4.2' 'pytest>=8,<10'
+            if [ "$kind" = wheel ]; then
+              "$venv/bin/python" -m pip install --no-deps "$wheel"
+            else
+              "$venv/bin/python" -m pip install --no-deps "$sdist"
+            fi
+            mkdir -p "$workspace"
+            cp -R "$extracted/scripts" "$extracted/examples" "$extracted/tests" "$workspace/"
+            test ! -e "$workspace/src"
+            (
+              cd "$workspace"
+              unset PYTHONPATH
+              "$venv/bin/python" -I scripts/tes_v09_installed_probe.py \
+                --expect-prefix "$venv" \
+                --out evidence/generated/tes_v09/tes_v09_installed_probe.json
+              "$venv/bin/python" scripts/tes_schumann_convergence.py \
+                --out evidence/generated/tes_v03
+              "$venv/bin/python" examples/tes_charge_discharge.py
+              "$venv/bin/python" examples/tes_coupled_discharge.py
+              "$venv/bin/python" -m pytest -q \
+                tests/test_thermal_storage.py \
+                tests/test_tes_cycles.py \
+                tests/test_tes_coupling.py \
+                tests/test_tes_metrics.py
+              "$venv/bin/python" -c \
+                'from pathlib import Path; import sco2_braytonbench.thermal_storage as m; import sys; assert Path(m.__file__).resolve().is_relative_to(Path(sys.prefix).resolve()); print("Installed module origin PASS")'
+            )
+          done
+      - name: Compare installed numerical evidence and write immutable source/artifact digest manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/tes_v09_release_gate.py replay \
+            --dist dist \
+            --wheel-root "$RUNNER_TEMP/tes-v09-wheel-workspace" \
+            --sdist-root "$RUNNER_TEMP/tes-v09-sdist-workspace" \
+            --source-sha "$TES_SOURCE_SHA" \
+            --out evidence/generated/tes_v09/tes_v09_release_manifest.json
+          python scripts/tes_v09_release_gate.py verify \
+            --dist dist \
+            --wheel-root "$RUNNER_TEMP/tes-v09-wheel-workspace" \
+            --sdist-root "$RUNNER_TEMP/tes-v09-sdist-workspace" \
+            --report evidence/generated/tes_v09/tes_v09_release_manifest.json
+      - name: Archive build and replay evidence by Python version
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v09-dist-and-replay-py${{ matrix.python-version }}
+          path: |
+            dist/
+            evidence/generated/tes_v09/tes_v09_release_manifest.json
+          if-no-files-found: warn
