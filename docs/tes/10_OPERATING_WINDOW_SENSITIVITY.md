@@ -90,7 +90,7 @@ The physical one-at-a-time (OAT) panel varies one independent coordinate from th
 | Discharge turnovers | 0.8, 1.0, 1.2 |
 | Useful outlet temperature threshold, K | 450, 500, 550, 700 |
 
-These produce **29 CSV rows** (1 nominal plus 28 perturbations). The independent numerical-discretization panels contain **10 rows**: N = 6/12/24/48, grade-trace decimation stride 4/2/1, and SSPRK3 maximum substep limited to 1/0.5/0.25 of the nominal stability timestep. Varying trace stride is *not* varying SSPRK3 timestep; the nominal grade observation uses every internal solver substep. Macro stage count stays at 24. Varying N is *not* changing the physical bed size.
+These produce **29 CSV rows** (1 nominal plus 28 perturbations). The independent numerical-discretization panels contain **12 rows**: N = 6/12/24/48/96/192, grade-trace decimation stride 4/2/1, and SSPRK3 maximum substep limited to 1/0.5/0.25 of the nominal stability timestep. Varying trace stride is *not* varying SSPRK3 timestep; the nominal grade observation uses every internal solver substep. Macro stage count stays at 24. Varying N is *not* changing the physical bed size.
 
 Each row reports charge, recovered and threshold-qualified energy, qualified duration, first-qualified/first-downcrossing time where defined, residuals, capacity, SOC, exergy, thermocline width when defined, full-state return and solver diagnostics, alongside absolute OAT deltas from nominal. Nonmonotone responses are legitimate; do not silently fit a derivative across a threshold event.
 
