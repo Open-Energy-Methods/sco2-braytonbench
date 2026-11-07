@@ -31,7 +31,8 @@ Synthetic model base:
 | Charge / zero-flow hold / discharge durations | 0.8 / 0.1 / 1.0 | thermal turnovers |
 | Qualifying discharge outlet grade | 500 | K |
 | Ambient exergy reference | 300 | K |
-| Outlet observation intervals per flowing stage | 24 | – |
+| Macro stage partition intervals | 24 | – |
+| Recorded SSPRK3 outlet substep stride | 1 (every substep) | – |
 
 The turnover period is calculated from **both** fluid and solid capacities:
 
@@ -58,7 +59,7 @@ E_{\mathrm{useful}}(T_q)=\int_{\mathrm{discharge}}
 |\dot m|c_{p,f}\,(T_{\mathrm{out}}(t)-T_{\mathrm{in}})\,dt.
 \]
 
-Here \(T_q>T_{\mathrm{in}}=T_{\mathrm{cold}}\). This quantity is not plant electric power, a heat-engine efficiency, or the entirety of heat withdrawn. It is integrated by piecewise-linear interpolation between **actual simulated outlet samples**, with linear segment splitting at threshold crossings. This approximation does *not* replace or adjust the conservative first-law ledger. The output contains the **full-linearly-reconstructed discharge energy** and its signed difference from the SSPRK3 ledger so the observation-quadrature bias is visible. Refine sample spacing separately before trusting threshold-sensitive magnitudes.
+Here \(T_q>T_{\mathrm{in}}=T_{\mathrm{cold}}\). This quantity is not plant electric power, a heat-engine efficiency, or the entirety of heat withdrawn. It is integrated by piecewise-linear interpolation across the **SSPRK3 internal substep outlet trace**, not only 24 widely spaced macro observations, with linear segment splitting at threshold crossings. A new opt-in trace field leaves the pre-existing conservative thermal solve unchanged. This approximation does *not* replace or adjust the conservative first-law ledger. The output contains the **full-linearly-reconstructed discharge energy** and its signed difference from the SSPRK3 ledger so the observation-quadrature bias is visible. A stride parameter permits controlled decimation of the substep trace without changing the physical solve; refine the sampling stride and SSPRK3 timestep independently before trusting threshold-sensitive magnitudes.
 
 A threshold never attained returns **zero qualified energy and duration**, correctly representing no service. An event such as a first crossing that never occurred is reported **null**, not zero time. A threshold can be above the physically possible inlet hot temperature as an explicit no-service stress case.
 
@@ -89,7 +90,7 @@ The physical one-at-a-time (OAT) panel varies one independent coordinate from th
 | Discharge turnovers | 0.8, 1.0, 1.2 |
 | Useful outlet temperature threshold, K | 450, 500, 550, 700 |
 
-These produce **29 CSV rows** (1 nominal plus 28 perturbations). The independent numerical-discretization panels contain **10 rows**: N = 6/12/24/48, 12/24/48 observations per stage, and SSPRK3 maximum substep limited to 1/0.5/0.25 of the nominal stability timestep. Varying observation count is *not* varying SSPRK3 timestep. Varying N is *not* changing the physical bed size.
+These produce **29 CSV rows** (1 nominal plus 28 perturbations). The independent numerical-discretization panels contain **10 rows**: N = 6/12/24/48, grade-trace decimation stride 4/2/1, and SSPRK3 maximum substep limited to 1/0.5/0.25 of the nominal stability timestep. Varying trace stride is *not* varying SSPRK3 timestep; the nominal grade observation uses every internal solver substep. Macro stage count stays at 24. Varying N is *not* changing the physical bed size.
 
 Each row reports charge, recovered and threshold-qualified energy, qualified duration, first-qualified/first-downcrossing time where defined, residuals, capacity, SOC, exergy, thermocline width when defined, full-state return and solver diagnostics, alongside absolute OAT deltas from nominal. Nonmonotone responses are legitimate; do not silently fit a derivative across a threshold event.
 
@@ -97,7 +98,7 @@ The design is **not** a probabilistic Monte Carlo study, a complete factorial in
 
 ## 6. Uncertainty and convergence are explicitly separated
 
-**Numerical:** use mesh N, SSPRK3 timestep limit and quality-observation refinement, plus known Schumann verification from TES-v0.3. The finest point here is not automatically an exact continuum truth. Results should be compared against the finest available reference and a plateau judged on relevant outputs; first-law closure alone cannot establish convergence.
+**Numerical:** use mesh N, SSPRK3 timestep limit and independently decimated solver-substep outlet traces, plus known Schumann verification from TES-v0.3. The finest point here is not automatically an exact continuum truth. Results should be compared against the finest available reference and a plateau judged on relevant outputs; first-law closure alone cannot establish convergence.
 
 **Parametric:** report signed physical OAT deltas under the declared scaled-turnover protocol. No distribution, standard error or confidence interval is inferred without justified input distributions.
 
