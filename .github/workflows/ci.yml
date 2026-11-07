@@ -470,7 +470,7 @@ jobs:
       - run: python -m pip install -e '.[test]'
       - name: Single-pass TES to quasi-steady Brayton independent ideal-gas ledger
         run: python -m pytest -q tests/test_tes_coupling.py
-      - name: Evidence: separate bed interval J and Brayton snapshot W
+      - name: "Evidence: separate bed interval J and Brayton snapshot W"
         run: python examples/tes_coupled_discharge.py
       - uses: actions/upload-artifact@v4
         if: always()
