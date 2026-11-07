@@ -38,13 +38,15 @@ def features(row: dict) -> list[float]:
     discharge = float(row["discharge_turnovers"])
     flow = float(row["flow_kg_s"])
     hv = float(row["hv_w_m3_k"])
-    # The full TES-v0.6 generator fixes L=1 m, A=0.1 m2, cp_f=1000 J/kgK.
-    # These are not fitted to validation or test measurements.
-    ntu = hv * 0.1 * 1.0 / (flow * 1000.0)
-    if not all(math.isfinite(v) for v in (f,charge,discharge,flow,hv,ntu)):
+    if not all(math.isfinite(v) for v in (f,charge,discharge,flow,hv)):
         raise ValueError("nonfinite model feature")
-    if not 0 < f <= 1 or min(charge,discharge,flow,hv,ntu) <= 0:
+    if not 0 < f <= 1 or min(charge,discharge,flow,hv) <= 0:
         raise ValueError("invalid physical domain")
+    # Guard the divisor before forming NTU, not after (zero-flow is invalid).
+    # The full TES-v0.6 generator fixes L=1 m, A=0.1 m2, cp_f=1000 J/kgK.
+    ntu = hv * 0.1 * 1.0 / (flow * 1000.0)
+    if not math.isfinite(ntu) or ntu <= 0:
+        raise ValueError("invalid finite interphase NTU")
     d = float(phase == "discharge")
     x = [
         d, f, charge, discharge,
