@@ -92,7 +92,10 @@ def _paths_checked(members: list[str], kind: str) -> dict:
         if not normalized:
             continue
         if kind=="sdist":
-            demand("/" in normalized,"sdist member lacks top-level root")
+            if "/" not in normalized:
+                # setuptools records its single top-level directory in tar.
+                roots.add(normalized)
+                continue
             roots.add(normalized.split("/",1)[0])
             relative=normalized.split("/",1)[1]
         else:
