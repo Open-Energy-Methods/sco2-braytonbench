@@ -25,7 +25,7 @@ BASE_SPEC = PackedBedSpec(
     length_m=1.0, area_m2=0.1, porosity=0.5,
     fluid_density_kg_m3=5.0, fluid_cp_j_kg_k=1000.0,
     solid_density_kg_m3=1000.0, solid_cp_j_kg_k=700.0,
-    interphase_hv_w_m3_k=500.0, n_cells=12,
+    interphase_hv_w_m3_k=500.0, n_cells=96,
 )
 BASE_INPUTS = OperatingInputs()
 PHYSICAL_AXES = {
