@@ -120,6 +120,7 @@ class PackedBedStepResult:
     courant_per_substep: float
     exchange_fluid_per_substep: float
     exchange_solid_per_substep: float
+    outlet_trace: tuple[tuple[float, float], ...] | None = None
 
 
 def stored_energy_j(spec: PackedBedSpec, state: PackedBedState, *, reference_k: float = 0.0) -> float:
@@ -179,6 +180,7 @@ def step_packed_bed(
     safety_factor: float = 0.75,
     max_substeps: int = 250000,
     max_step_s: float | None = None,
+    record_outlet_trace: bool = False,
 ) -> PackedBedStepResult:
     """Advance a held-inlet boundary by SSPRK3 with flux-matched energy ledger.
 
@@ -186,6 +188,8 @@ def step_packed_bed(
     fluid/solid interphase exchange but no boundary energy transport.
     """
     state.validate(spec)
+    if type(record_outlet_trace) is not bool:
+        raise ValueError("record_outlet_trace must be boolean")
     tin = _finite("inlet_k", inlet_k, positive=True)
     flow = _finite("mdot_kg_s", mdot_kg_s)
     dt = _finite("duration_s", duration_s)
@@ -206,7 +210,8 @@ def step_packed_bed(
         outlet = state.fluid_k[-1] if flow >= 0 else state.fluid_k[0]
         return PackedBedStepResult(
             state, outlet, 0 if flow == 0 else (1 if flow > 0 else -1),
-            0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0
+            0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0,
+            ((0.0, outlet),) if record_outlet_trace else None,
         )
     allowed = (sf / frequency) if frequency else dt
     if max_step_s is not None:
@@ -220,7 +225,11 @@ def step_packed_bed(
     fluid = list(state.fluid_k)
     solid = list(state.solid_k)
     boundary_energy_terms = []
-    for _ in range(count):
+    outlet_trace = (
+        [(0.0, fluid[-1] if flow >= 0 else fluid[0])]
+        if record_outlet_trace else None
+    )
+    for substep_index in range(count):
         df0, ds0, qb0 = _rhs(spec, fluid, solid, tin, flow)
         f1 = [a + h * b for a, b in zip(fluid, df0)]
         s1 = [a + h * b for a, b in zip(solid, ds0)]
@@ -235,6 +244,11 @@ def step_packed_bed(
         solid = [(a / 3) + (2.0 / 3) * (b + h * c)
                  for a, b, c in zip(solid, s2, ds2)]
         boundary_energy_terms.append(h * (qb0 / 6 + qb1 / 6 + 2 * qb2 / 3))
+        if outlet_trace is not None:
+            outlet_trace.append((
+                h * (substep_index + 1),
+                fluid[-1] if flow >= 0 else fluid[0],
+            ))
     final = PackedBedState(tuple(fluid), tuple(solid))
     final.validate(spec)
     initial_u = stored_energy_j(spec, state, reference_k=tin)
@@ -245,5 +259,6 @@ def step_packed_bed(
     return PackedBedStepResult(
         final, outlet, 0 if flow == 0 else (1 if flow > 0 else -1),
         boundary, change, boundary - change, count,
-        advection * h, fluid_exchange * h, solid_exchange * h
+        advection * h, fluid_exchange * h, solid_exchange * h,
+        tuple(outlet_trace) if outlet_trace is not None else None,
     )
