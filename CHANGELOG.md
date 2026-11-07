@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — TES-v1.0 integrated research-baseline candidate (2026-11-07)
+
+- Consolidated TES-v0.1–v0.9 equations, numerical verification, conservation/energy grade, real-CO2 one-pass coupling, 512-run synthetic ROM, negative OOD outcome, grid and factorial findings in a single scoped scientific report.
+- Added independent affine-temperature/area-flow invariance and exergy/thermocline checks; release-fraud tests reject altered source content SHA256, falsely asserted reviewer identity/approval, rights clearance and public version tags.
+- Added qualified external reviewer task matrix, unsigned reviewer report template, historic NIST ThermoML rights/remediation dossier and release decision register. **These do not constitute external human review or legal rights clearance.**
+- Added exact-source candidate CI to generate and verify a hashed scientific-source ledger with release authorization unconditionally false. **No parent version change, tag, DOI or real experimental claims.**
+- TES-v0.8 and TES-v0.9 are already merged. Parent stays 0.5.0a0; #27 historical data rights and #28 independent human review remain open before a formal v1.0 release.
+
 ## Unreleased — WP5 software-release reproducibility gate (2026-11-06)
 
 - Added explicit source-distribution manifest for method docs, synthetic examples, prospective test inputs, research fixtures and tests; no auto-publishing of binary artifacts or sensitive experiment data.

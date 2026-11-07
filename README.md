@@ -46,7 +46,7 @@ the full evidence; results are **synthetic** and do not establish model-form
 uncertainty, experimental validation, real-pressure losses, or industrial TES
 round-trip efficiency. Independent v1.0 scientific review remains open.
 
-### TES-v0.9 — isolated distributions and deterministic replay (under review)
+### TES-v0.9 — isolated distributions and deterministic replay (merged)
 
 The [TES-v0.9 software release gate](docs/tes/12_DISTRIBUTION_AND_REPLAY_GATE.md)
 builds a wheel and sdist from the same exact commit and exercises each through
@@ -61,8 +61,31 @@ The archive audit excludes the uncleared Mantilla 2010 extracted density CSV
 and disallowed packaged model pickles/PDFs while retaining source provenance.
 **Passing software distribution checks does not establish redistribution rights,
 experimental verification or scientific reviewer approval.** The TES-v0.9
-milestone PR must pass exact-head CI before merge; parent version stays
-0.5.0a0, with #27/#28 remaining release blockers.
+milestone passed all three dedicated Python-version CI jobs, 27/27 repository
+jobs, and the TES-v0.8 regression; merged as PR #41 (main commit
+46db32e6e9a45bdfeb645aa6e0599380cb9bc9e4). Parent version remains
+0.5.0a0, with #27/#28 remaining independent release blockers.
+
+### TES-v1.0 — integrated research baseline and review package (candidate)
+
+The [integrated TES research report](docs/tes/13_RESEARCH_BASELINE_TECHNICAL_REPORT.md)
+consolidates the conservative 1-D two-temperature governing equations, Schumann
+analytical/grid comparisons, energy-preserving charge/hold/reverse-discharge,
+explicit one-pass TES-to-Brayton boundary, exergy/temperature-grade accounting,
+synthetic surrogate (including its **negative out-of-domain result**) and the
+N=96/192 sensitivity limitations. Additional candidate tests cross-check
+affine-temperature, area/flow dimensional scaling, exergy identities and
+grade-independent conservation against independent physical constructions.
+
+The [external scientific and software reviewer packet](docs/tes/14_EXTERNAL_REVIEW_PACKET.md),
+[source and historical data rights dossier](docs/data_licenses/TES_SOURCE_RIGHTS.md)
+and [release decision register](docs/tes/15_RELEASE_DECISION_REGISTER.md)
+are **unsatisfied review requirements, not signed approvals**. The
+candidate self-audit records exact commit/source SHA256 and *fails closed*
+if release authorization, independent reviewer approval or historical
+redistribution rights are asserted without a separate actual review.
+No v1.0 tag, Zenodo DOI, real facility validation or parent version change
+is implied. Parent version remains **0.5.0a0**.
 
 ## v1.0 research release programme — work in progress
 

@@ -8,4 +8,4 @@ authors:
     given-names: Abhijith
 repository-code: "https://github.com/Open-Energy-Methods/sco2-braytonbench"
 license: "BSD-3-Clause"
-abstract: "Alpha-stage numerical research software for steady sCO2 Brayton cycle and finite-source analyses, with explicitly synthetic thermal-wall transient/control examples and prospective laboratory-readiness tools. Not a validated CARBOSOLA plant model."
+abstract: "Alpha-stage numerical research software for quasi-steady sCO2 Brayton cycles, finite-source thermal transients and a synthetic constant-property 1-D two-temperature sensible packed-bed TES benchmark, with mathematical verification and a leakage-controlled output surrogate whose OOD limitations are disclosed. No experimental TES or CARBOSOLA plant validation or independent v1.0 sign-off."

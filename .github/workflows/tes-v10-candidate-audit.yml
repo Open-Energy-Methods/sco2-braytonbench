@@ -1,0 +1,63 @@
+name: TES-v1.0 candidate scientific and governance self-audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tes-v10-research-candidate:
+    name: Synthetic physics invariants and unsigned release-gate audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TES_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Checkout exact candidate commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install project research-alpha and pytest
+        run: python -m pip install -e '.[test]'
+      - name: Independent dimensional/affine/energy and governance failure-injection tests
+        run: python -m pytest -q tests/test_tes_v10_consistency.py
+      - name: Anchor candidate audit to checked-out source commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TES_SOURCE_SHA"
+          python scripts/tes_v10_research_gate.py audit \
+            --source-sha "$TES_SOURCE_SHA" \
+            --out evidence/generated/tes_v10/candidate_manifest.json
+          python scripts/tes_v10_research_gate.py verify \
+            --source-sha "$TES_SOURCE_SHA" \
+            --out evidence/generated/tes_v10/candidate_manifest.json
+      - name: Verify release cannot be authorized by machine-only audit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("evidence/generated/tes_v10/candidate_manifest.json")
+          data=json.loads(p.read_text(encoding="utf-8"))
+          assert data["release_authorized"] is False
+          assert data["reviewer_identity_asserted_by_this_program"] is False
+          assert data["pre_release_flags"]["independent_human_reviewer_approved"] is False
+          assert data["pre_release_flags"]["historical_third_party_data_rights_cleared"] is False
+          assert data["parent_version"] == "0.5.0a0"
+          assert len(data["source_file_sha256"]) >= 40
+          print("TES-v1.0 candidate SELF AUDIT pass; public release BLOCKED")
+          PY
+      - name: Archive unsigned candidate evidence (not a release)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v10-candidate-unsigned-source-ledger
+          path: evidence/generated/tes_v10/candidate_manifest.json
+          if-no-files-found: error
