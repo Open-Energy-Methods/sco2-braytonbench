@@ -104,6 +104,28 @@ def test_operating_study_is_deterministic_and_hash_tamper_detected(tmp_path):
         len(x) for x in manifest["study_design_predeclared"]["physical_axes"].values()
     )
     assert manifest["counts"]["numerical_rows"] == 12
+    assert manifest["counts"]["factorial_rows"] == 8
+    assert manifest["counts"]["factorial_effect_rows"] == 7
+    with (tmp_path / "tes_v08_factorial_cases.csv").open(
+        newline="", encoding="utf-8"
+    ) as fp:
+        corners = list(csv.DictReader(fp))
+    assert len({
+        (r["code_flow_kg_s"], r["code_porosity"],
+         r["code_interphase_hv_w_m3_k"]) for r in corners
+    }) == 8
+    for factor in ("flow_kg_s", "porosity", "interphase_hv_w_m3_k"):
+        assert sum(int(r["code_" + factor]) for r in corners) == 0
+    expected_flow_effect = sum(
+        int(r["code_flow_kg_s"]) * float(r["recovered_energy_j"])
+        for r in corners
+    ) / 4
+    flow_contrast = next(
+        r for r in manifest["factorial_effects"] if r["term"] == "flow_kg_s"
+    )
+    assert flow_contrast["recovered_energy_j"] == pytest.approx(
+        expected_flow_effect, abs=1e-7
+    )
     assert verify_study(tmp_path)["sha256"] == manifest["sha256"]
     with (tmp_path / "tes_v08_physical_sensitivity.csv").open(
         newline="", encoding="utf-8"
