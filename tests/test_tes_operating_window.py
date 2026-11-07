@@ -172,3 +172,19 @@ def test_internal_substep_trace_does_not_modify_conservative_solution():
     assert traced.conservation_residual_j == ordinary.conservation_residual_j
     for (t0, _), (t1, _) in zip(traced.outlet_trace, traced.outlet_trace[1:]):
         assert 0 <= t0 < t1 <= 16.0
+
+
+def test_true_returned_full_state_allows_but_does_not_force_roundtrip():
+    # A long, entirely synthetic discharge returns the *actual* complete
+    # fluid+solid cell profile; unlike a short discharge this permits a ratio.
+    spec = replace(BASE_SPEC, n_cells=4)
+    inputs = replace(
+        BASE_INPUTS, charge_turnovers=0.2, hold_turnovers=0.0,
+        discharge_turnovers=30.0, observations_per_stage=8,
+    )
+    r = run_operating_case(spec, inputs)
+    assert r.max_cell_return_error_k < inputs.state_return_tolerance_k
+    assert r.complete_cycle
+    assert r.gross_round_trip_efficiency is not None
+    assert 0.98 <= r.gross_round_trip_efficiency <= 1.0000001
+    assert r.first_law_relative_residual < 1e-9
