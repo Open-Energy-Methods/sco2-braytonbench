@@ -458,3 +458,35 @@ jobs:
             evidence/generated/tes_v04/synthetic_storage_stage_trace.csv
             evidence/generated/tes_v04/synthetic_storage_summary.json
           if-no-files-found: error
+
+  tes-one-pass-cycle-ideal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test]'
+      - name: Single-pass TES to quasi-steady Brayton independent ideal-gas ledger
+        run: python -m pytest -q tests/test_tes_coupling.py
+      - name: "Evidence: separate bed interval J and Brayton snapshot W"
+        run: python examples/tes_coupled_discharge.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tes-v05-open-htf-brayton-firstlaw
+          path: evidence/generated/tes_v05/synthetic_one_pass_cycle_snapshot.json
+          if-no-files-found: error
+
+  tes-one-pass-cycle-real-co2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: TES one-pass source/heater real-CO2 compatibility and conservation
+        run: python -m pytest -q tests/test_tes_coupling.py
