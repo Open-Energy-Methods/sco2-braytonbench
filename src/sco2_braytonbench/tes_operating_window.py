@@ -65,6 +65,8 @@ class OperatingResult:
     charged_energy_j: float
     recovered_energy_j: float
     useful_discharge_energy_j: float
+    reconstructed_discharge_energy_j: float
+    observation_quadrature_error_j: float
     useful_discharge_duration_s: float
     first_qualified_time_s: float | None
     first_downcrossing_time_s: float | None
@@ -148,6 +150,7 @@ def run_operating_case(spec: PackedBedSpec,
     charged_terms = []
     recovered_terms = []
     quality_terms = []
+    full_linear_terms = []
     seconds_terms = []
     first_qualified = None
     first_downcrossing = None
@@ -200,6 +203,9 @@ def run_operating_case(spec: PackedBedSpec,
             inputs.useful_outlet_threshold_k, inputs.cold_k, flow_cp, h,
         )
         quality_terms.append(energy)
+        full_linear_terms.append(
+            flow_cp * h * (0.5*(outlet_before+outlet_after) - inputs.cold_k)
+        )
         seconds_terms.append(seconds)
         if enter is not None and first_qualified is None:
             first_qualified = i * h + enter
@@ -209,6 +215,7 @@ def run_operating_case(spec: PackedBedSpec,
     charged_energy = math.fsum(charged_terms)
     recovered_energy = math.fsum(recovered_terms)
     useful_energy = math.fsum(quality_terms)
+    linear_recovered = math.fsum(full_linear_terms)
     useful_seconds = math.fsum(seconds_terms)
     stored_change = (
         stored_energy_j(spec, state, reference_k=inputs.cold_k)
@@ -228,7 +235,8 @@ def run_operating_case(spec: PackedBedSpec,
     scale = max(1.0, abs(charged_energy), abs(recovered_energy))
     if (charged_energy <= 0 or recovered_energy < -scale * 1e-12
             or useful_energy < -scale * 1e-12
-            or useful_energy > recovered_energy + scale * 1e-9):
+            or useful_energy > recovered_energy + abs(linear_recovered - recovered_energy)
+            + scale * 1e-9):
         raise ValueError("scenario violates charge/discharge/grade accounting")
     if relative > 1e-9:
         raise ArithmeticError("packed-bed first-law numerical closure failed")
@@ -244,6 +252,8 @@ def run_operating_case(spec: PackedBedSpec,
         charged_energy_j=charged_energy,
         recovered_energy_j=recovered_energy,
         useful_discharge_energy_j=useful_energy,
+        reconstructed_discharge_energy_j=linear_recovered,
+        observation_quadrature_error_j=linear_recovered-recovered_energy,
         useful_discharge_duration_s=useful_seconds,
         first_qualified_time_s=first_qualified,
         first_downcrossing_time_s=first_downcrossing,
