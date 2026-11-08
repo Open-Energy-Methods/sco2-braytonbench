@@ -1,5 +1,7 @@
 # WP5 — v1.0 release acceptance and independent evidence freeze
 
+**8 November parent-alpha update:** Source package/CITATION target 0.6.0a0 *development alpha*, not a tagged or independently approved v1.0 release. Historical 0.5.0a0 statements remain dated evidence. Historic source-data rights #27 and qualified human review #28 remain unresolved; [parent integration dossier](PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md).
+
 **Created:** 2026-11-06. **Status:** engineering candidate, review required; no tag, DOI or publication authorized.
 **Current package identity:** `sco2-braytonbench 0.5.0a0`, BSD-3-Clause, Python `>=3.10` declared; CI checks Python 3.11 and 3.12. Version in `CITATION.cff` must match `pyproject.toml`.
 
