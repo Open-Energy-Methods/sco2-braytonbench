@@ -1,5 +1,7 @@
 # v1.0 requirements-to-evidence matrix
 
+**Development update (8 November 2026):** This is an original 6 November baseline. Parent 0.6.0a0 development alpha now integrates TES-v1 candidate and the *experimental* Kim H1d implementation, while original Eq.24 ambiguity #20, historic rights #27, external review #28 and stable v1 authorization remain open. See [current parent integration dossier](PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md).
+
 **Baseline captured:** 2026-11-06, initial v1.0 foundation. This file must track **evidence and failures**, not simply mark planned components complete.
 
 Legend: **P** passed on the scoped existing evidence; **PARTIAL** evidence is limited; **OPEN** not implemented/reviewed; **BLOCKED** external provenance/data.
