@@ -369,6 +369,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          expected_version=$(python -c 'import tomllib; from pathlib import Path; print(tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))["project"]["version"])')
           python -m venv "$RUNNER_TEMP/wp5-wheel-venv"
           python -m venv "$RUNNER_TEMP/wp5-sdist-venv"
           "$RUNNER_TEMP/wp5-wheel-venv/bin/python" -m pip install --no-deps dist/*.whl
@@ -380,7 +381,7 @@ jobs:
             interpreter="$RUNNER_TEMP/wp5-$kind-venv/bin/python"
             (
               cd "$workspace"
-              env -u PYTHONPATH "$interpreter" -c "import importlib.metadata as md, sco2_braytonbench as x; from pathlib import Path; assert md.version('sco2-braytonbench') == '0.5.0a0'; assert Path(x.__file__).resolve().is_relative_to(Path('$RUNNER_TEMP/wp5-$kind-venv').resolve())"
+              env -u PYTHONPATH "$interpreter" -c "import importlib.metadata as md, sco2_braytonbench as x; from pathlib import Path; assert md.version('sco2-braytonbench') == '$expected_version'; assert Path(x.__file__).resolve().is_relative_to(Path('$RUNNER_TEMP/wp5-$kind-venv').resolve())"
               env -u PYTHONPATH "$interpreter" examples/thermal_wall_step_response.py
               env -u PYTHONPATH "$interpreter" examples/waste_heat_wall_coupled_cycle.py
               env -u PYTHONPATH "$interpreter" examples/waste_heat_bypass_pi_comparison.py
