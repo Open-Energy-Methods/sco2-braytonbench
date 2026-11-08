@@ -73,4 +73,4 @@ A review at an earlier SHA does not silently transfer to later source-changing c
 
 ## E. Separation of sign-off and release
 
-This packet may be used to request peer review. The repository itself may integrate the candidate self-audit implementation as 0.6.0a0 once machine CI is green. Do not create a TES-v1.0 public DOI, formal v1.0 release tag, or claim independent scientific sign-off until issue #28 is fulfilled by real identified reviewers **and** issue #27 is separately resolved. The automated candidate manifest deliberately keeps both status fields false regardless of CI outcomes.
+This packet may be used to request peer review. The repository itself may integrate the candidate self-audit implementation as 0.7.0a0 once machine CI is green. Do not create a TES-v1.0 public DOI, formal v1.0 release tag, or claim independent scientific sign-off until issue #28 is fulfilled by real identified reviewers **and** issue #27 is separately resolved. The automated candidate manifest deliberately keeps both status fields false regardless of CI outcomes.
