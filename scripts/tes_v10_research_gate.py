@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 
 SCHEMA="tes-v10-research-baseline-candidate-1"
-PARENT_VERSION="0.6.0a0"
+PARENT_VERSION="0.7.0a0"
 REQUIRED = (
     "pyproject.toml", "CITATION.cff", "LICENSE", "MANIFEST.in", "README.md", "CHANGELOG.md",
     ".github/workflows/tes-v10-candidate-audit.yml",
@@ -121,9 +121,9 @@ def audit(root: Path, source_sha: str, out: Path) -> dict:
                "unapproved extracted Mantilla measurements in source snapshot")
     project=(root/"pyproject.toml").read_text(encoding="utf-8")
     citation=(root/"CITATION.cff").read_text(encoding="utf-8")
-    demand(re.search(r'(?m)^version = "0\.6\.0a0"$',project) is not None,
+    demand(re.search(r'(?m)^version = "0\.7\.0a0"$',project) is not None,
            "parent pyproject version must stay research alpha")
-    demand(re.search(r'(?m)^version: "0\.6\.0a0"$',citation) is not None,
+    demand(re.search(r'(?m)^version: "0\.7\.0a0"$',citation) is not None,
            "CITATION parent version must stay research alpha")
     demand('license = "BSD-3-Clause"' in project,
            "project license contract drift")
