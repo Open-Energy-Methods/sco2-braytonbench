@@ -30,6 +30,11 @@
 - Source split is **256 training + 64 validation + 128 test + 64 OOD complete synthetic runs**. ROM was selected/frozen against validation only. OOD uses higher inlet temperatures 810–855 K and larger mass flows 0.105–0.15 kg/s than training, with declared other synthetic variation unchanged.
 - Outlet RMSE plotted: test ROM 6.196479 K, test two-cell 15.091789 K, OOD ROM 14.252179 K, OOD two-cell 6.596487 K. The **negative OOD transfer** is an integral finding and the out-of-domain results were not used to retune this frozen model. The figure does not plot confidence intervals; none have been justified for real-world prediction.
 
+## Figure 4. Liquid-piston algebraic thought experiment — NOT DATA
+
+- [04_liquid_piston_illustrative_pv.svg](figures/04_liquid_piston_illustrative_pv.svg) is a **separately classified hypothetical mathematical visualization**, *not a fourth experimental or TES numerical verification plot*. It uses the documented source-level LiquidPistonSpec defaults: p_g0=10 MPa absolute, V_g0=2 L, V_p=0.5 L, isothermal p_g(x)=10/(1−0.25x) MPa, invasion pressure offset 20 MPa and recession offset 12 MPa.
+- The 8 MPa branch separation over 0.5 L produces **(20−12) MPa × 0.5 L = 4,000 J** pressure–volume loop area by definition. The full analytic gas/heat and hydraulic work budgets and independent tests are described in [the concept](LIQUID_PISTON_CONCEPT.md). The offsets are NOT inferred from any material data or COMPETENT experiment.
+
 ## Figure integrity and reproduction
 
 - SVG graphics are first-party, drawn from the three small CSV snapshots. No internet-hosted images, copyrighted source-article graphics or measured third-party data are included.
