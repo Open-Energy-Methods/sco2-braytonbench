@@ -13,13 +13,13 @@ from scripts import tes_v09_release_gate as gate
 
 def wheel_members():
     return list(gate.REQUIRED_WHEEL) + [
-        "sco2_braytonbench-0.5.0a0.dist-info/METADATA",
-        "sco2_braytonbench-0.5.0a0.dist-info/licenses/LICENSE",
+        "sco2_braytonbench-0.6.0a0.dist-info/METADATA",
+        "sco2_braytonbench-0.6.0a0.dist-info/licenses/LICENSE",
     ]
 
 
 def source_members():
-    return ["sco2_braytonbench-0.5.0a0/" + name
+    return ["sco2_braytonbench-0.6.0a0/" + name
             for name in gate.REQUIRED_SDIST]
 
 
@@ -30,16 +30,16 @@ def test_minimum_complete_packaging_contract_and_source_rights():
     assert sdist["no_uncleared_restricted_assets"]
     assert wheel["required_checked"] == len(gate.REQUIRED_WHEEL)
     assert sdist["required_checked"] == len(gate.REQUIRED_SDIST)
-    assert gate.PARENT_VERSION == "0.5.0a0"
+    assert gate.PARENT_VERSION == "0.6.0a0"
     assert len(gate.REPLAY_ARTIFACTS) == 7
 
 
 @pytest.mark.parametrize("injection", [
-    "sco2_braytonbench-0.5.0a0/data/reference/mantilla2010_thermoml_density.csv",
-    "sco2_braytonbench-0.5.0a0/docs/copied_paper.pdf",
-    "sco2_braytonbench-0.5.0a0/evidence/generated/tes_v07/test.csv",
-    "sco2_braytonbench-0.5.0a0/models/unverified.joblib",
-    "sco2_braytonbench-0.5.0a0/../another-root/file.py",
+    "sco2_braytonbench-0.6.0a0/data/reference/mantilla2010_thermoml_density.csv",
+    "sco2_braytonbench-0.6.0a0/docs/copied_paper.pdf",
+    "sco2_braytonbench-0.6.0a0/evidence/generated/tes_v07/test.csv",
+    "sco2_braytonbench-0.6.0a0/models/unverified.joblib",
+    "sco2_braytonbench-0.6.0a0/../another-root/file.py",
     "/absolutely/not/an/archive/name",
 ])
 def test_restricted_assets_and_archive_paths_fail_closed(injection):
@@ -61,7 +61,7 @@ def test_provenance_yaml_remains_permitted_while_density_table_is_rejected():
     gate._paths_checked(source_members(),"sdist")
     with pytest.raises(ValueError,match="unapproved NIST"):
         gate._paths_checked(source_members()+[
-            "sco2_braytonbench-0.5.0a0/data/reference/MANTILLA2010_THERMOML_DENSITY.CSV"
+            "sco2_braytonbench-0.6.0a0/data/reference/MANTILLA2010_THERMOML_DENSITY.CSV"
         ],"sdist")
 
 
