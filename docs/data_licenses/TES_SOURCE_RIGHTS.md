@@ -1,5 +1,7 @@
 # TES source data and third-party redistribution-rights dossier — pre-release status
 
+**Updated historical audit (8 November 2026):** [Source-specific NIST/ACS licensing analysis and 17-of-29-branch exposure inventory](MANTILLA_HISTORICAL_RIGHTS_AUDIT_2026-11-08.md). Current and historical distribution are separate questions. NIST catalog metadata points to its general reuse policy, but ThermoML is publisher-sourced and its particular downstream rights remain unconfirmed. No permission or independent stewardship sign-off is claimed.
+
 **Issue:** [#27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27).  
 **Status:** UNRESOLVED / **no permission to redistribute historical extracted measurements has been demonstrated**.  
 **Scope:** governance of third-party historical data in this repository and archives; not evidence that the underlying original experimental paper is inaccurate.  
@@ -7,16 +9,18 @@
 
 ## Exactly which source is implicated
 
-- Original source: Mantilla, I.D., Cristancho, D.E., Ejaz, S. and Hall, K.R., Journal of Chemical & Engineering Data (2010), doi:10.1021/je1001158, original high-pressure CO2 P-rho-T density measurements.
+- Original source: Mantilla, I.D., Cristancho, D.E., Ejaz, S., Hall, K.R., Atilhan, M. and Iglesias-Silva, G.A., Journal of Chemical & Engineering Data (2010), doi:10.1021/je1001158, original high-pressure CO2 P-rho-T density measurements.
 - ThermoML curated record: https://trc.nist.gov/ThermoML/10.1021/je1001158.html — identifies **49 observation points** with temperature and pressure coordinates.
 - Historic repository derivative: data/reference/mantilla2010_thermoml_density.csv — a normalized/transcribed measurement table whose exact downstream distribution rights have **not** been documented.
 - Retained non-measurement provenance: data/reference/mantilla2010_provenance.yaml and data/reference/README_MANTILLA_OPT_IN.md. This is citation/provenance metadata, not the 49 measurement rows.
 - NIST/TRC's own archive note states that the ThermoML files are available *with permission of the journal publishers* and requests reference to original journals and the ThermoML archive (https://www.nist.gov/mml/acmd/trc/thermoml). **Permission for NIST to host a publisher-derived record does not automatically convey permission to a third party to relicense and republish its 49-row normalized table under a BSD software release.**
 - The original article's publisher page is https://pubs.acs.org/doi/10.1021/je1001158. No explicit downstream right to republish the extracted 49-row CSV under the repository BSD-3-Clause has been established in this audit.
 
-## Present source/archive state (verified at merged TES-v0.9 main commit)
+## Present source/archive state (updated Git tree and CI check, 8 November 2026)
 
-The named derived table is **absent from the current Git tree at 46db32e6e9a45bdfeb645aa6e0599380cb9bc9e4**. The source manifest contains an explicit denylist exclusion of that CSV, and TES-v0.9 checks absence in both built wheel and sdist alongside packaged model-pickle/PDF exclusions. Provenance YAML remains.
+The named derived table is **absent from the current Git tree at 16d8a2d221bc7906dc6c89b38aea3888f2e441f3**. The source manifest contains an explicit denylist exclusion of that CSV, and TES-v0.9 checks absence in both built wheel and sdist alongside packaged model-pickle/PDF exclusions. Provenance YAML remains.
+
+The 8 November 2026 GitHub API inventory found the historical CSV still present **at 17 of 29 current public branch tips**, even though main and the current TES branches exclude it. **Two downloadable historical Actions artifacts (IDs 13521677319 and 13521522512, run 42253583972) were also independently inspected and their sdist archives DO include the same 49-row table**; their wheels did not. Both remain unexpired as checked. The repository has **zero GitHub Releases and zero Git tag refs** at this audit time. The full older CI/fork inventory is not complete. See the detailed dated audit linked above for the exact branch names, artifact/archive hashes, source history and proposed authorized cleanup.
 
 **Important distinction:** removal from the latest tree and build archives does **not** automatically remove material from public Git history, forks, earlier tags/releases, prior artifact bundles or downstream copies. An archival history and distribution-rights review is still required; neither original publication nor NIST-hosted download establishes a permissive downstream license by implication.
 
