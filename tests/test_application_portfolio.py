@@ -69,6 +69,7 @@ def test_frozen_test_versus_ood_negative_transfer_is_preserved():
     "01_schumann_grid_convergence.svg",
     "02_tes_charge_hold_discharge.svg",
     "03_frozen_rom_test_ood.svg",
+    "04_liquid_piston_illustrative_pv.svg",
 ])
 def test_public_svg_is_accessible_and_self_contained(name):
     fp=PORT/"figures"/name
