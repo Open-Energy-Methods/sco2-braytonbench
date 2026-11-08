@@ -80,7 +80,7 @@ def test_public_svg_is_accessible_and_self_contained(name):
     child_tags={c.tag.split("}")[-1] for c in root}
     assert "title" in child_tags and "desc" in child_tags
     src=fp.read_text(encoding="utf-8")
-    assert "http:" not in src and "<script" not in src
+    assert '<image' not in src and 'href="http' not in src and "<script" not in src
     assert "<polyline" in src or "<rect" in src
     assert "not experimental" in src.lower() or "not laboratory" in src.lower()
 
