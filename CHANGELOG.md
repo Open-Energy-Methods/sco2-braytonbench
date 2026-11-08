@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — 0.7.0a0 application research-alpha (8 November 2026)
+
+- Added an immediately navigable PhD-oriented thermal/mechanical storage portfolio with three original SVG scientific figures (independent Schumann grid error, 28-stage charge/hold/reverse-discharge, frozen surrogate in-domain success and **negative OOD** result); data snapshots trace to exact full GitHub Actions artifacts and SHA256.
+- Added a **proposed, not executed** TES experimental validation protocol with ten illustrative axial temperature locations, inlet/outlet thermal channels, flow/pressure, uncertain sensor phase contact, calibration/covariance, run-level held-out design, parameter identifiability, uncertainty, safety/rights and non-fabrication gates; machine-readable proposed sensor/run matrices.
+- Added a **separate unvalidated** educational gas–liquid piston model, isothermal/adiabatic ideal-gas PVT and pressure-offset intrusion/extrusion hysteresis, explicitly split thermal/recoverable/dissipation ledger, independent p-dV tests and CSV/JSON example. No molecular-spring material calibration or CFD claim.
+- Parent package/CFF/installed wheel/sdist/TES research candidate test constants advanced to **0.7.0a0** as development alpha, **not** formal v1.0/1.1, published release, Git tag, DOI or reviewer approval.
+- Rights issue #27 and independent review #28 remain unresolved; Kim Eq.24 #20 is separate. Previously dated evidence records retain their original versions and claims.
+
 ## Unreleased — parent 0.6.0a0 research-alpha integration (8 November 2026)
 
 - Reconciled the current parent software and CITATION to 0.6.0a0 research alpha, consistently updating TES-v0.9/v1.0 numerical packaging and source-integrity gates. No published GitHub release, tag, PyPI upload or Zenodo DOI.

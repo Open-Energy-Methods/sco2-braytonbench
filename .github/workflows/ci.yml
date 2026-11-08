@@ -648,3 +648,31 @@ jobs:
             evidence/generated/kim-h1d-summary/common_station_comparison.md
             evidence/generated/kim-h1d-summary/common_station_errors.csv
           if-no-files-found: ignore
+
+
+  tes-phd-application-portfolio:
+    name: Thermal/mechanical storage application evidence and unvalidated piston
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install untagged research-alpha and independent tests
+        run: python -m pip install -e '.[test]'
+      - name: Verify three real-source figures, synthetic split and proposed-only experiment schema
+        run: python -m pytest -q tests/test_application_portfolio.py
+      - name: Independently audit isothermal and adiabatic PVT, p-dV work and hysteresis
+        run: python -m pytest -q tests/test_liquid_piston_concept.py
+      - name: Generate both zero-calibration illustrative gas pressure-volume paths
+        run: |
+          python examples/liquid_piston_concept.py --out evidence/generated/liquid_piston/isothermal
+          python examples/liquid_piston_concept.py --gas-path reversible_adiabatic --out evidence/generated/liquid_piston/reversible_adiabatic
+      - name: Archive purely synthetic conceptual pressure-volume and energy ledgers
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: application-portfolio-piston-unvalidated-mathematical-evidence
+          path: evidence/generated/liquid_piston/
+          if-no-files-found: warn

@@ -4,7 +4,7 @@ This directory preserves substantial technical reports as **versioned research r
 
 ## Latest integration scope (8 November 2026)
 
-[Parent 0.6.0a0 development-alpha dossier](../PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md) tracks current code and unresolved formal release gates; dated reports remain evidence of their own commits.
+The [PhD-facing research portfolio](../portfolio/README.md) tracks the current 0.7.0a0 development alpha and its synthetic TES evidence, unvalidated liquid-piston concept and proposed-only experimental protocol. The [parent 0.6.0a0 dossier](../PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md) remains a dated older integration record; it is not a current version claim.
 
 ## Dated consolidated report
 

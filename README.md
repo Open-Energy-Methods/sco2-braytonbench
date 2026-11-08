@@ -4,12 +4,17 @@
 
 Maintained under [Open Energy Methods](https://github.com/Open-Energy-Methods).
 
-> **Research status: 0.6.0a0 (development alpha; no public release tag) — numerically verified research software, not an experimentally validated sCO₂ power-cycle or CARBOSOLA plant model.** The core solver has dedicated real-CoolProp test jobs; the thermal-wall, source-bypass/PI and experimental-readiness examples remain explicitly synthetic or prospective. No complete dynamic CO₂ mass/pressure inventory or industrial controller is claimed.
+> **Research status: 0.7.0a0 (development alpha; no public release tag) — numerically verified research software, not an experimentally validated sCO₂ power-cycle or CARBOSOLA plant model.** The core solver has dedicated real-CoolProp test jobs; the thermal-wall, source-bypass/PI and experimental-readiness examples remain explicitly synthetic or prospective. No complete dynamic CO₂ mass/pressure inventory or industrial controller is claimed.
+
+## Research portfolio — thermal and mechanical energy storage (PhD preparation)
+
+The **[PhD-facing thermal/mechanical storage research portfolio](docs/portfolio/README.md)** is the recommended scientific entry point. It contains three actual-evidence vector figures (Schumann convergence; the charge/hold/reverse-discharge trace; and the **negative** frozen-ROM out-of-domain comparison), a proposed-but-**not executed** [experimental validation protocol](docs/portfolio/PROSPECTIVE_EXPERIMENTAL_VALIDATION_PROTOCOL.md), and a separately bounded, **unvalidated** [liquid-piston gas/work/hysteresis concept](docs/portfolio/LIQUID_PISTON_CONCEPT.md). Every figure has an [original CI-artifact provenance dossier](docs/portfolio/EVIDENCE_AND_FIGURE_SOURCES.md). This is independent applicant research, **not** CIC energiGUNE/COMPETENT work or a real laboratory validation.
+
+[Schumann numerical verification](docs/portfolio/figures/01_schumann_grid_convergence.svg) · [TES charge/discharge](docs/portfolio/figures/02_tes_charge_hold_discharge.svg) · [ROM test/OOD comparison](docs/portfolio/figures/03_frozen_rom_test_ood.svg)
 
 ## Latest parent integration and dated technical reports
 
-The [parent 0.6.0a0 alpha integration record](docs/PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md)
-is the current development-scope and PR/release-governance source. The archived
+The [parent 0.6.0a0 consolidation record](docs/PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md) preserves the prior 8 November integration scope. The current application-focused source is **0.7.0a0 research alpha** and is described in the [storage portfolio](docs/portfolio/README.md). The archived
 [5 November full G0–G3.5 research report](docs/reports/2026-11-05/sco2-braytonbench-comprehensive-project-report.md)
 and 6 November WP0–WP5 report are dated historical records, not claims that
 their version/PR statuses remain current.
@@ -30,7 +35,7 @@ The merged **[frozen-split surrogate PR #39](https://github.com/Open-Energy-Meth
 - [Full-state charge/hold/discharge semantics](docs/tes/05_CYCLES_AND_METRICS.md), [open single-pass TES→Brayton power balance](docs/tes/06_SINGLE_PASS_CO2_COUPLING.md) and [constant-property capacity/exergy/thermocline metrics](docs/tes/07_PERFORMANCE_METRICS.md).
 - Generate source data: `python scripts/tes_generate_synthetic_dataset.py --out evidence/generated/tes_v06`.
 - Fit and freeze the surrogate with optional `.[ml]` dependencies: `python scripts/tes_surrogate_pipeline.py train --data evidence/generated/tes_v06 --model-dir evidence/generated/tes_v07/frozen`, then invoke `evaluate` separately.
-- This code does **not** represent measured CIC energiGUNE or CARBOSOLA hardware, CFD, phase-change TES, PCM, a mechanical liquid piston, a calibrated thermal-storage plant, or a validated full dynamic CO₂ power cycle. TES research milestones do not themselves confer a stable parent release; the current parent source is **0.6.0a0 development alpha**, without a release tag or external human scientific approval.
+- This code does **not** represent measured CIC energiGUNE or CARBOSOLA hardware, CFD, phase-change TES, PCM, a physically calibrated or validated molecular-spring liquid piston, a calibrated thermal-storage plant, or a validated full dynamic CO₂ power cycle. TES research milestones do not themselves confer a stable parent release; the current parent source is **0.7.0a0 development alpha**, without a release tag or external human scientific approval.
 
 ### TES-v0.8 — temperature-grade operating window and sensitivity
 
@@ -72,7 +77,7 @@ experimental verification or scientific reviewer approval.** The TES-v0.9
 milestone passed all three dedicated Python-version CI jobs, 27/27 repository
 jobs, and the TES-v0.8 regression; merged as PR #41 (main commit
 46db32e6e9a45bdfeb645aa6e0599380cb9bc9e4). Parent version remains
-0.5.0a0 at the time of the TES-v0.9 merge; the parent source is now 0.6.0a0 development alpha, with #27/#28 still independent stable-release blockers.
+0.5.0a0 at the time of the TES-v0.9 merge; the parent source is now 0.7.0a0 development alpha, with #27/#28 still independent stable-release blockers.
 
 ### TES-v1.0 — integrated research baseline and review package (candidate)
 
@@ -93,7 +98,7 @@ candidate self-audit records exact commit/source SHA256 and *fails closed*
 if release authorization, independent reviewer approval or historical
 redistribution rights are asserted without a separate actual review.
 No v1.0 tag, Zenodo DOI, real facility validation or parent version change
-is implied. Parent source is now **0.6.0a0 alpha** (not a tagged, reviewed or formally published v1.0).
+is implied. Parent source is now **0.7.0a0 alpha** (not a tagged, reviewed or formally published v1.0).
 
 ## v1.0 research release programme — work in progress
 
@@ -200,7 +205,7 @@ the document into real experiments or grant facility operating permission.
 
 The [WP5 v1.0 acceptance and independent-review dossier](docs/WP5_RELEASE_ACCEPTANCE.md)
 defines the future **software** release gates separately from experimental
-plant validation. The project is **`0.6.0a0` development alpha, not v1.0**. The WP5
+plant validation. The project is **`0.7.0a0` development alpha, not v1.0**. The WP5
 tool `scripts/v1_release_gate.py` audits consistent package/citation/SPDX
 licence metadata, verifies installed wheel and research-complete source
 archive contents, fingerprints source files and numerical outputs, and

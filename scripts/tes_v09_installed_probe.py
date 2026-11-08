@@ -167,12 +167,12 @@ def run(out,expected_prefix):
            "installed package shadowed by checkout")
     insist(Path(sys.prefix).resolve()==expected_prefix.resolve(),
            "wrong venv selected")
-    insist(md.version("sco2-braytonbench")=="0.6.0a0","package version drift")
+    insist(md.version("sco2-braytonbench")=="0.7.0a0","package version drift")
     out.parent.mkdir(parents=True,exist_ok=True)
     result={
         "schema":"tes-v09-isolated-installed-replay-1",
         "evidence_class":"synthetic_software_replay_no_facility_validation",
-        "parent_package":"0.6.0a0",
+        "parent_package":"0.7.0a0",
         "dependency_versions":{n:md.version(n) for n in
             ("CoolProp","numpy","scikit-learn","joblib")},
         "sealed_v07_evaluation_repeated":False,

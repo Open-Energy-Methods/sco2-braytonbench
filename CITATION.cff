@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, cite the repository and the specific released version."
 title: "sCO2-BraytonBench"
 type: software
-version: "0.6.0a0"
+version: "0.7.0a0"
 authors:
   - family-names: Sivaprasadan
     given-names: Abhijith
