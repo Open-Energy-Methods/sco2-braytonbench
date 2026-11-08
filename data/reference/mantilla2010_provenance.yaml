@@ -3,7 +3,7 @@ source: NIST ThermoML original curated record
 original_json_url: https://trc.nist.gov/ThermoML/10.1021/je1001158.json
 landing_url: https://trc.nist.gov/ThermoML/10.1021/je1001158.html
 doi: 10.1021/je1001158
-authors: [Ivan D. Mantilla, Diego E. Cristancho, Saquib Ejaz, Kenneth R. Hall]
+authors: [Ivan D. Mantilla, Diego E. Cristancho, Saquib Ejaz, Kenneth R. Hall, Mert Atilhan, Gustavo A. Iglesias-Silva]
 publication_year: 2010
 title: P-rho-T Data for Carbon Dioxide from (310 to 450) K up to 160 MPa
 method: magnetic suspension densimetry
