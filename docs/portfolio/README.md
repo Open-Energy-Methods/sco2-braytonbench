@@ -60,6 +60,8 @@ Real facility geometry, P&IDs, sensor installation, material properties, permits
 
 ## 7. Prospective liquid-piston / molecular-spring mathematical concept
 
+![Figure 4: Hypothetical ideal-gas liquid-piston pressure-volume hysteresis with prescribed offsets](figures/04_liquid_piston_illustrative_pv.svg)
+
 The [bounded gas–liquid work demonstrator](LIQUID_PISTON_CONCEPT.md) separates an ideal-gas isothermal or reversible-adiabatic compression/expansion term from **externally specified** intrusion/extrusion pressure offsets. It reports P–V loops and a nonnegative hysteresis loss with independently tested first-law conservation. This is **not** an identified pore-pressure relation, a nanoporous fluid model, a calibrated gas compressor, CFD or a claim about any COMPETENT prototype.
 
 Run from root: python examples/liquid_piston_concept.py --out evidence/generated/liquid_piston_concept.
