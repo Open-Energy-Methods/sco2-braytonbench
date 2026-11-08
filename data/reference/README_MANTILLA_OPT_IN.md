@@ -1,6 +1,6 @@
 # Mantilla et al. 2010 ThermoML measurement data — user-supplied optional test
 
-The sCO₂-BraytonBench repository **does not distribute the 49-point transcription** of the Mantilla, Cristancho, Ejaz, Hall, Atilhan and Iglesias-Silva (2010) experimental CO₂ density dataset from NIST ThermoML. The upstream article and source are:
+The **current sCO₂-BraytonBench main source snapshot and tested wheel/sdist builds do not distribute the 49-point transcription** of the Mantilla, Cristancho, Ejaz, Hall, Atilhan and Iglesias-Silva (2010) experimental CO₂ density dataset from NIST ThermoML. Historical Git revisions, 17 live older branch heads and at least two old Actions source-archive artifacts **still expose the file**, as documented in the dated rights audit below. The upstream article and source are:
 
 - Mantilla et al., *P-ρ-T Data for Carbon Dioxide from (310 to 450) K up to 160 MPa*, *J. Chem. Eng. Data* (2010), DOI: https://doi.org/10.1021/je1001158
 - NIST ThermoML record: https://trc.nist.gov/ThermoML/10.1021/je1001158.html
@@ -38,4 +38,4 @@ Run after `python -m pip install -e '.[test,co2]' 'CoolProp==8.0.0'`.
 
 Without that external file, pytest reports an **explicit optional skip**. This is not equivalent to passing 49 independent experimental measurements. Historical recorded results from earlier repository/CI commits remain historical evidence, not a newly runnable release test.
 
-The current HEAD omits the transcribed CSV and WP5 enforces exclusion from new source archives/tags. **Git commit history still contains older revisions**. Any historical-content remediation requires separate maintainer/legal review; the source HEAD change does not delete or revoke prior copies.
+The current HEAD omits the transcribed CSV and WP5 enforces exclusion from **new** source archives. **Historical Git history, 17 older public branch heads and at least two unexpired downloadable historical Actions sdist artifacts still contain the CSV.** Prior exposure is not undone by today's exclusion. See the linked dated audit; any old-artifact deletion, branch cleanup or historical-content remediation requires a documented maintainer/rights-steward decision.
