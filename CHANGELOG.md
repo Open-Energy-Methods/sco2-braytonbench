@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — parent 0.6.0a0 research-alpha integration (8 November 2026)
+
+- Reconciled the current parent software and CITATION to 0.6.0a0 research alpha, consistently updating TES-v0.9/v1.0 numerical packaging and source-integrity gates. No published GitHub release, tag, PyPI upload or Zenodo DOI.
+- Integrated Kim (2019) experimental H1d source-equation benchmark, negative Stuttgart transfer results, three-mode real-CoolProp evaluation and exact-station comparison. Original Eq.24/Table 4 ambiguity remains open (#20); source data are outside original heat-flux fit domain.
+- Preserved the 5 November historical G0–G3.5/H1d comprehensive research report without rewriting its old CI/version/PR claims.
+- Integrated historical Mantilla ThermoML rights/provenance correction in PR #43; 17 stale branches and two affected historical Actions artifacts documented, rights issue #27 remains open.
+- Scope and reviewer documents retain scientific limits and human independent review #28 as a non-automatable gate; PR-head CI and parent release classification are distinct from formal v1.0 authorization.
+
 ## Unreleased — TES-v1.0 integrated research-baseline candidate (2026-11-07)
 
 - Consolidated TES-v0.1–v0.9 equations, numerical verification, conservation/energy grade, real-CO2 one-pass coupling, 512-run synthetic ROM, negative OOD outcome, grid and factorial findings in a single scoped scientific report.
