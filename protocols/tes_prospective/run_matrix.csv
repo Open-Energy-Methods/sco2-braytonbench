@@ -1,0 +1,13 @@
+run_id,partition,programme,level,repeat,execution_status,hardware_limits_verified
+C-00,commissioning,timebase_and_sensor_response,facility_defined,1,NOT_EXECUTED,NO
+C-01,commissioning,flow_direction_and_loss_boundary,facility_defined,1,NOT_EXECUTED,NO
+TR-01,training,charge_hold_reverse,low_approved_flow,1,NOT_EXECUTED,NO
+TR-02,training,charge_hold_reverse,nominal_approved_flow,1,NOT_EXECUTED,NO
+TR-03,training,charge_hold_reverse,high_approved_flow,1,NOT_EXECUTED,NO
+TR-04,training,changed_thermal_ramp,approved_inlet_level_A,1,NOT_EXECUTED,NO
+TR-05,training,changed_thermal_ramp,approved_inlet_level_B,1,NOT_EXECUTED,NO
+VA-01,validation,charge_hold_reverse,unseen_schedule_1,1,NOT_EXECUTED,NO
+VA-02,validation,charge_hold_reverse,unseen_schedule_2,1,NOT_EXECUTED,NO
+RE-01,replicate,repeat_TR_02_new_day,nominal_approved_flow,2,NOT_EXECUTED,NO
+RE-02,replicate,repeat_VA_01_new_day,unseen_schedule_1,2,NOT_EXECUTED,NO
+OOD-01,conditional_ood,separate_approved_flow_or_temperature_family,safe_extrapolation_only,1,NOT_EXECUTED,NO
