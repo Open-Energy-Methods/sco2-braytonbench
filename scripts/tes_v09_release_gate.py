@@ -19,7 +19,7 @@ import tarfile
 import zipfile
 
 SCHEMA="tes-v09-distribution-replay-1"
-PARENT_VERSION="0.5.0a0"
+PARENT_VERSION="0.6.0a0"
 REQUIRED_WHEEL=(
     "sco2_braytonbench/thermal_storage.py",
     "sco2_braytonbench/tes_schumann.py",
@@ -131,7 +131,7 @@ def inspect_distributions(dist: Path) -> dict:
            "require exactly one wheel and one sdist, remove stale dist files")
     wheel,sdist=wheels[0],sdists[0]
     demand(PARENT_VERSION in wheel.name and PARENT_VERSION in sdist.name,
-           "distribution version differs from 0.5.0a0")
+           "distribution version differs from 0.6.0a0")
     with zipfile.ZipFile(wheel) as archive:
         members=archive.namelist()
         wheel_info=_paths_checked(members,"wheel")
