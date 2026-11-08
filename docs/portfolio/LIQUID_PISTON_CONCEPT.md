@@ -30,6 +30,8 @@ The p_extrusion ΔV term is a *recoverable reference surface-energy bookkeeping 
 
 **Thermodynamic warning:** An isothermal ideal gas does not accumulate internal energy, even though it can perform work later by consuming heat from a bath; do not report Win or Wout as an independently calibrated storage energy density. The hysteresis offsets are assumptions, not fitted experimental pressure thresholds.
 
+[Illustrative assumed P–V loop figure](figures/04_liquid_piston_illustrative_pv.svg): pressure range in absolute MPa and intrusion volume in mL, with a labelled *4 kJ model-assumed hysteresis area*. It does **not** show experimental observations or fitted pore constitutive behaviour.
+
 ## Explicitly illustrative defaults and reproduction
 
 Vg0=0.002 m³, pg0=10 MPa absolute, Tg0=300 K, R=287 J/(kg K), displaced liquid ΔV=0.0005 m³, intrusion excess pressure=20 MPa and extrusion excess=12 MPa. These values are invented for numerical demonstration, NOT source-derived measurements or COMPETENT equipment specifications.
