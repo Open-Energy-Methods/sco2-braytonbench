@@ -48,7 +48,18 @@ integration/consolidated-g35-and-kim-source
 
 **12 of 29 branch tips lack the CSV**, including main, the TES branches, and fix/v1-rights-optin-thermoml-dataset. Deleting a branch may remove that particular ref but does not necessarily remove its underlying blob from main ancestry, other refs, caches, forks, clones or historical artifacts.
 
-There were **no GitHub Releases** and the Git refs/tags API returned **zero tags** at audit time. This does not prove absence of historic Actions artifacts, forks or independently uploaded data and is not a complete distribution-forensics survey.
+There were **no GitHub Releases** and the Git refs/tags API returned **zero tags** at audit time. However, historical GitHub Actions artifacts were checked more closely and **two still-downloadable artifacts did contain the 49-row source CSV inside their built source distribution (sdist)**:
+
+| Workflow run | Artifact ID | Name | Inspected sdist | Inspected wheel |
+|---|---:|---|---|---|
+| https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42253583972 | 13521677319 | v1-wheel-sdist-build-smoke | **CSV PRESENT** | CSV absent |
+| https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42253583972 | 13521522512 | v1-wp5-wheel-sdist-release-audit | **CSV PRESENT** | CSV absent |
+
+Both sdists contained the same 1,232-byte measurement CSV with SHA256 97ed4e33f42ffdc087de85d5bdd686833abc766d8e56a31fac995b0cc6d10616. Sdist archive SHA256 values were respectively 4b016d04ae038e46ce744a7c981c3c527ee166336a911abc2d4e023948841d8e and edde1b01a84c7cf44b4548ed49ec853172ea4f82e69bb4eb58dc0084ed21cf9d. This was established by *archive-member inspection*, not by republishing numerical observations. **The two artifacts remain present/unexpired at the time of audit.**
+
+Two additional sampled artifacts after exclusion (IDs 13523418148 and 13524430071 from run 42258225916) did **not** contain the CSV in their wheel or sdist. These are specific inspected examples, **not a complete count of every potentially affected earlier Actions artifact**. Forks, downloaded clones, historical PR refs, other Actions runs and externally uploaded data were not exhaustively assessed.
+
+**Remediation priority:** Obtain explicit maintainer/rights-steward authorization to delete or expire the two confirmed public downloadable Actions artifacts and inventory other pre-removal build artifacts. GitHub artifact removal must use an authorized human maintainer or tooling with Actions write permission; the current automated read/audit process did not delete any artifact. Artifact deletion removes that distribution endpoint but not the historical Git blob, branch heads, previous downloads or third-party forks.
 
 ## 3. Present mitigations and remaining limitations
 
@@ -64,7 +75,7 @@ There were **no GitHub Releases** and the Git refs/tags API returned **zero tags
 1. Request a written scope clarification from the NIST ThermoML data contact **Demian Riccardi (demian.riccardi@nist.gov)**, listed in https://catalog.data.gov/dataset/thermoml-data-archive-08162 . Specifically ask whether the archive-level general license permits republication of the 49 normalized ACS-derived measurement rows in public Git repositories and downloadable archives. If not, ask who can authorize or classify the data use.
 2. Ask ACS (copyright@acs.org, via https://pubs.acs.org/pages/rightslinkno ) or its RightsLink unit to distinguish copying numeric scientific facts from reproducing their protected article/table formatting and any material-specific restrictions. Disclose **historic Git posting**, continuing exposure in 17 branch tips, removal from current main and the intention **not to bundle the measurements** in future wheel/sdist/Zenodo releases.
 3. Record actual replies, sender and rights-owner authority, exact permitted or excluded scope, dates, required acknowledgments and public/private evidence references. A generic no-response is not affirmative permission.
-4. With named maintainer and rights-steward approval, classify old branches as active or already merged/retired and implement approved branch-ref retirement or file-removal commits. **Do not automatically rewrite main history or force-push**, which could disrupt provenance and may not remove public copies from PR refs/forks/caches.
+4. With named maintainer and rights-steward approval, classify old branches as active or already merged/retired, **remove confirmed exposed Actions artifacts**, inventory similar old uploads, and implement approved branch-ref retirement or file-removal commits. **Do not automatically rewrite main history or force-push**, which could disrupt provenance and may not remove public copies from PR refs/forks/caches.
 5. Reinspect the exact public release candidate's Git snapshot, source/wheel archives, retained data, third-party license attributions and relevant historical exposure. Document the actual rights disposition and close #27 only on explicit rights-steward approval.
 
 For each external inquiry distinguish (A) reading/citing original ThermoML, (B) using numerical facts to run research tests, (C) public GitHub redistribution of the entire normalized table, and (D) source-archive/Zenodo deposit/relicensing. These are not necessarily the same permission.
