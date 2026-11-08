@@ -13,7 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def test_metadata_is_present_and_citation_matches_unreleased_package():
     obj=gate._metadata(ROOT)
     assert obj["package_name"]=="sco2-braytonbench"
-    assert obj["version"]=="0.6.0a0"
+    assert obj["version"]=="0.7.0a0"
     assert obj["CITATION_cff_version"]==obj["version"]
     assert obj["license_spdx"]=="BSD-3-Clause"
     assert obj["release_status"]=="unreleased_alpha"
@@ -150,7 +150,7 @@ def test_cross_distribution_replay_rejects_csv_schema_mutation(tmp_path):
 
 def test_missing_external_source_archive_fails_with_honest_error(tmp_path):
     with pytest.raises(ValueError,match="precisely one wheel"):
-        gate._read_distributions(tmp_path,"0.6.0a0")
+        gate._read_distributions(tmp_path,"0.7.0a0")
 
 
 def test_unexpected_citation_version_fails_before_release(tmp_path):
@@ -160,7 +160,7 @@ def test_unexpected_citation_version_fails_before_release(tmp_path):
         (fake/name).write_text((ROOT/name).read_text("utf-8"),encoding="utf-8")
     cite=(fake/"CITATION.cff").read_text("utf-8")
     (fake/"CITATION.cff").write_text(
-        cite.replace('version: "0.6.0a0"','version: "1.0.0"'),
+        cite.replace('version: "0.7.0a0"','version: "1.0.0"'),
         encoding="utf-8"
     )
     with pytest.raises(ValueError,match="CITATION.cff version"):
