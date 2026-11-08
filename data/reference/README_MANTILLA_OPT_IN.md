@@ -1,11 +1,12 @@
 # Mantilla et al. 2010 ThermoML measurement data — user-supplied optional test
 
-The sCO₂-BraytonBench repository **does not distribute the 49-point transcription** of the Mantilla, Cristancho, Ejaz and Hall (2010) experimental CO₂ density dataset from NIST ThermoML. The upstream article and source are:
+The sCO₂-BraytonBench repository **does not distribute the 49-point transcription** of the Mantilla, Cristancho, Ejaz, Hall, Atilhan and Iglesias-Silva (2010) experimental CO₂ density dataset from NIST ThermoML. The upstream article and source are:
 
 - Mantilla et al., *P-ρ-T Data for Carbon Dioxide from (310 to 450) K up to 160 MPa*, *J. Chem. Eng. Data* (2010), DOI: https://doi.org/10.1021/je1001158
 - NIST ThermoML record: https://trc.nist.gov/ThermoML/10.1021/je1001158.html
 - Source metadata: [mantilla2010_provenance.yaml](mantilla2010_provenance.yaml)
 - Redistribution/permission issue: https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27
+- Historical Git/branch exposure and rights audit: ../../docs/data_licenses/MANTILLA_HISTORICAL_RIGHTS_AUDIT_2026-11-08.md
 
 **Reason:** NIST states that ThermoML archive files are provided with permission of journal publishers. Specific downstream redistribution permission for the complete normalized 49-point data table has not been established. Merely downloading a file or citing a scientific publication does not establish relicensing of a third-party data compilation.
 
