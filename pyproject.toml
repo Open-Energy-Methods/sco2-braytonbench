@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sco2-braytonbench"
-version = "0.6.0a0"
-description = "Independent auditable research prototype for recuperated sCO2 Brayton cycles"
+version = "0.7.0a0"
+description = "Auditable alpha: sCO2 Brayton cycles, sensible TES and unvalidated liquid-piston concept"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "BSD-3-Clause"
