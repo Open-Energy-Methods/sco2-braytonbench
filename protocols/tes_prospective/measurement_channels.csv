@@ -1,0 +1,19 @@
+channel_id,quantity,unit,nominal_position,sensor_concept,phase_or_contact,status
+T-IN,temperature,K,upstream after inlet mixer,calibrated immersed temperature probe,fluid,PROPOSED
+T-OUT,temperature,K,downstream after outlet collector,calibrated immersed temperature probe,fluid,PROPOSED
+T-AX01,temperature,K,x_over_L_0.05,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX02,temperature,K,x_over_L_0.15,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX03,temperature,K,x_over_L_0.25,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX04,temperature,K,x_over_L_0.35,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX05,temperature,K,x_over_L_0.45,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX06,temperature,K,x_over_L_0.55,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX07,temperature,K,x_over_L_0.65,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX08,temperature,K,x_over_L_0.75,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX09,temperature,K,x_over_L_0.85,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+T-AX10,temperature,K,x_over_L_0.95,interior thermal probe contact to be verified,UNRESOLVED,PROPOSED
+M-FLOW,mass_flow,kg/s,inlet flow leg,bidirectional mass-flow meter,fluid,PROPOSED
+P-IN,absolute_pressure,Pa,upstream port,pressure transducer,fluid,PROPOSED
+P-OUT,absolute_pressure,Pa,downstream port,pressure transducer,fluid,PROPOSED
+T-AMBIENT,temperature,K,near outer bed,ambient temperature probe,ambient,PROPOSED
+T-WALL,temperature,K,representative outside wall,attached thermal probe,wall,OPTIONAL_PROPOSED
+Q-ELEC,electric_power,W,heater electrical supply,calibrated electrical power meter,boundary_crosscheck,OPTIONAL_PROPOSED
