@@ -1,7 +1,9 @@
 # TES-v1.0 — Release decision register and no-go controls
 
 **Current decision: NOT AUTHORIZED FOR FORMAL v1.0 RELEASE.**
-This register is a public audit checklist, not a certificate of rights, independent peer review or approval to tag. The integrated baseline remains parent software v0.5.0a0. The repository development branch may carry the candidate's research report and expanded tests without declaring a public release.
+
+**Latest parent development status:** 0.6.0a0 research alpha (untagged); prior 0.5.0a0 development baseline preserved in dated evidence only.
+This register is a public audit checklist, not a certificate of rights, independent peer review or approval to tag. The integrated baseline remains parent software v0.6.0a0. The repository development branch may carry the candidate's research report and expanded tests without declaring a public release.
 
 ## A. Decision records
 
@@ -46,6 +48,6 @@ If there is conflicting software evidence, negative out-of-domain findings, chan
 - Obtain independent rights review of historic Mantilla ThermoML extraction/redistribution (issue #27), including public Git history exposure, not just wheel/sdist contents.
 - Send the reviewer packet (docs/tes/14_EXTERNAL_REVIEW_PACKET.md) to actual qualified independent thermo/numerical and scientific-software reviewers (issue #28); record dates and verified identities only after genuine participation.
 - Resolve reviewer findings, regenerate the candidate ledger on exact final commit and recheck post-merge main actions.
-- Only then decide if a formal parent software release is desirable; changing 0.5.0a0, creating v1.0 tags or depositing Zenodo is a separate explicit maintainer action.
+- Only then decide if a formal parent software release is desirable; changing 0.6.0a0, creating v1.0 tags or depositing Zenodo is a separate explicit maintainer action.
 
 **Verifiable current status:** Candidate engineering/self-audit can be integrated as an alpha milestone after CI; release promotion remains BLOCKED.
