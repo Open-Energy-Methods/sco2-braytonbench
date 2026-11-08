@@ -50,7 +50,7 @@ jobs:
           assert data["reviewer_identity_asserted_by_this_program"] is False
           assert data["pre_release_flags"]["independent_human_reviewer_approved"] is False
           assert data["pre_release_flags"]["historical_third_party_data_rights_cleared"] is False
-          assert data["parent_version"] == "0.5.0a0"
+          assert data["parent_version"] == "0.6.0a0"
           assert len(data["source_file_sha256"]) >= 40
           print("TES-v1.0 candidate SELF AUDIT pass; public release BLOCKED")
           PY

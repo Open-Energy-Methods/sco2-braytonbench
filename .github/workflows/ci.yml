@@ -369,6 +369,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          expected_version=$(python -c 'import tomllib; from pathlib import Path; print(tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))["project"]["version"])')
           python -m venv "$RUNNER_TEMP/wp5-wheel-venv"
           python -m venv "$RUNNER_TEMP/wp5-sdist-venv"
           "$RUNNER_TEMP/wp5-wheel-venv/bin/python" -m pip install --no-deps dist/*.whl
@@ -380,7 +381,7 @@ jobs:
             interpreter="$RUNNER_TEMP/wp5-$kind-venv/bin/python"
             (
               cd "$workspace"
-              env -u PYTHONPATH "$interpreter" -c "import importlib.metadata as md, sco2_braytonbench as x; from pathlib import Path; assert md.version('sco2-braytonbench') == '0.5.0a0'; assert Path(x.__file__).resolve().is_relative_to(Path('$RUNNER_TEMP/wp5-$kind-venv').resolve())"
+              env -u PYTHONPATH "$interpreter" -c "import importlib.metadata as md, sco2_braytonbench as x; from pathlib import Path; assert md.version('sco2-braytonbench') == '$expected_version'; assert Path(x.__file__).resolve().is_relative_to(Path('$RUNNER_TEMP/wp5-$kind-venv').resolve())"
               env -u PYTHONPATH "$interpreter" examples/thermal_wall_step_response.py
               env -u PYTHONPATH "$interpreter" examples/waste_heat_wall_coupled_cycle.py
               env -u PYTHONPATH "$interpreter" examples/waste_heat_bypass_pi_comparison.py
@@ -582,3 +583,68 @@ jobs:
             evidence/generated/tes_v07/evaluation/tes_rom_sealed_predictions.csv
             evidence/generated/tes_v07/evaluation/tes_rom_holdout_report.json
           if-no-files-found: warn
+
+  kim-h1d-stuttgart:
+    name: Kim H1d (${{ matrix.variant }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [semi_empirical, empirical_literal, empirical_hypothesis]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[test,co2]' "CoolProp==8.0.0"
+      - name: Source registry and independent equation tests
+        run: python -m pytest -q tests/test_kim2019_source_registry.py tests/test_kim2019_model.py tests/test_kim2019_real_co2.py tests/test_kim2019_summary.py tests/test_kim2019_common_support.py
+      - name: Regenerate unchanged H1a baseline
+        run: python scripts/stuttgart_h1.py
+      - name: Regenerate unchanged H1b benchmark
+        run: python scripts/stuttgart_h1b.py
+      - name: Evaluate Kim source variant and source-domain exclusions
+        run: python scripts/stuttgart_h1d.py --variant "${{ matrix.variant }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35d-kim-${{ matrix.variant }}
+          path: |
+            evidence/generated/stuttgart_h1d/${{ matrix.variant }}/kim_report.json
+            evidence/generated/stuttgart_h1d/${{ matrix.variant }}/kim_pointwise.csv
+          if-no-files-found: ignore
+
+  kim-h1d-summary:
+    runs-on: ubuntu-latest
+    needs: [kim-h1d-stuttgart]
+    if: always()
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: g35d-kim-*
+          path: evidence/kim-h1d-collected
+          merge-multiple: false
+      - name: Scientific coverage and model-comparison summary
+        run: python scripts/kim_h1d_summary.py
+      - name: Exact three-way matched-station comparison and source ID audit
+        run: python scripts/h1d_common_support.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: g35d-kim-scientific-summary
+          path: |
+            evidence/generated/kim-h1d-summary/summary.md
+            evidence/generated/kim-h1d-summary/summary.json
+            evidence/generated/kim-h1d-summary/summary.csv
+            evidence/generated/kim-h1d-summary/htc_mape_log_scale.svg
+            evidence/generated/kim-h1d-summary/common_station_comparison.json
+            evidence/generated/kim-h1d-summary/common_station_comparison.csv
+            evidence/generated/kim-h1d-summary/common_station_comparison.md
+            evidence/generated/kim-h1d-summary/common_station_errors.csv
+          if-no-files-found: ignore

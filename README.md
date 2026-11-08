@@ -4,11 +4,19 @@
 
 Maintained under [Open Energy Methods](https://github.com/Open-Energy-Methods).
 
-> **Research status: 0.5.0a0 (alpha) — numerically verified research software, not an experimentally validated sCO₂ power-cycle or CARBOSOLA plant model.** The core solver has dedicated real-CoolProp test jobs; the thermal-wall, source-bypass/PI and experimental-readiness examples remain explicitly synthetic or prospective. No complete dynamic CO₂ mass/pressure inventory or industrial controller is claimed.
+> **Research status: 0.6.0a0 (development alpha; no public release tag) — numerically verified research software, not an experimentally validated sCO₂ power-cycle or CARBOSOLA plant model.** The core solver has dedicated real-CoolProp test jobs; the thermal-wall, source-bypass/PI and experimental-readiness examples remain explicitly synthetic or prospective. No complete dynamic CO₂ mass/pressure inventory or industrial controller is claimed.
+
+## Latest parent integration and dated technical reports
+
+The [parent 0.6.0a0 alpha integration record](docs/PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md)
+is the current development-scope and PR/release-governance source. The archived
+[5 November full G0–G3.5 research report](docs/reports/2026-11-05/sco2-braytonbench-comprehensive-project-report.md)
+and 6 November WP0–WP5 report are dated historical records, not claims that
+their version/PR statuses remain current.
 
 ## Current comprehensive technical report
 
-The **[6 November 2026 comprehensive research, engineering and verification report](docs/reports/2026-11-06/sco2-braytonbench-comprehensive-research-report.md)** is the current, full-length technical record of the project. It covers the original G0–G3.5 research, Stuttgart H1a–H1d evidence, integrated WP0–WP5 models, governing equations, numerical results, optional measured-density rights cleanup, 20/20 integrated-main CI, reproducibility and the outstanding external-review gates. The [report index](docs/reports/README.md) distinguishes dated evidence from the historical 5 November snapshot.
+The dated **[6 November 2026 comprehensive research, engineering and verification report](docs/reports/2026-11-06/sco2-braytonbench-comprehensive-research-report.md)** preserves the integrated WP0–WP5 technical baseline at that date. The [8 November parent alpha integration dossier](docs/PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md) tracks the current development scope, historical-PR reconciliation, Kim H1d experimental status, release-gate consistency and the unapproved data/review decisions. It covers the original G0–G3.5 research, Stuttgart H1a–H1d evidence, integrated WP0–WP5 models, governing equations, numerical results, optional measured-density rights cleanup, 20/20 integrated-main CI, reproducibility and the outstanding external-review gates. The [report index](docs/reports/README.md) distinguishes dated evidence from the historical 5 November snapshot.
 
 **Verified baseline:** main `8df1711a425e21da342bd3f401da61a1375bbc0a`, [Actions 42266275348](https://github.com/Open-Energy-Methods/sco2-braytonbench/actions/runs/42266275348) 20/20 green. No v1.0 tag or DOI issued. The 49-point Mantilla ThermoML transcription has been removed from current HEAD and redistributed archives while historical reuse and independent human scientific review remain unresolved ([#27](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/27), [#28](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/28)).
 
@@ -22,7 +30,7 @@ The merged **[frozen-split surrogate PR #39](https://github.com/Open-Energy-Meth
 - [Full-state charge/hold/discharge semantics](docs/tes/05_CYCLES_AND_METRICS.md), [open single-pass TES→Brayton power balance](docs/tes/06_SINGLE_PASS_CO2_COUPLING.md) and [constant-property capacity/exergy/thermocline metrics](docs/tes/07_PERFORMANCE_METRICS.md).
 - Generate source data: `python scripts/tes_generate_synthetic_dataset.py --out evidence/generated/tes_v06`.
 - Fit and freeze the surrogate with optional `.[ml]` dependencies: `python scripts/tes_surrogate_pipeline.py train --data evidence/generated/tes_v06 --model-dir evidence/generated/tes_v07/frozen`, then invoke `evaluate` separately.
-- This code does **not** represent measured CIC energiGUNE or CARBOSOLA hardware, CFD, phase-change TES, PCM, a mechanical liquid piston, a calibrated thermal-storage plant, or a validated full dynamic CO₂ power cycle. TES research milestones **do not change the parent package's 0.5.0a0 release status**.
+- This code does **not** represent measured CIC energiGUNE or CARBOSOLA hardware, CFD, phase-change TES, PCM, a mechanical liquid piston, a calibrated thermal-storage plant, or a validated full dynamic CO₂ power cycle. TES research milestones do not themselves confer a stable parent release; the current parent source is **0.6.0a0 development alpha**, without a release tag or external human scientific approval.
 
 ### TES-v0.8 — temperature-grade operating window and sensitivity
 
@@ -64,7 +72,7 @@ experimental verification or scientific reviewer approval.** The TES-v0.9
 milestone passed all three dedicated Python-version CI jobs, 27/27 repository
 jobs, and the TES-v0.8 regression; merged as PR #41 (main commit
 46db32e6e9a45bdfeb645aa6e0599380cb9bc9e4). Parent version remains
-0.5.0a0, with #27/#28 remaining independent release blockers.
+0.5.0a0 at the time of the TES-v0.9 merge; the parent source is now 0.6.0a0 development alpha, with #27/#28 still independent stable-release blockers.
 
 ### TES-v1.0 — integrated research baseline and review package (candidate)
 
@@ -85,7 +93,7 @@ candidate self-audit records exact commit/source SHA256 and *fails closed*
 if release authorization, independent reviewer approval or historical
 redistribution rights are asserted without a separate actual review.
 No v1.0 tag, Zenodo DOI, real facility validation or parent version change
-is implied. Parent version remains **0.5.0a0**.
+is implied. Parent source is now **0.6.0a0 alpha** (not a tagged, reviewed or formally published v1.0).
 
 ## v1.0 research release programme — work in progress
 
@@ -192,7 +200,7 @@ the document into real experiments or grant facility operating permission.
 
 The [WP5 v1.0 acceptance and independent-review dossier](docs/WP5_RELEASE_ACCEPTANCE.md)
 defines the future **software** release gates separately from experimental
-plant validation. The project remains **`0.5.0a0`, not v1.0**. The WP5
+plant validation. The project is **`0.6.0a0` development alpha, not v1.0**. The WP5
 tool `scripts/v1_release_gate.py` audits consistent package/citation/SPDX
 licence metadata, verifies installed wheel and research-complete source
 archive contents, fingerprints source files and numerical outputs, and
@@ -411,9 +419,19 @@ been obtained and its Eqs. (23), (24), (29), (30), top/bottom
 **Table 4** coefficients and original experimental limits recorded in
 [the source audit](docs/KIM2019_ORIGINAL_SOURCE_RECOVERY.md)
 and [machine-readable coefficient registry](data/reference/kim2019_coefficients.json).
-The copyrighted full PDF is **not included**. **No Kim 2019 numerical
-correlation, Stuttgart benchmark reproduction, or independent
-prediction has yet been implemented.**
+The copyrighted full PDF is **not included**. The [experimental H1d
+implementation](src/sco2_braytonbench/kim2019.py), [reproducible benchmark
+methods](docs/G35D_KIM2019_BENCHMARK.md), [executed negative Stuttgart
+results](docs/G35D_RESULTS.md), [independent evidence triage](docs/G35D_INDEPENDENT_VALIDATION_SOURCE_TRIAGE.md)
+and [exact-station comparison](scripts/h1d_common_support.py) are now
+integrated into the development-alpha source, with three **distinct** modes:
+published semi-empirical, printed empirical Eq.24/Table4 literal, and an
+explicitly **UNVERIFIED sign-placement hypothesis**. The original article's
+620-point parity and empirical equation ambiguity remain **open**
+([#20](https://github.com/Open-Energy-Methods/sco2-braytonbench/issues/20));
+all tested Stuttgart stations exceed Kim's original reported fitted heat-flux
+domain. Do not use H1d as a validated design correlation or replace its
+negative/failed-root observations with a favourable selected subset.
 
 ## Source literature
 

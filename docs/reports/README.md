@@ -2,7 +2,11 @@
 
 This directory preserves substantial technical reports as **versioned research records**, not automatically updated software documentation. Every report states the Git revision and evidence cut-off to which its numerical and release-governance claims apply.
 
-## Current consolidated report
+## Latest integration scope (8 November 2026)
+
+[Parent 0.6.0a0 development-alpha dossier](../PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md) tracks current code and unresolved formal release gates; dated reports remain evidence of their own commits.
+
+## Dated consolidated report
 
 **[6 November 2026 — Comprehensive Research, Engineering and Verification Report](2026-11-06/sco2-braytonbench-comprehensive-research-report.md)**
 
@@ -19,7 +23,7 @@ This is the authoritative *dated overview* of the integrated sCO₂-BraytonBench
 
 ## Historical preservation
 
-The original **5 November 2026** comprehensive G0–G3.5/H1d research report was proposed as [draft historical archive PR #21](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/21); it is not silently overwritten or claimed to be merged into the default branch. That earlier report captures source and CI status at its own evidence cut-off, before the subsequent WP0–WP5 integration.
+The original **[5 November comprehensive G0–G3.5/H1d research report](2026-11-05/sco2-braytonbench-comprehensive-project-report.md)** is preserved as a dated record, introduced through draft PR #21 and later transferred to the current-parent integration. Its numeric results, PR #19 draft status and parent 0.5.0a0 version refer to **5 November only**. That earlier report captures source and CI status at its own evidence cut-off, before the subsequent WP0–WP5 integration.
 
 Use a historical report for the scientific state **as of its cut-off**, and the new 6 November report for the current integrated 0.5.0a0 baseline. Later model changes or experiments require their own dated report and exact commit/run citations.
 

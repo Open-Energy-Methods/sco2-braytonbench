@@ -1,5 +1,7 @@
 # v1.0 release contract — sCO₂-BraytonBench
 
+**Development note (8 November 2026):** Parent source now targets **0.6.0a0 alpha**, not tagged v1.0. Original 6 November 0.5.0a0 statements are historical. TES-v1 research baseline, thermal/control WP0–WP5 and experimental Kim H1d are integrated; Eq.24 #20, source rights #27 and qualified review #28 remain unresolved. See [parent integration dossier](PARENT_0_6_ALPHA_INTEGRATION_2026-11-08.md).
+
 **Initiated:** 2026-11-06. **Status:** proposed acceptance contract, NOT a release or a claim of plant validation.
 **Base:** integrated `main` at `217bb27` (`pyproject.toml` version `0.5.0a0`); independently reviewed research in draft [PR #19](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/19); historical report in draft [PR #21](https://github.com/Open-Energy-Methods/sco2-braytonbench/pull/21).
 

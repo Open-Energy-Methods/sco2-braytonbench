@@ -127,7 +127,7 @@ def _metadata(root: Path) -> dict[str, Any]:
         "license_spdx": project["license"],
         "python_requires": project["requires-python"],
         "CITATION_cff_version": quoted.group(1),
-        "release_status": "unreleased_alpha" if version == "0.5.0a0" else
+        "release_status": "unreleased_alpha" if re.fullmatch(r"0\.\d+\.\d+a\d+", version) is not None else
                           "requires_manual_version_review",
     }
 
