@@ -4,7 +4,7 @@
 **Use:** concise technical evidence for prospective PhD research in thermal energy storage, physics-based numerical modelling, verification, surrogate/ROM methods and eventual experiment-led validation.  
 **Current evidence boundary:** independent research carried out in software; **no experimental packed-bed or molecular-spring dataset has been collected, fitted or validated in this repository**. This is not a CIC energiGUNE/COMPETENT deliverable or an institutional endorsement.
 
-[Repository homepage](../../README.md) · [TES complete research baseline](../tes/13_RESEARCH_BASELINE_TECHNICAL_REPORT.md) · [Prospective experimental protocol](PROSPECTIVE_EXPERIMENTAL_VALIDATION_PROTOCOL.md) · [Liquid-piston model concept](LIQUID_PISTON_CONCEPT.md) · [Evidence provenance](EVIDENCE_AND_FIGURE_SOURCES.md)
+[Repository homepage](../../README.md) · [TES complete research baseline](../tes/13_RESEARCH_BASELINE_TECHNICAL_REPORT.md) · [Prospective experimental protocol](PROSPECTIVE_EXPERIMENTAL_VALIDATION_PROTOCOL.md) · [Liquid-piston model concept](LIQUID_PISTON_CONCEPT.md) · [Liquid-piston scope decision](LIQUID_PISTON_SCOPE_GOVERNANCE.md) · [Evidence provenance](EVIDENCE_AND_FIGURE_SOURCES.md)
 
 ## 1. Research question and engineering scope
 
