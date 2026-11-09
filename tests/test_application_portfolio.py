@@ -94,6 +94,7 @@ def test_application_readme_links_all_research_items_and_limits():
         "figures/03_frozen_rom_test_ood.svg",
         "PROSPECTIVE_EXPERIMENTAL_VALIDATION_PROTOCOL.md",
         "LIQUID_PISTON_CONCEPT.md",
+        "LIQUID_PISTON_SCOPE_GOVERNANCE.md",
         "14.2522 K", "6.5965 K", "undefined", "NOT",
     ):
         assert piece.lower() in readme.lower(), piece
@@ -123,3 +124,12 @@ def test_protocol_files_not_misrepresented_as_actual_experiments():
     protocol=(PORT/"PROSPECTIVE_EXPERIMENTAL_VALIDATION_PROTOCOL.md").read_text("utf-8")
     assert "NOT" in protocol and "uncertainty" in protocol.lower()
     assert "J Σ Jᵀ" in protocol or "covariance" in protocol.lower()
+
+
+def test_liquid_piston_scope_exception_is_documented_not_approved_as_validation():
+    scope=(PORT/"LIQUID_PISTON_SCOPE_GOVERNANCE.md").read_text(encoding="utf-8")
+    assert "scope deviation" in scope.lower()
+    assert "background only" in scope.lower()
+    assert "not" in scope.lower() and "experimental" in scope.lower()
+    assert "0.7.0a0" in scope
+    assert "0.7.1a0 package release" in scope
