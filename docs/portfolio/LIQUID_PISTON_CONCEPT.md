@@ -1,5 +1,7 @@
 # Liquid-piston and molecular-spring storage — bounded, unvalidated modelling concept
 
+**Scope governance:** The 0.7.0a0 implementation deliberately departed from the earlier TES-extension plan. The [dated governance addendum](LIQUID_PISTON_SCOPE_GOVERNANCE.md) records the deviation and retains this module solely as an unvalidated illustrative concept. It is not a retrospective claim of plan compliance.
+
 **Classification:** Independent preparatory mathematical exploration only. Not a CIC energiGUNE / COMPETENT experimental result, nanoporous constitutive fit, CFD, hydraulic transient or industrial design. No laboratory access, calibration, facility permission or measurements are implied.
 
 ## Research question and physical idealisation
