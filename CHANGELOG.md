@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased documentation-only scope clarification (9 November 2026)
+
+- Recorded [LIQUID_PISTON_SCOPE_GOVERNANCE.md](docs/portfolio/LIQUID_PISTON_SCOPE_GOVERNANCE.md): the liquid-piston implementation in parent 0.7.0a0 exceeded the original TES master-plan research-scope restriction, and is explicitly retained only as an unvalidated algebraic energy-accounting concept. No experimental, nanoporous-material, CFD, patent, source-rights or independent release approval is inferred. **Package version remains 0.7.0a0**, without new release/tag/DOI.
+
 ## Unreleased — 0.7.0a0 application research-alpha (8 November 2026)
 
 - Added an immediately navigable PhD-oriented thermal/mechanical storage portfolio with three original SVG scientific figures (independent Schumann grid error, 28-stage charge/hold/reverse-discharge, frozen surrogate in-domain success and **negative OOD** result); data snapshots trace to exact full GitHub Actions artifacts and SHA256.
