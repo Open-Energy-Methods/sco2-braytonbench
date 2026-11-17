@@ -452,3 +452,13 @@ This is **not a CARBOSOLA digital twin**. No HZDR rig measurements, experimental
 The related [HTHP-ControlBench](https://github.com/Open-Energy-Methods/hthp-controlbench) is a separate repository; general testing/control methods may be adapted, but their physics models remain independent.
 
 BSD-3-Clause license. AI-assisted work is subject to scientific and human review.
+
+<!-- portfolio-reader-guide-2026:start -->
+## Engineering portfolio reader's guide (November 2026)
+
+**What to inspect:** Supercritical CO₂ Brayton-cycle research software with numerical checks, a prospective experimental validation plan and unvalidated hardware/control examples.
+
+**Portfolio context:** [Selected work for engineering recruiters](https://abhijith-sivaprasadan.github.io/for/armada-2026.html) · [Armada 2026 employer-facing selection](https://abhijith-sivaprasadan.github.io/for/armada-2026.html).
+
+These navigation links do not supersede the research status, assumptions, provenance, licences or validation limits documented above. This independent research project is not an employer-commissioned deliverable or externally qualified engineering product.
+<!-- portfolio-reader-guide-2026:end -->
